@@ -1,0 +1,32 @@
+{
+  "name": "typedash",
+  "version": "1.0.0",
+  "description": "Orbital 2023 - Click Clackers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raynertjx/typedash.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raynertjx/typedash/issues"
+  },
+  "homepage": "https://github.com/raynertjx/typedash#readme",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.2",
+    "prettier": "2.8.8"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,css,md}": [
+      "npx prettier --write",
+      "npx eslint --fix",
+    ]
+  }
+}
