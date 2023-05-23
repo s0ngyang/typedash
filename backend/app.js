@@ -10,8 +10,6 @@ var logger = require('morgan');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
-const db = require('./db');
-
 const initializePassport = require('./passport-config');
 initializePassport(passport);
 
@@ -33,11 +31,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter)
-
 app.use(flash());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -46,6 +39,12 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
