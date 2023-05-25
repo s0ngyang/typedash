@@ -7,12 +7,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const passport = require('passport');
-const flash = require('express-flash');
-const session = require('express-session');
-const initializePassport = require('./passport-config');
+var passport = require('passport');
+var flash = require('express-flash');
+var session = require('express-session');
+var initializePassport = require('./passport-config');
 initializePassport(passport);
-
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -39,6 +39,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
