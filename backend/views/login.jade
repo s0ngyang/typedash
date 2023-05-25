@@ -2,11 +2,9 @@ extends layout
 
 block content
   p Login
-  script.
-    if (messages.error) {
-      document.getElementById('error-message').textContent = messages.error;
-    }
-  div#error-message
+  if errors && errors.length > 0
+    each error in errors
+      p.error= error.message 
   form(action='/login' method='POST')
     div
       label(for="email") Email:
