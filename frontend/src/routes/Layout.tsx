@@ -1,12 +1,11 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+interface LayoutProps {}
 
-export const Layout: FC<LayoutProps> = ({ children }) => {
+export const Layout: FC<LayoutProps> = () => {
   return (
     <div className="w-full h-screen grid grid-cols-[2.5fr_6fr_2.5fr] bg-grey-8008 text-lightgrey-8008 font-mono">
       <div
@@ -14,7 +13,7 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
       "
       >
         <Header />
-        {children}
+        <Outlet />
         <Footer />
       </div>
     </div>
