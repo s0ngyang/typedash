@@ -9,7 +9,8 @@ const testPassage: string =
 const test = testPassage.split(' ');
 
 export const TypingTest: FC<TypingTestProps> = ({}) => {
-  const [wordSet, setWordSet] = useState<string[]>(test);
+  const wordSet = test;
+  // const [wordSet, setWordSet] = useState<string[]>(test);
   const [typedWordList, setTypedWordList] = useState<string[]>(['']);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [mistypedCount, setMistypedCount] = useState(0);
@@ -27,6 +28,8 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
     // console.log(typedWordList);
     // console.log(wordSet);
     // console.log(testStatus);
+    // console.log(resetTimer);
+    console.log(resetTimer);
     if (testStatus === 0) {
       startTimer();
       setTestStatus(1);
