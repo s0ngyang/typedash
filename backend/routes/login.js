@@ -1,22 +1,32 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 
-router.get('/', checkNotAuthenticated, function(req, res, next) {
-  res.render('login');
-})
-
-router.post('/', checkNotAuthenticated, passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: 'login',
-  failureFlash: true
-}))
+router.post('/', checkNotAuthenticated, (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ message: 'Authentication failed' });
+    }
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Authentication failed' });
+      }
+      const { name, email } = user;
+      return res
+        .status(200)
+        .json({ message: 'Authentication successful', name, email });
+    });
+  })(req, res, next);
+});
 
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return res.redirect('/');
+    return res.status(403).json({ message: 'Already authenticated' });
   }
-  next()
+  next();
 }
 
 module.exports = router;
