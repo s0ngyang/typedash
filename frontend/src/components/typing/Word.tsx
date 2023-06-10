@@ -3,13 +3,12 @@ import Caret from './Caret';
 import Letter from './Letter';
 
 interface WordProps {
-  index: number;
   word: string;
   typedWord: string;
   status: string;
 }
 
-const Word: FC<WordProps> = ({ index, word, typedWord, status }) => {
+const Word: FC<WordProps> = ({ word, typedWord, status }) => {
   const letters = word.split('').map((char, i) => {
     let letterStatus = 'letter-idle';
     if (status === 'completed') {

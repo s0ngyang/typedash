@@ -71,12 +71,12 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
     inputRef.current!.value = '';
   };
 
-  const handleTab = (e: React.KeyboardEvent) => {
-    if (e.key === 'Tab' && e.target !== restartRef.current) {
-      e.preventDefault();
-    }
-    restartRef.current?.focus();
-  };
+  // const handleTab = (e: React.KeyboardEvent) => {
+  //   if (e.key === 'Tab' && e.target !== restartRef.current) {
+  //     e.preventDefault();
+  //   }
+  //   restartRef.current?.focus();
+  // };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === ' ') {
@@ -167,7 +167,7 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
           {test.map((word, index) => (
             <Word
               key={index}
-              index={index}
+              // index={index}
               word={word}
               typedWord={typedWordList[index]}
               status={
