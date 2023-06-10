@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .letter-correct {
+    color: theme('colors.white');
+  }
+
+  .letter-incorrect {
+    color: theme('colors.red.500');
+  }
+
+  .letter-idle {
+    color: #939eae;
+  }
+
+  .word-active {
+    position: relative;
+  }
+
+  .caret {
+    position: absolute;
+    width: 0.15rem;
+    height: 1.4rem;
+    border-radius: 0.05rem;
+    background-color: white;
+    transition: left 0.2s;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes blink {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.3;
+    }
+  }
+}
+
 html,
 body {
   min-height: 100vh;
