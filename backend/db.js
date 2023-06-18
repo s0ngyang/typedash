@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // necessary?
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
