@@ -6,7 +6,7 @@ interface LetterProps {
 }
 
 const Letter: FC<LetterProps> = ({ status, char }) => {
-  return <div className={`${status}`}>{char}</div>;
+  return <div className={`${status} h-8`}>{char}</div>;
 };
 
 export default memo(Letter);
