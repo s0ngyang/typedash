@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const db = require('../db');
+const prisma = require('../db');
 
 router.post('/', async (req, res) => {
   try {
@@ -26,15 +26,34 @@ router.post('/', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.none(
-      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3)',
-      [name, email, hashedPassword],
-    );
+    // await db.none(
+    //   'INSERT INTO users (name, email, password) VALUES ($1, $2, $3)',
+    //   [name, email, hashedPassword],
+    // );
+    main()
+      .then(async () => {
+        await prisma.$disconnect();
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
+      });
 
     return res.status(201).json({ message: 'Registration successful' });
   } catch (error) {
     return res.status(500).json({ message: 'Registration failed' });
   }
 });
+
+async function main() {
+  await prisma.users.create({
+    data: {
+      name: name,
+      email: email,
+      password: hashedPassword,
+    },
+  });
+}
 
 module.exports = router;
