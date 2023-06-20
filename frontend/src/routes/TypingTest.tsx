@@ -55,7 +55,7 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsFocused(false);
+        setTimeout(() => setIsFocused(false), 1000);
       }
     };
     document.addEventListener('mousedown', handleClickAway);
