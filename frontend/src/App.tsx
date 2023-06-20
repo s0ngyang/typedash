@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { authContext } from './context/authContext';
 import Layout from './routes/Layout';
@@ -12,8 +12,9 @@ function App() {
     <authContext.Provider value={{ user, setUser }}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<TypingTest />} />
+          <Route path="/singleplayer" element={<TypingTest />} />
           <Route path="login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/singleplayer" replace />} />
         </Route>
       </Routes>
     </authContext.Provider>

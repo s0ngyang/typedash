@@ -1,4 +1,6 @@
+import { Tooltip } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
+import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
@@ -16,9 +18,31 @@ const Header: FC<HeaderProps> = ({}) => {
   const context = useContext(authContext);
   return (
     <div className="flex justify-between items-center">
-      <Link to={`/`}>
-        <h1 className="font-bold text-2xl">TypeDash</h1>
-      </Link>
+      <div className="flex items-center gap-8">
+        <Link to={`/`}>
+          <h1 className="font-bold text-2xl">TypeDash</h1>
+        </Link>
+        <div className="flex gap-4">
+          <Tooltip
+            label="Singeplayer"
+            aria-label="Singleplayer tooltip"
+            className="font-mono"
+          >
+            <Link to={`/`}>
+              <BsFillPersonFill size={25} />
+            </Link>
+          </Tooltip>
+          <Tooltip
+            label="Multiplayer"
+            aria-label="Multiplayer tooltip"
+            className="font-mono"
+          >
+            <Link to={`/`}>
+              <BsPeopleFill size={25} />
+            </Link>
+          </Tooltip>
+        </div>
+      </div>
       {!context?.user && (
         <Link to={`login`}>
           <FiLogIn
