@@ -29,7 +29,7 @@ const Word: FC<WordProps> = ({ word, typedWord, status }) => {
       return <Letter key={i} status={'letter-incorrect'} char={char} />;
     });
   return (
-    <div className={`flex word-active`}>
+    <div className={`flex word-active h-8`}>
       {status === 'active' && (
         <Caret offset={12.05 * typedWord?.length || -3} />
       )}
