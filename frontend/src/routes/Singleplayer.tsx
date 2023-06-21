@@ -8,9 +8,9 @@ import BookChallenges, {
 } from '../components/typing/challenges/Books.constants';
 import useTimer from '../hooks/useTimer';
 
-interface TypingTestProps {}
+interface SingleplayerProps {}
 
-export const TypingTest: FC<TypingTestProps> = ({}) => {
+const Singleplayer: FC<SingleplayerProps> = ({}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -55,7 +55,7 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsFocused(false);
+        setTimeout(() => setIsFocused(false), 1000);
       }
     };
     document.addEventListener('mousedown', handleClickAway);
@@ -274,3 +274,5 @@ export const TypingTest: FC<TypingTestProps> = ({}) => {
     </div>
   );
 };
+
+export default Singleplayer;
