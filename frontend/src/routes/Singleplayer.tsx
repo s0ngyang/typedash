@@ -10,7 +10,7 @@ import useTimer from '../hooks/useTimer';
 
 interface SingleplayerProps {}
 
-export const Singleplayer: FC<SingleplayerProps> = ({}) => {
+const Singleplayer: FC<SingleplayerProps> = ({}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -274,3 +274,5 @@ export const Singleplayer: FC<SingleplayerProps> = ({}) => {
     </div>
   );
 };
+
+export default Singleplayer;

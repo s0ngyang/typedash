@@ -28,7 +28,7 @@ const Header: FC<HeaderProps> = ({}) => {
             aria-label="Singleplayer tooltip"
             className="font-mono"
           >
-            <Link to={`/`}>
+            <Link to={`/singleplayer`}>
               <BsFillPersonFill size={25} />
             </Link>
           </Tooltip>
@@ -37,7 +37,7 @@ const Header: FC<HeaderProps> = ({}) => {
             aria-label="Multiplayer tooltip"
             className="font-mono"
           >
-            <Link to={`/`}>
+            <Link to={`/multiplayer`}>
               <BsPeopleFill size={25} />
             </Link>
           </Tooltip>
