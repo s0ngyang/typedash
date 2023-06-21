@@ -24,7 +24,7 @@ const Header: FC<HeaderProps> = ({}) => {
         </Link>
         <div className="flex gap-4">
           <Tooltip
-            label="Singeplayer"
+            label="Singleplayer"
             aria-label="Singleplayer tooltip"
             className="font-mono"
           >

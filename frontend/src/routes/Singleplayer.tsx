@@ -8,9 +8,9 @@ import BookChallenges, {
 } from '../components/typing/challenges/Books.constants';
 import useTimer from '../hooks/useTimer';
 
-interface TypingTestProps {}
+interface SingleplayerProps {}
 
-export const TypingTest: FC<TypingTestProps> = ({}) => {
+export const Singleplayer: FC<SingleplayerProps> = ({}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
