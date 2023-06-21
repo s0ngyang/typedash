@@ -16,10 +16,10 @@ io.on('connection', (socket) => {
   // Handle connection logic for each client here
   console.log(`User connected: ${socket.id}`);
 
-  socket.on('createSession', (data) => {
-    console.log('Received session data:', data);
+  socket.on('createRoom', (data) => {
+    console.log('Received room data:', data);
     socket.join(data.id);
-    socket.emit('sessionCreated', {
+    socket.emit('roomCreated', {
       url: `https://typedash.com/multiplayer/${data.id}`,
     });
   });
