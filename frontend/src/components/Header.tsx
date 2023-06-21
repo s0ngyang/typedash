@@ -24,11 +24,11 @@ const Header: FC<HeaderProps> = ({}) => {
         </Link>
         <div className="flex gap-4">
           <Tooltip
-            label="Singeplayer"
+            label="Singleplayer"
             aria-label="Singleplayer tooltip"
             className="font-mono"
           >
-            <Link to={`/`}>
+            <Link to={`/singleplayer`}>
               <BsFillPersonFill size={25} />
             </Link>
           </Tooltip>
@@ -37,7 +37,7 @@ const Header: FC<HeaderProps> = ({}) => {
             aria-label="Multiplayer tooltip"
             className="font-mono"
           >
-            <Link to={`/`}>
+            <Link to={`/multiplayer`}>
               <BsPeopleFill size={25} />
             </Link>
           </Tooltip>
