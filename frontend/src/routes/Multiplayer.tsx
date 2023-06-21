@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 
 interface MultiplayerProps {}
@@ -14,7 +15,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
   return (
     <div className="flex flex-col justify-center">
       <Button variant="ghost" onClick={createRoom}>
-        Create Room
+        <NavLink to={`/multiplayer/${socket.id}`}>Create Room</NavLink>
       </Button>
     </div>
   );
