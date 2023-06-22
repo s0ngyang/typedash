@@ -15,7 +15,8 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/singleplayer" element={<Singleplayer />} />
-          <Route path="/multiplayer" element={<Multiplayer />}>
+          <Route path="/multiplayer">
+            <Route index={true} element={<Multiplayer />} />
             <Route path=":roomId" element={<Room />} />
           </Route>
           <Route path="login" element={<Login />} />

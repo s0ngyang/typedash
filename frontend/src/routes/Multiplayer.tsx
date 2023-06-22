@@ -15,7 +15,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
   return (
     <div className="flex flex-col justify-center">
       <Button variant="ghost" onClick={createRoom}>
-        <NavLink to={`/multiplayer/${socket.id}`}>Create Room</NavLink>
+        <NavLink to={`${socket.id}`}>Create Room</NavLink>
       </Button>
     </div>
   );
