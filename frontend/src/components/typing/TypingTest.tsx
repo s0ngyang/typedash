@@ -2,13 +2,20 @@ import { Progress, SlideFade, Tooltip } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
-import useTimer from '../../hooks/useTimer';
+import { randomChallenge } from '../../helpers/randomChallenge';
+import useTimer from '../../helpers/useTimer';
 import Word from './Word';
-import BookChallenges, { ChallengeProps } from './challenges/Books.constants';
+import { ChallengeProps } from './challenges/Books.constants';
 
-interface TypingTestProps {}
+interface TypingTestProps {
+  isMultiplayer: boolean;
+  specificChallenge?: ChallengeProps;
+}
 
-const TypingTest: FC<TypingTestProps> = ({}) => {
+const TypingTest: FC<TypingTestProps> = ({
+  isMultiplayer,
+  specificChallenge,
+}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -35,7 +42,12 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
 
   useEffect(() => {
     // first load
-    const firstChallenge = randomChallenge();
+    let firstChallenge;
+    if (isMultiplayer && specificChallenge) {
+      firstChallenge = specificChallenge;
+    } else {
+      firstChallenge = randomChallenge();
+    }
     setLetterSet(firstChallenge.content.split(''));
     setWordSet(firstChallenge.content.split(' '));
   }, []);
@@ -89,11 +101,6 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     });
   }, [testStatus]);
 
-  const randomChallenge = () => {
-    const temp = BookChallenges.filter((item) => item.id !== challenge?.id);
-    return temp[Math.floor(Math.random() * temp.length)];
-  };
-
   const restartTest = () => {
     resetTimer();
     setTestStatus(0);
@@ -111,7 +118,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     });
     focusOnInput();
     clearInput();
-    setChallenge(randomChallenge());
+    setChallenge(randomChallenge(challenge?.id));
   };
 
   const focusOnInput = () => {
@@ -253,21 +260,23 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
             {result.time}
           </div>
         )}
-        <Tooltip
-          label="Restart Test"
-          fontSize="md"
-          aria-label="Restart test tooltip"
-          className="font-mono"
-        >
-          <button
-            onClick={restartTest}
-            ref={restartRef}
-            className="p-4 hover:text-white transition focus:text-white outline-none "
-            tabIndex={0}
+        {!isMultiplayer && (
+          <Tooltip
+            label="Restart Test"
+            fontSize="md"
+            aria-label="Restart test tooltip"
+            className="font-mono"
           >
-            <VscDebugRestart />
-          </button>
-        </Tooltip>
+            <button
+              onClick={restartTest}
+              ref={restartRef}
+              className="p-4 hover:text-white transition focus:text-white outline-none "
+              tabIndex={0}
+            >
+              <VscDebugRestart />
+            </button>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

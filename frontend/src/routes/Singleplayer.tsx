@@ -4,7 +4,7 @@ import TypingTest from '../components/typing/TypingTest';
 interface SingleplayerProps {}
 
 const Singleplayer: FC<SingleplayerProps> = ({}) => {
-  return <TypingTest />;
+  return <TypingTest isMultiplayer={false} />;
 };
 
 export default Singleplayer;

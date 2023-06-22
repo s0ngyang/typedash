@@ -1,13 +1,12 @@
 import { Button } from '@chakra-ui/react';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import io, { Socket } from 'socket.io-client';
+import socket from '../services/socket';
 
 interface MultiplayerProps {}
 
-const socket: Socket = io('http://localhost:3001');
-
 const Multiplayer: FC<MultiplayerProps> = ({}) => {
+  console.log('multiplayer');
   const createRoom = () => {
     socket.emit('createRoom', { id: socket.id });
   };
