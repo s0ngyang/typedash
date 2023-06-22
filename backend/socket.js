@@ -18,7 +18,6 @@ io.on('connection', (socket) => {
 
   socket.on('createRoom', (data) => {
     console.log('Received room data:', data);
-    socket.join(data.id);
     socket.emit('roomCreated', {
       id: data.id,
     });
@@ -30,7 +29,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const port = process.env.PORT || 3001; // Replace with your desired port number
+const port = process.env.PORT || 3000; // Replace with your desired port number
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
