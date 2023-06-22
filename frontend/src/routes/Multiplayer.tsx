@@ -4,7 +4,7 @@ import io, { Socket } from 'socket.io-client';
 
 interface MultiplayerProps {}
 
-const socket: Socket = io('http://localhost:3001');
+const socket: Socket = io('http://localhost:3000');
 
 const Multiplayer: FC<MultiplayerProps> = ({}) => {
   const createRoom = () => {
