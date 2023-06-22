@@ -20,8 +20,13 @@ io.on('connection', (socket) => {
     console.log('Received room data:', data);
     socket.join(data.id);
     socket.emit('roomCreated', {
-      url: `https://typedash.com/multiplayer/${data.id}`,
+      id: data.id,
     });
+  });
+
+  socket.on('showChallenge', (arg) => {
+    console.log(arg);
+    // socket.to(socket.id).emit('showChallenge', {challenge})
   });
 });
 
