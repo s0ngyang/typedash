@@ -7,17 +7,23 @@ app.use(cors());
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://127.0.0.1:5173',
+    // origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
   },
 });
 
+const rooms = {}; // Object to store room state
+
 io.on('connection', (socket) => {
-  // Handle connection logic for each client here
   console.log(`User connected: ${socket.id}`);
 
   socket.on('createRoom', (data) => {
     console.log('Received room data:', data);
+    rooms[data.id] = {
+      users: [], // Array to store user details
+      // ...other relevant room state properties
+    };
     socket.emit('roomCreated', {
       id: data.id,
     });
@@ -26,6 +32,28 @@ io.on('connection', (socket) => {
   socket.on('showChallenge', (arg) => {
     console.log(arg);
     // socket.to(socket.id).emit('showChallenge', {challenge})
+  });
+
+  socket.on('joinRoom', (data) => {
+    socket.join(data.id);
+
+    // Add user to the room state
+    const user = {
+      id: socket.id,
+      username: 'Guest',
+    };
+    rooms[data.id].users.push(user);
+    console.log(rooms[data.id].users);
+  });
+
+  socket.on('leaveRoom', (roomName) => {
+    socket.leave(roomName);
+
+    // Remove user from the room state
+    const room = rooms[roomName];
+    if (room) {
+      room.users = room.users.filter((user) => user.id !== socket.id);
+    }
   });
 });
 
