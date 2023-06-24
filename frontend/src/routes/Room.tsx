@@ -15,6 +15,7 @@ const Room: FC<RoomProps> = ({}) => {
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(1);
   const [listOfPlayers, setListOfPlayers] = useState<string[]>();
+  const [readyPlayers, setReadyPlayers] = useState(0);
 
   useEffect(() => {
     socket.emit('joinRoom', roomID);
@@ -22,6 +23,7 @@ const Room: FC<RoomProps> = ({}) => {
     socket.on('playerJoined', (players) => {
       setNumPlayers(players.length);
       setListOfPlayers(players);
+      //console.log(players.length);
     });
 
     socket.on('roomJoined', (challenge) => {
@@ -39,20 +41,34 @@ const Room: FC<RoomProps> = ({}) => {
       setNumPlayers(players.length);
       setListOfPlayers(players);
     });
+
+    socket.on('receiveReady', (readyCount) => {
+      setReadyPlayers(readyCount);
+    });
   }, []);
 
   const leaveRoom = () => {
+    socket.emit('leaveRoom');
     navigate('/singleplayer');
+  };
+
+  const ready = () => {
+    socket.emit('sendReady');
   };
 
   return (
     <>
       <TypingTest isMultiplayer={true} specificChallenge={chosenChallenge} />
+      <Button onClick={ready} variant="ghost">
+        ready
+      </Button>
       <Button onClick={leaveRoom} variant="ghost">
         leave room
       </Button>
       <div>{listOfPlayers}</div>
-      <div>{numPlayers}</div>
+      <div>
+        {readyPlayers}/{numPlayers} ready
+      </div>
       <div>{roomUrl}</div>
     </>
   );

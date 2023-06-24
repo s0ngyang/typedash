@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
     rooms[roomID] = {
       challenge,
       players: [socket.id],
+      ready: 0,
     };
     socket.roomID = roomID;
     socket.join(roomID);
@@ -48,11 +49,19 @@ io.on('connection', (socket) => {
 
       io.to(roomID).emit('playerJoined', room.players);
       console.log('player joined, players:', room.players);
-
       socket.emit('roomJoined', room.challenge);
     } else {
       socket.emit('invalidRoom');
     }
+  });
+
+  socket.on('sendReady', () => {
+    io.to(socket.roomID).emit('receiveReady', rooms[socket.roomID].ready);
+  });
+
+  socket.on('leaveRoom', () => {
+    socket.leave(socket.roomID);
+    io.to(socket.roomID).emit('playerLeft');
   });
 
   socket.on('disconnect', () => {
