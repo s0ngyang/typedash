@@ -1,5 +1,5 @@
 import { FC, useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LoginUserProps,
   RegisterUserProps,
@@ -73,37 +73,7 @@ const Login: FC<LoginProps> = ({}) => {
   };
 
   return (
-    <div className="flex justify-center items-center gap-[16rem]">
-      <form className="flex flex-col gap-3" onSubmit={registerUserHandler}>
-        <h1>register</h1>
-        <input
-          className={textfieldStyleString}
-          type="text"
-          placeholder="username"
-          ref={registerName}
-        />
-        <input
-          className={textfieldStyleString}
-          type="email"
-          placeholder="email"
-          ref={registerEmail}
-        />
-        <input
-          className={textfieldStyleString}
-          type="password"
-          placeholder="password"
-          ref={registerPassword}
-        />
-        <input
-          className={textfieldStyleString}
-          type="password"
-          placeholder="verify password"
-          ref={registerVerifyPassword}
-        />
-        <button type="submit" className="hover:bg-slate-100 transition p-1">
-          sign up
-        </button>
-      </form>
+    <div className="flex flex-col justify-center items-center gap-8">
       <form className="flex flex-col gap-4" onSubmit={loginUserHandler}>
         <h1>login</h1>
         <input
@@ -122,6 +92,12 @@ const Login: FC<LoginProps> = ({}) => {
           log in
         </button>
       </form>
+      <h1>
+        don't have an account?{' '}
+        <NavLink to="/register" className="hover:underline">
+          sign up
+        </NavLink>
+      </h1>
     </div>
   );
 };
