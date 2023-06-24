@@ -5,9 +5,9 @@ import { authContext } from './context/authContext';
 import Layout from './routes/Layout';
 import Login from './routes/Login';
 import Multiplayer from './routes/Multiplayer';
+import Register from './routes/Register';
 import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
-
 function App() {
   const [user, setUser] = useState<string>();
   return (
@@ -15,6 +15,9 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/singleplayer" element={<Singleplayer />} />
+          <Route path="/multiplayer" element={<Multiplayer />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/multiplayer">
             <Route index={true} element={<Multiplayer />} />
             <Route path=":roomId" element={<Room />} />

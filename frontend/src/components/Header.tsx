@@ -44,22 +44,34 @@ const Header: FC<HeaderProps> = ({}) => {
         </div>
       </div>
       {!context?.user && (
-        <Link to={`login`}>
-          <FiLogIn
-            size={20}
-            className="hover:text-lightgrey-8008 cursor-pointer"
-          />
-        </Link>
+        <Tooltip
+          label="Log In"
+          aria-label="Log in tooltip"
+          className="font-mono"
+        >
+          <Link to={`login`}>
+            <FiLogIn
+              size={25}
+              className="hover:text-lightgrey-8008 cursor-pointer"
+            />
+          </Link>
+        </Tooltip>
       )}
       {context?.user && (
         <div className="flex items-center gap-4">
           <h1>Welcome {context?.user}</h1>
-          <button onClick={logoutHandler}>
-            <FiLogOut
-              size={20}
-              className="hover:text-lightgrey-8008 cursor-pointer"
-            />
-          </button>
+          <Tooltip
+            label="Log Out"
+            aria-label="Log out tooltip"
+            className="font-mono"
+          >
+            <button onClick={logoutHandler}>
+              <FiLogOut
+                size={25}
+                className="hover:text-lightgrey-8008 cursor-pointer"
+              />
+            </button>
+          </Tooltip>
         </div>
       )}
     </div>
