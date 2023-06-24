@@ -50,8 +50,7 @@ const TypingTest: FC<TypingTestProps> = ({
     } else {
       firstChallenge = randomChallenge();
     }
-    setLetterSet(firstChallenge.content.split(''));
-    setWordSet(firstChallenge.content.split(' '));
+    setChallenge(firstChallenge);
   }, []);
 
   useEffect(() => {
