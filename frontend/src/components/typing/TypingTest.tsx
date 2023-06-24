@@ -282,7 +282,7 @@ const TypingTest: FC<TypingTestProps> = ({
               className="p-4 hover:text-white transition focus:text-white outline-none "
               tabIndex={0}
             >
-              <VscDebugRestart />
+              <VscDebugRestart size={25} />
             </button>
           </Tooltip>
         )}
