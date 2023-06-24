@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        'pink-8008': '#f44c7f',
         'grey-8008': '#333a45',
         'lightgrey-8008': '#939eae',
       },
