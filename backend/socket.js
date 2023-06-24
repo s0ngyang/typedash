@@ -28,7 +28,10 @@ io.on('connection', (socket) => {
     socket.emit('roomCreated', roomID);
     console.log(`room created, players: ${rooms[roomID].players}`);
 
-    socket.emit('playerJoined', rooms[roomID].players);
+    socket.emit('playerJoined', {
+      players: rooms[roomID].players,
+      challenge: rooms[roomID].challenge,
+    });
   });
 
   socket.on('joinRoom', (roomID) => {
@@ -47,7 +50,10 @@ io.on('connection', (socket) => {
       socket.join(roomID);
       socket.roomID = roomID;
 
-      io.to(roomID).emit('playerJoined', room.players);
+      io.to(roomID).emit('playerJoined', {
+        players: room.players,
+        challenge: room.challenge,
+      });
       console.log('player joined, players:', room.players);
       socket.emit('roomJoined', room.challenge);
     } else {
@@ -60,7 +66,7 @@ io.on('connection', (socket) => {
     if (room.ready.length < room.players.length) {
       for (let index = 0; index < room.ready.length; index++) {
         const player = room.ready[index];
-        if (player == socket.id) {
+        if (player === socket.id) {
           return;
         }
       }
@@ -69,11 +75,11 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('gameStart', () => {
-    setInterval(() => {
-      socket.to(socket.roomID).emit('progressUpdate', { playerId: socket.id });
-    }, 1000);
-  });
+  // socket.on('gameStart', () => {
+  //   setInterval(() => {
+  //     socket.to(socket.roomID).emit('progressUpdate', { playerId: socket.id });
+  //   }, 1000);
+  // });
 
   socket.on('leaveRoom', () => {
     socket.leave(socket.roomID);
@@ -89,6 +95,12 @@ io.on('connection', (socket) => {
       'receiveReady',
       rooms[socket.roomID].ready.length,
     );
+  });
+
+  socket.on('typingProgress', (progress) => {
+    socket
+      .to(socket.roomID)
+      .emit('progressUpdate', { playerId: socket.id, progress });
   });
 
   socket.on('disconnect', () => {
