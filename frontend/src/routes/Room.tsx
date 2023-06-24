@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import TypingTest from '../components/typing/TypingTest';
 import { ChallengeProps } from '../components/typing/challenges/Books.constants';
@@ -29,4 +29,4 @@ const Room: FC<RoomProps> = ({}) => {
   );
 };
 
-export default memo(Room);
+export default Room;
