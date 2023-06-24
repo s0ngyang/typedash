@@ -58,12 +58,9 @@ export const Login: FC<LoginProps> = ({}) => {
           log in
         </button>
       </form>
-      <h1>
-        don't have an account?{' '}
-        <NavLink to="/register" className="hover:underline">
-          sign up
-        </NavLink>
-      </h1>
+      <NavLink to="/register" className="hover:underline">
+        don't have an account? sign up
+      </NavLink>
     </div>
   );
 };
