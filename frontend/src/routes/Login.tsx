@@ -8,7 +8,7 @@ import { authContext } from '../context/authContext';
 import http from '../services/api';
 interface LoginProps {}
 
-const Login: FC<LoginProps> = ({}) => {
+export const Login: FC<LoginProps> = ({}) => {
   const navigate = useNavigate();
   const registerName = useRef<HTMLInputElement>(null);
   const registerEmail = useRef<HTMLInputElement>(null);
