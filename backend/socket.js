@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
     rooms[roomID] = {
       challenge,
       players: [socket.id],
-      ready: 0,
+      ready: [],
     };
     socket.roomID = roomID;
     socket.join(roomID);
@@ -56,12 +56,33 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sendReady', () => {
-    io.to(socket.roomID).emit('receiveReady', rooms[socket.roomID].ready);
+    const room = rooms[socket.roomID];
+    if (room.ready.length < room.players.length) {
+      for (let index = 0; index < room.ready.length; index++) {
+        const player = room.ready[index];
+        if (player == socket.id) {
+          return;
+        }
+      }
+      room.ready.push(socket.id);
+      io.to(socket.roomID).emit('receiveReady', room.ready.length);
+    }
   });
 
   socket.on('leaveRoom', () => {
     socket.leave(socket.roomID);
-    io.to(socket.roomID).emit('playerLeft');
+    rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
+      (id) => id !== socket.id,
+    );
+    io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+
+    rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
+      (id) => id !== socket.id,
+    );
+    io.to(socket.roomID).emit(
+      'receiveReady',
+      rooms[socket.roomID].ready.length,
+    );
   });
 
   socket.on('disconnect', () => {
@@ -75,7 +96,14 @@ io.on('connection', (socket) => {
           (id) => id !== socket.id,
         );
         io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
-        console.log('players left:', rooms[socket.roomID].players);
+
+        rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
+          (id) => id !== socket.id,
+        );
+        io.to(socket.roomID).emit(
+          'receiveReady',
+          rooms[socket.roomID].ready.length,
+        );
       }
     }
   });
