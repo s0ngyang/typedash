@@ -1,9 +1,10 @@
-import { Progress, SlideFade, Tooltip } from '@chakra-ui/react';
+import { SlideFade, Tooltip } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
 import { randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
+import ProgressBar from './ProgressBar';
 import Word from './Word';
 import { ChallengeProps } from './challenges/Books.constants';
 import Result from './results/Result';
@@ -220,16 +221,9 @@ const TypingTest: FC<TypingTestProps> = ({
           <>
             <div className="w-4/5 h-4 transition">
               <SlideFade in={testStatus === 1}>
-                <Progress
-                  size="md"
-                  value={activeLetterIndex}
-                  max={letterSet.length}
-                  sx={{
-                    '& > div:first-child': {
-                      transitionProperty: 'width',
-                      backgroundColor: '#f44c7f',
-                    },
-                  }}
+                <ProgressBar
+                  lettersTyped={activeLetterIndex}
+                  totalLetters={letterSet.length}
                 />
               </SlideFade>
             </div>
