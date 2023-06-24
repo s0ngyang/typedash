@@ -12,20 +12,41 @@ const io = new Server(server, {
   },
 });
 
+const rooms = {};
+
 io.on('connection', (socket) => {
   // Handle connection logic for each client here
   console.log(`User connected: ${socket.id}`);
 
   socket.on('createRoom', (data) => {
     console.log('Received room data:', data);
+    const { id, challenge } = data;
+    rooms[id] = {
+      host: id,
+      challenge,
+      players: [id],
+    };
+    socket.join(id);
     socket.emit('roomCreated', {
-      id: data.id,
+      id,
+      challenge,
     });
   });
 
-  socket.on('showChallenge', (arg) => {
-    console.log(arg);
-    // socket.to(socket.id).emit('showChallenge', {challenge})
+  socket.on('joinRoom', (roomId) => {
+    if (rooms[roomId]) {
+      const room = rooms[roomId];
+      if (room.players.length >= 3) {
+        socket.emit('roomFull');
+      }
+      room.players.push(socket.id);
+      socket.join(roomId);
+      io.to(room.host).emit('playerJoined', socket.id);
+      socket.emit('roomJoined', room.challenge);
+      console.log(room.players);
+    } else {
+      socket.emit('invalidRoom');
+    }
   });
 });
 
