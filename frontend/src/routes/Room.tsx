@@ -11,16 +11,26 @@ const Room: FC<RoomProps> = ({}) => {
   const [chosenChallenge, setChosenChallenge] = useState<ChallengeProps>();
   const roomId = location.pathname.split('/')[2];
   const roomUrl = `https://typedash.com/multiplayer/${roomId}`;
+  const userId = 1;
 
   useEffect(() => {
-    if (roomId !== socket.id) {
-      socket.emit('joinRoom', roomId);
-    }
+    socket.emit('joinRoom', { sessionID: roomId, userID: userId });
+
     socket.on('roomJoined', (challenge) => {
       console.log(challenge);
       setChosenChallenge(challenge);
     });
+
+    // socket.on('roomCreated', ({ sessionID, userID }) => {
+    //   // attach the session ID to the next reconnection attempts
+    //   socket.auth = { sessionID };
+    //   // store it in the localStorage
+    //   localStorage.setItem('sessionID', sessionID);
+    //   // save the ID of the user
+    //   socket.userID = userID;
+    // });
   }, []);
+
   return (
     <>
       <TypingTest isMultiplayer={true} specificChallenge={chosenChallenge} />
