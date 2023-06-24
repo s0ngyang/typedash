@@ -1,8 +1,10 @@
 import { Button } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ProgressBar from '../components/typing/ProgressBar';
 import TypingTest from '../components/typing/TypingTest';
 import { ChallengeProps } from '../components/typing/challenges/Books.constants';
+import useTimer from '../helpers/useTimer';
 import socket from '../services/socket';
 
 interface RoomProps {}
@@ -16,6 +18,8 @@ const Room: FC<RoomProps> = ({}) => {
   const [numPlayers, setNumPlayers] = useState(1);
   const [listOfPlayers, setListOfPlayers] = useState<string[]>();
   const [readyPlayers, setReadyPlayers] = useState(0);
+  const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(5);
+  const [lettersTyped, setLettersTyped] = useState(0);
 
   useEffect(() => {
     socket.emit('joinRoom', roomID);
@@ -47,6 +51,13 @@ const Room: FC<RoomProps> = ({}) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (readyPlayers === numPlayers) {
+      startTimer();
+      socket.emit('gameStart');
+    }
+  }, []);
+
   const leaveRoom = () => {
     socket.emit('leaveRoom');
     navigate('/singleplayer');
@@ -59,12 +70,26 @@ const Room: FC<RoomProps> = ({}) => {
   return (
     <>
       <TypingTest isMultiplayer={true} specificChallenge={chosenChallenge} />
-      <Button onClick={ready} variant="ghost">
-        ready
-      </Button>
+      {readyPlayers !== numPlayers && (
+        <Button onClick={ready} variant="ghost">
+          ready
+        </Button>
+      )}
+      {readyPlayers === numPlayers && (
+        <>
+          {listOfPlayers?.map(() => (
+            <ProgressBar
+              lettersTyped={0}
+              totalLetters={chosenChallenge?.content.split('').length!}
+            />
+          ))}
+          <div>{time}</div>
+        </>
+      )}
       <Button onClick={leaveRoom} variant="ghost">
         leave room
       </Button>
+
       <div>{listOfPlayers}</div>
       <div>
         {readyPlayers}/{numPlayers} ready

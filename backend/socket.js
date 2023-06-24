@@ -69,6 +69,12 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('gameStart', () => {
+    setInterval(() => {
+      socket.to(socket.roomID).emit('progressUpdate', { playerId: socket.id });
+    }, 1000);
+  });
+
   socket.on('leaveRoom', () => {
     socket.leave(socket.roomID);
     rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
