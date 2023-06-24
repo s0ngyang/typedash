@@ -22,14 +22,17 @@ const Header: FC<HeaderProps> = ({}) => {
         <Link to={`/`}>
           <h1 className="font-bold text-2xl">TypeDash</h1>
         </Link>
-        <div className="flex gap-4">
+        <div className="flex gap-6">
           <Tooltip
             label="Singleplayer"
             aria-label="Singleplayer tooltip"
             className="font-mono"
           >
             <Link to={`/singleplayer`}>
-              <BsFillPersonFill size={25} />
+              <BsFillPersonFill
+                size={25}
+                className="hover:text-white transition"
+              />
             </Link>
           </Tooltip>
           <Tooltip
@@ -38,7 +41,7 @@ const Header: FC<HeaderProps> = ({}) => {
             className="font-mono"
           >
             <Link to={`/multiplayer`}>
-              <BsPeopleFill size={25} />
+              <BsPeopleFill size={25} className="hover:text-white transition" />
             </Link>
           </Tooltip>
         </div>
@@ -50,10 +53,7 @@ const Header: FC<HeaderProps> = ({}) => {
           className="font-mono"
         >
           <Link to={`login`}>
-            <FiLogIn
-              size={25}
-              className="hover:text-lightgrey-8008 cursor-pointer"
-            />
+            <FiLogIn size={25} className="hover:text-white transition" />
           </Link>
         </Tooltip>
       )}
@@ -66,10 +66,7 @@ const Header: FC<HeaderProps> = ({}) => {
             className="font-mono"
           >
             <button onClick={logoutHandler}>
-              <FiLogOut
-                size={25}
-                className="hover:text-lightgrey-8008 cursor-pointer"
-              />
+              <FiLogOut size={25} className="hover:text-white transition" />
             </button>
           </Tooltip>
         </div>
