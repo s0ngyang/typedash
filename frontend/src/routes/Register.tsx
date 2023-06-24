@@ -22,7 +22,7 @@ const Register: FC<RegisterProps> = ({}) => {
     console.log(params);
     http()
       .post('register', params)
-      .then((res) => {
+      .then(() => {
         navigate('/login');
       })
       .catch((e) =>
