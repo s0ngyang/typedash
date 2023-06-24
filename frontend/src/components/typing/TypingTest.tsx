@@ -6,6 +6,7 @@ import { randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
 import Word from './Word';
 import { ChallengeProps } from './challenges/Books.constants';
+import Result from './results/Result';
 
 interface TypingTestProps {
   isMultiplayer: boolean;
@@ -28,6 +29,7 @@ const TypingTest: FC<TypingTestProps> = ({
   const [timeTaken, setTimeTaken] = useState(0);
   const [wrongLettersInWord, setWrongLettersInWord] = useState(0);
   const [isFocused, setIsFocused] = useState(true);
+  const [showResults, setShowResults] = useState(true);
   const [wrongLetters, setWrongLetters] = useState<number[]>([]);
   const [result, setResult] = useState({
     wpm: 0,
@@ -61,6 +63,7 @@ const TypingTest: FC<TypingTestProps> = ({
 
   useEffect(() => {
     const handleClickAway = (e: MouseEvent) => {
+      if (showResults) return;
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
@@ -99,6 +102,7 @@ const TypingTest: FC<TypingTestProps> = ({
       accuracy,
       time: timeTaken,
     });
+    setShowResults(true);
   }, [testStatus]);
 
   const restartTest = () => {
@@ -116,6 +120,7 @@ const TypingTest: FC<TypingTestProps> = ({
       accuracy: 0,
       time: 0,
     });
+    setShowResults(false);
     focusOnInput();
     clearInput();
     setChallenge(randomChallenge(challenge?.id));
@@ -199,7 +204,7 @@ const TypingTest: FC<TypingTestProps> = ({
       ref={containerRef}
       onKeyDown={handleTab}
     >
-      {!isFocused && (
+      {!isFocused && !showResults && (
         <div
           onClick={focusOnInput}
           className="flex items-center gap-4 absolute z-10 pb-12 text-white"
@@ -210,55 +215,59 @@ const TypingTest: FC<TypingTestProps> = ({
       <div
         className={`flex flex-col justify-center items-center gap-8 h-full overflow-hidden ${
           !isFocused ? 'blur-sm' : ''
-        } transition`}
+        } transition w-full`}
       >
-        <div className="w-4/5 h-4 transition">
-          <SlideFade in={testStatus === 1}>
-            <Progress
-              size="md"
-              value={activeLetterIndex}
-              max={letterSet.length}
-              sx={{
-                '& > div:first-child': {
-                  transitionProperty: 'width',
-                  backgroundColor: '#f44c7f',
-                },
-              }}
+        {!showResults ? (
+          <>
+            <div className="w-4/5 h-4 transition">
+              <SlideFade in={testStatus === 1}>
+                <Progress
+                  size="md"
+                  value={activeLetterIndex}
+                  max={letterSet.length}
+                  sx={{
+                    '& > div:first-child': {
+                      transitionProperty: 'width',
+                      backgroundColor: '#f44c7f',
+                    },
+                  }}
+                />
+              </SlideFade>
+            </div>
+            <div className="flex flex-wrap h-1/5">
+              {wordSet.map((word, index) => (
+                <Word
+                  key={index}
+                  word={word}
+                  typedWord={typedWordList[index]}
+                  status={
+                    index === activeWordIndex
+                      ? 'active'
+                      : index < activeWordIndex && typedWordList[index] === word
+                      ? 'completed'
+                      : 'idle'
+                  }
+                />
+              ))}
+            </div>
+            <input
+              autoFocus
+              type="text"
+              onChange={handleKeyPress}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
+              className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
             />
-          </SlideFade>
-        </div>
-        <div className="flex flex-wrap h-1/5">
-          {wordSet.map((word, index) => (
-            <Word
-              key={index}
-              word={word}
-              typedWord={typedWordList[index]}
-              status={
-                index === activeWordIndex
-                  ? 'active'
-                  : index < activeWordIndex && typedWordList[index] === word
-                  ? 'completed'
-                  : 'idle'
-              }
-            />
-          ))}
-        </div>
-        <input
-          autoFocus
-          type="text"
-          onChange={handleKeyPress}
-          onKeyDown={handleKeyDown}
-          ref={inputRef}
-          className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
-        />
-        <div className="">
-          <h1>{time}</h1>
-        </div>
-        {testStatus === -1 && (
-          <div>
-            WPM: {result.wpm} accuracy: {`${result.accuracy}%`} time:{' '}
-            {result.time}
-          </div>
+            <div className="">
+              <h1>{time}</h1>
+            </div>
+          </>
+        ) : (
+          <Result
+            result={result}
+            showResults={showResults}
+            challenge={challenge}
+          />
         )}
         {!isMultiplayer && (
           <Tooltip
