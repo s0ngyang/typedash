@@ -10,74 +10,64 @@ const io = require('socket.io')(httpServer, {
 });
 
 const crypto = require('crypto');
-const randomId = () => crypto.randomBytes(8).toString('hex');
-
-const { InMemorySessionStore } = require('./sessionStore');
-const sessionStore = new InMemorySessionStore();
+const randomID = () => crypto.randomBytes(8).toString('hex');
 
 const rooms = {};
 
-io.use((socket, next) => {
-  const sessionID = socket.handshake.auth.sessionID;
-  if (sessionID) {
-    // find existing session
-    const session = sessionStore.findSession(sessionID);
-    if (session) {
-      socket.sessionID = sessionID;
-      //socket.userID = session.userID;
-      //socket.username = session.username;
-      return next();
-    }
-  }
-  // create new session
-  //socket.userID = randomId();
-  //socket.username = username;
-  next();
-});
-
 io.on('connection', (socket) => {
   socket.on('createRoom', (challenge) => {
-    socket.sessionID = randomId();
-    rooms[socket.sessionID] = {
-      host: socket.userID,
+    const roomID = randomID();
+    rooms[roomID] = {
       challenge,
-      players: [socket.userID],
+      players: [socket.id],
     };
+    socket.roomID = roomID;
+    socket.join(roomID);
 
-    socket.join(socket.sessionID);
+    socket.emit('roomCreated', roomID);
+    console.log(`room created, players: ${rooms[roomID].players}`);
 
-    socket.emit('roomCreated', socket.sessionID);
+    socket.emit('playerJoined', rooms[roomID].players);
   });
 
-  socket.on('joinRoom', (roomId) => {
-    // if room exists and user is not host
-
-    if (rooms[roomId] && rooms[roomId].host !== socket.userID) {
-      const room = rooms[roomId];
-      if (room.players.length >= 3) {
-        socket.emit('roomFull');
+  socket.on('joinRoom', (roomID) => {
+    // if room exists
+    if (rooms[roomID]) {
+      const room = rooms[roomID];
+      if (room.players.includes(socket.id)) {
+        return;
       }
-      room.players.push(socket.userID);
-      socket.join(roomId);
-      io.to(room.host).emit('playerJoined', socket.userID);
+      if (room.players.length >= 4) {
+        socket.emit('roomFull');
+        return;
+      }
+      room.players.push(socket.id);
+
+      socket.join(roomID);
+      socket.roomID = roomID;
+
+      io.to(roomID).emit('playerJoined', room.players);
+      console.log('player joined, players:', room.players);
+
       socket.emit('roomJoined', room.challenge);
-      //console.log(room.players);
     } else {
       socket.emit('invalidRoom');
     }
   });
 
-  socket.on('disconnect', (roomName) => {
-    if (userID === rooms[roomId].host) {
-      // teardown socket room
-      // remove rooms[roomId]
-    }
-    socket.leave(roomName);
-
-    // Remove user from the room state
-    const room = rooms[roomName];
-    if (room) {
-      room.users = room.users.filter((id) => id !== socket.userID);
+  socket.on('disconnect', () => {
+    if (rooms[socket.roomID]) {
+      if (rooms[socket.roomID].players.length <= 1) {
+        delete rooms[socket.roomID];
+        console.log('delete, rooms:', rooms);
+        io.to(socket.roomID).emit('playerLeft');
+      } else {
+        rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
+          (id) => id !== socket.id,
+        );
+        io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+        console.log('players left:', rooms[socket.roomID].players);
+      }
     }
   });
 });

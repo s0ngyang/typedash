@@ -10,10 +10,10 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
   const navigate = useNavigate();
   const challenge = randomChallenge();
   const createRoom = () => {
-    socket.emit('createRoom', { challenge });
-
-    socket.on('roomCreated', (roomId) => {
-      navigate(`/multiplayer/${roomId}`);
+    socket.emit('createRoom', challenge);
+    socket.on('roomCreated', (roomID) => {
+      socket.emit('joinRoom', roomID);
+      navigate(`/multiplayer/${roomID}`);
     });
   };
 
