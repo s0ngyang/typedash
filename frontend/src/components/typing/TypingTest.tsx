@@ -29,7 +29,7 @@ const TypingTest: FC<TypingTestProps> = ({
   const [timeTaken, setTimeTaken] = useState(0);
   const [wrongLettersInWord, setWrongLettersInWord] = useState(0);
   const [isFocused, setIsFocused] = useState(true);
-  const [showResults, setShowResults] = useState(true);
+  const [showResults, setShowResults] = useState(false);
   const [wrongLetters, setWrongLetters] = useState<number[]>([]);
   const [result, setResult] = useState({
     wpm: 0,
