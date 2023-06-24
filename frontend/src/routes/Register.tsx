@@ -1,27 +1,16 @@
-import { FC, useRef } from 'react';
+import { FormikValues, useFormik } from 'formik';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RegisterUserProps } from '../components/authentication/auth.types';
+import * as Yup from 'yup';
 import http from '../services/api';
 
 interface RegisterProps {}
 
 const Register: FC<RegisterProps> = ({}) => {
   const navigate = useNavigate();
-  const registerName = useRef<HTMLInputElement>(null);
-  const registerEmail = useRef<HTMLInputElement>(null);
-  const registerPassword = useRef<HTMLInputElement>(null);
-  const registerVerifyPassword = useRef<HTMLInputElement>(null);
-  const registerUserHandler = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params: RegisterUserProps = {
-      name: registerName.current!.value!,
-      email: registerEmail.current!.value!,
-      password: registerPassword.current!.value!,
-      password2: registerVerifyPassword.current!.value!,
-    };
-    console.log(params);
+  const registerUserHandler = (values: FormikValues) => {
     http()
-      .post('register', params)
+      .post('register', values)
       .then(() => {
         navigate('/login');
       })
@@ -37,34 +26,93 @@ const Register: FC<RegisterProps> = ({}) => {
   };
   const textfieldStyleString =
     'bg-transparent border-solid border-2 border-lightgrey-8008 rounded p-2';
+
+  const getCharacterValidationError = (str: string) => {
+    return `Your password must have at least 1 ${str} character.`;
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      password2: '',
+    },
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .max(15, 'Must be 15 characters or less')
+        .required('Username is required'),
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .required('Please enter a password')
+        .min(8, 'Password must have at least 8 characters')
+        .matches(/[0-9]/, getCharacterValidationError('digit'))
+        .matches(/[a-z]/, getCharacterValidationError('lowercase'))
+        .matches(/[A-Z]/, getCharacterValidationError('uppercase')),
+      password2: Yup.string()
+        .required('Please re-type your password')
+        .oneOf([Yup.ref('password')], 'Passwords does not match'),
+    }),
+    onSubmit: registerUserHandler,
+  });
   return (
     <div className="flex justify-center items-center gap-[16rem]">
-      <form className="flex flex-col gap-3" onSubmit={registerUserHandler}>
+      <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
         <h1>register</h1>
         <input
+          id="username"
+          name="username"
           className={textfieldStyleString}
           type="text"
           placeholder="username"
-          ref={registerName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.username}
         />
+        {formik.touched.username && formik.errors.username ? (
+          <div>{formik.errors.username}</div>
+        ) : null}
         <input
+          id="email"
+          name="email"
           className={textfieldStyleString}
           type="email"
           placeholder="email"
-          ref={registerEmail}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.email}
         />
+        {formik.touched.email && formik.errors.email ? (
+          <div>{formik.errors.email}</div>
+        ) : null}
         <input
+          id="password"
+          name="password"
           className={textfieldStyleString}
           type="password"
           placeholder="password"
-          ref={registerPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.password}
         />
+        {formik.touched.password && formik.errors.password ? (
+          <div>{formik.errors.password}</div>
+        ) : null}
         <input
+          id="password2"
+          name="password2"
           className={textfieldStyleString}
           type="password"
           placeholder="verify password"
-          ref={registerVerifyPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.password2}
         />
+        {formik.touched.password2 && formik.errors.password2 ? (
+          <div>{formik.errors.password2}</div>
+        ) : null}
         <button type="submit" className="hover:bg-slate-100 transition p-1">
           sign up
         </button>

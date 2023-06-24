@@ -75,7 +75,7 @@ const TypingTest: FC<TypingTestProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickAway);
     };
-  }, [inputRef]);
+  }, [containerRef]);
 
   // if finished word set, stop the test
   useEffect(() => {
@@ -203,6 +203,7 @@ const TypingTest: FC<TypingTestProps> = ({
       }
       ref={containerRef}
       onKeyDown={handleTab}
+      onClick={focusOnInput}
     >
       {!isFocused && !showResults && (
         <div
@@ -227,7 +228,7 @@ const TypingTest: FC<TypingTestProps> = ({
                 />
               </SlideFade>
             </div>
-            <div className="flex flex-wrap h-1/5">
+            <div className="flex flex-wrap h-1/5" onClick={focusOnInput}>
               {wordSet.map((word, index) => (
                 <Word
                   key={index}
