@@ -20,7 +20,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
   return (
     <div className="flex flex-col justify-center">
       <Button variant="ghost" onClick={createRoom}>
-        create room
+        Create Room
       </Button>
     </div>
   );

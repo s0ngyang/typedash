@@ -26,7 +26,10 @@ router.post('/', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    // await db.none(
+    //   'INSERT INTO users (name, email, password) VALUES ($1, $2, $3)',
+    //   [name, email, hashedPassword],
+    // );
     main()
       .then(async () => {
         await prisma.$disconnect();

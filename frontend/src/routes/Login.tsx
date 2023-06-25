@@ -59,8 +59,9 @@ export const Login: FC<LoginProps> = ({}) => {
         </button>
       </form>
       <h1>
+        don't have an account?{' '}
         <NavLink to="/register" className="hover:underline">
-          don't have an account? sign up
+          sign up
         </NavLink>
       </h1>
     </div>

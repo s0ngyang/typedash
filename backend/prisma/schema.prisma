@@ -8,18 +8,8 @@ datasource db {
 }
 
 model users {
-  id       Int        @id @default(autoincrement())
-  name     String     @unique(map: "no_dupe_name") @db.VarChar(128)
-  email    String     @unique(map: "no_dupe_email") @db.VarChar(128)
-  password String     @db.VarChar(10000)
-  loadouts loadouts[]
-}
-
-model loadouts {
-  id       Int     @id @default(autoincrement())
-  name     String  @db.VarChar(128)
-  switches String? @db.VarChar(128)
-  others   String? @db.VarChar(128)
-  user_id  Int?
-  users    users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id       Int    @id @default(autoincrement())
+  name     String @unique(map: "no_dupe_name") @db.VarChar(128)
+  email    String @unique(map: "no_dupe_email") @db.VarChar(128)
+  password String @db.VarChar(10000)
 }
