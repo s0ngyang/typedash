@@ -9,15 +9,9 @@ import Word from './Word';
 import { ChallengeProps } from './challenges/Books.constants';
 import Result from './results/Result';
 
-interface TypingTestProps {
-  isMultiplayer: boolean;
-  specificChallenge?: ChallengeProps;
-}
+interface TypingTestProps {}
 
-const TypingTest: FC<TypingTestProps> = ({
-  isMultiplayer,
-  specificChallenge,
-}) => {
+const TypingTest: FC<TypingTestProps> = ({}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -45,12 +39,7 @@ const TypingTest: FC<TypingTestProps> = ({
 
   useEffect(() => {
     // first load
-    let firstChallenge;
-    if (isMultiplayer && specificChallenge) {
-      firstChallenge = specificChallenge;
-    } else {
-      firstChallenge = randomChallenge();
-    }
+    const firstChallenge = randomChallenge();
     setChallenge(firstChallenge);
   }, []);
 
@@ -77,22 +66,23 @@ const TypingTest: FC<TypingTestProps> = ({
     };
   }, [containerRef]);
 
-  // if finished word set, stop the test
+  // if finished word set or timer has ran out, stop the test
   useEffect(() => {
     if (
-      typedWordList.length >= wordSet.length &&
-      typedWordList.at(-1) === wordSet.at(-1)
+      (typedWordList.length >= wordSet.length &&
+        typedWordList.at(-1) === wordSet.at(-1)) ||
+      time === 0
     ) {
       pauseTimer();
       setTestStatus(-1);
       setTimeTaken(INITIAL_TIME - time);
     }
-  }, [typedWordList, wordSet]);
+  }, [typedWordList, wordSet, time]);
 
   // generate result once test ends
   useEffect(() => {
     if (testStatus !== -1) return;
-    const WPM = Math.floor((wordSet.length / timeTaken) * 60);
+    const WPM = Math.floor((typedWordList.length / timeTaken) * 60);
     const accuracy = +(
       ((totalStrokes - mistypedCount) / totalStrokes) *
       100
@@ -261,25 +251,24 @@ const TypingTest: FC<TypingTestProps> = ({
             result={result}
             showResults={showResults}
             challenge={challenge}
+            timerRanOut={time === 0}
           />
         )}
-        {!isMultiplayer && (
-          <Tooltip
-            label="Restart Test"
-            fontSize="md"
-            aria-label="Restart test tooltip"
-            className="font-mono"
+        <Tooltip
+          label="Restart Test"
+          fontSize="md"
+          aria-label="Restart test tooltip"
+          className="font-mono"
+        >
+          <button
+            onClick={restartTest}
+            ref={restartRef}
+            className="p-4 hover:text-white transition focus:text-white outline-none "
+            tabIndex={0}
           >
-            <button
-              onClick={restartTest}
-              ref={restartRef}
-              className="p-4 hover:text-white transition focus:text-white outline-none "
-              tabIndex={0}
-            >
-              <VscDebugRestart size={25} />
-            </button>
-          </Tooltip>
-        )}
+            <VscDebugRestart size={25} />
+          </button>
+        </Tooltip>
       </div>
     </div>
   );
