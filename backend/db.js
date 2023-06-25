@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // const db = pgp(
