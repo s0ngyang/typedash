@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../db');
 
-router.post('/', async (res, req) => {
+router.post('/', async (req, res) => {
   try {
     const { name, switches, others, username } = req.body;
 
@@ -16,6 +16,26 @@ router.post('/', async (res, req) => {
       return res.status(400).json({ errors });
     }
 
+    async function main() {
+      const user_id = await prisma.users.findUnique({
+        select: {
+          id: {
+            where: {
+              name: username,
+            },
+          },
+        },
+      });
+
+      await prisma.loadout.create({
+        data: {
+          name: name,
+          switches: switches,
+          others: others,
+          user_id: user_id,
+        },
+      });
+    }
     main()
       .then(async () => {
         await prisma.$disconnect();
@@ -27,30 +47,9 @@ router.post('/', async (res, req) => {
       });
 
     return res.status(201).json({ message: 'Loadout created' });
-  } catch {
+  } catch (error) {
     return res.status(500).json({ message: 'Error: Loadout not created' });
   }
 });
-
-async function main() {
-  await prisma.loadout.create({
-    data: {
-      name: name,
-      switches: switches,
-      others: others,
-      user_id: {
-        select: {
-          id: {
-            where: {
-              name: {
-                equals: username,
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-}
 
 module.exports = router;

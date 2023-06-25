@@ -2,7 +2,7 @@ import { Tooltip } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
 
 interface HeaderProps {}
@@ -60,6 +60,9 @@ const Header: FC<HeaderProps> = ({}) => {
       {context?.user && (
         <div className="flex items-center gap-4">
           <h1>Welcome {context?.user}</h1>
+          <NavLink to="/account" className="hover:underline">
+            account
+          </NavLink>
           <Tooltip
             label="Log Out"
             aria-label="Log out tooltip"
