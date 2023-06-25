@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const prisma = require('../db');
+const prisma = require('../prisma');
 
 router.post('/', async (req, res) => {
   try {
@@ -18,12 +18,11 @@ router.post('/', async (req, res) => {
 
     async function main() {
       const user_id = await prisma.users.findUnique({
+        where: {
+          name: username,
+        },
         select: {
-          id: {
-            where: {
-              name: username,
-            },
-          },
+          id: true,
         },
       });
 

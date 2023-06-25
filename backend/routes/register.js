@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const prisma = require('../db');
+const prisma = require('../prisma');
 
 router.post('/', async (req, res) => {
   try {
