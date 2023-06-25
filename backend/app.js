@@ -19,6 +19,7 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 const logoutRouter = require('./routes/logout');
+const createloadoutRouter = require('./routes/createloadout');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -52,6 +53,7 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
+app.use('/createloadout', createloadoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

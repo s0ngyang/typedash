@@ -40,7 +40,6 @@ const Room: FC<RoomProps> = ({}) => {
     });
 
     socket.on('invalidRoom', () => {
-      // show alert
       alert('Room not found!');
       navigate('/singleplayer');
     });
@@ -106,32 +105,38 @@ const Room: FC<RoomProps> = ({}) => {
               <div className="flex">
                 <div>{id}</div>
                 <ProgressBar
-                  lettersTyped={100}
+                  lettersTyped={5}
                   totalLetters={chosenChallenge?.content.split('').length!}
                 />
               </div>
             ))}
         </>
       )}
+
       <MultiplayerTest
         startTyping={time === 0}
         setLettersTyped={setLettersTyped}
       />
-      <div>{`Game is starting in ${time}`}</div>
+
+      {readyPlayers === numPlayers && (
+        <div>{`Game is starting in ${time}`}</div>
+      )}
+
       {readyPlayers !== numPlayers && (
         <Button onClick={ready} variant="ghost">
           ready
         </Button>
       )}
+
       <Button onClick={leaveRoom} variant="ghost">
         leave room
       </Button>
 
-      <div>{listOfPlayers}</div>
+      {/* <div>{listOfPlayers}</div> */}
       <div>
         {readyPlayers}/{numPlayers} ready
       </div>
-      <div>{roomUrl}</div>
+      <div>invite link: {roomUrl}</div>
     </>
   );
 };

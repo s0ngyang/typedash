@@ -1,5 +1,5 @@
 import { FC, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { RegisterUserProps } from '../components/authentication/auth.types';
 import http from '../services/api';
 
@@ -38,7 +38,7 @@ const Register: FC<RegisterProps> = ({}) => {
   const textfieldStyleString =
     'bg-transparent border-solid border-2 border-lightgrey-8008 rounded p-2';
   return (
-    <div className="flex justify-center items-center gap-[16rem]">
+    <div className="flex flex-col justify-center items-center gap-8">
       <form className="flex flex-col gap-3" onSubmit={registerUserHandler}>
         <h1>register</h1>
         <input
@@ -69,6 +69,11 @@ const Register: FC<RegisterProps> = ({}) => {
           sign up
         </button>
       </form>
+      <h1>
+        <NavLink to="/login" className="hover:underline">
+          back to login
+        </NavLink>
+      </h1>
     </div>
   );
 };

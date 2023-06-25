@@ -13,4 +13,3 @@ CREATE UNIQUE INDEX "no_dupe_name" ON "users"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "no_dupe_email" ON "users"("email");
-
