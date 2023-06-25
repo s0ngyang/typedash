@@ -10,14 +10,25 @@ interface ResultProps {
   };
   showResults: boolean;
   challenge: ChallengeProps | undefined;
+  timerRanOut: boolean;
 }
 
-const Result: FC<ResultProps> = ({ result, showResults, challenge }) => {
+const Result: FC<ResultProps> = ({
+  result,
+  showResults,
+  challenge,
+  timerRanOut,
+}) => {
   return (
     <Fade in={showResults} className="w-3/4">
-      <div className="text-left pb-12">
-        <div className="text-4xl text-pink-8008">{challenge?.title}</div>
-        <div className="text-xl">{`by ${challenge?.author}`}</div>
+      <div className="flex justify-between pb-12">
+        <div className="text-left">
+          <div className="text-4xl text-pink-8008">{challenge?.title}</div>
+          <div className="text-xl">{`by ${challenge?.author}`}</div>
+        </div>
+        {timerRanOut && (
+          <div className="text-right text-4xl italic">incomplete test</div>
+        )}
       </div>
       <div className="flex justify-between">
         <div className="text-left">
@@ -35,7 +46,7 @@ const Result: FC<ResultProps> = ({ result, showResults, challenge }) => {
         <div className="text-left">
           <div className="font-bold text-6xl">time</div>
           <div className="font-medium text-4xl text-pink-8008">
-            {`${result.time}s`}
+            {!timerRanOut ? `${result.time}s` : '-'}
           </div>
         </div>
       </div>

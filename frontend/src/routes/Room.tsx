@@ -47,7 +47,7 @@ const Room: FC<RoomProps> = ({}) => {
 
   return (
     <>
-      <TypingTest isMultiplayer={true} specificChallenge={chosenChallenge} />
+      <TypingTest specificChallenge={chosenChallenge} />
       <Button onClick={leaveRoom} variant="ghost">
         leave room
       </Button>

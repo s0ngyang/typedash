@@ -27,7 +27,14 @@ const useTimer = (initialTime: number): [number, TimerControls] => {
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = window.setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
+        setTime((prevTime) => {
+          if (prevTime <= 0) {
+            clearInterval(intervalRef.current!);
+            setIsRunning(false);
+            return 0;
+          }
+          return prevTime - 1;
+        });
       }, 1000);
     } else {
       clearInterval(intervalRef.current!);
