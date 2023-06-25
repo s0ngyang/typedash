@@ -9,9 +9,11 @@ import Word from './Word';
 import { ChallengeProps } from './challenges/Books.constants';
 import Result from './results/Result';
 
-interface TypingTestProps {}
+interface TypingTestProps {
+  specificChallenge?: ChallengeProps;
+}
 
-const TypingTest: FC<TypingTestProps> = ({}) => {
+const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -39,7 +41,12 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
 
   useEffect(() => {
     // first load
-    const firstChallenge = randomChallenge();
+    let firstChallenge;
+    if (specificChallenge) {
+      firstChallenge = specificChallenge;
+    } else {
+      firstChallenge = randomChallenge();
+    }
     setChallenge(firstChallenge);
   }, []);
 
