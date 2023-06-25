@@ -5,7 +5,7 @@ const passport = require('passport');
 router.post('/', checkNotAuthenticated, (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      console.log('err 1');
+      //console.log('err 1');
       return res.status(500).json({ message: 'Authentication failed' });
     }
     if (!user) {
@@ -13,7 +13,7 @@ router.post('/', checkNotAuthenticated, (req, res, next) => {
     }
     req.login(user, (err) => {
       if (err) {
-        console.log('err 2');
+        //console.log('err 2');
         return res.status(500).json({ message: 'Authentication failed' });
       }
       const { name, email } = user;

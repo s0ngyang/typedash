@@ -7,7 +7,7 @@ const Account: FC<AccountProps> = () => {
   return (
     <div className="flex flex-col">
       <NavLink to={'/account/loadout'} className="hover:underline">
-        loadouts
+        Loadouts
       </NavLink>
     </div>
   );

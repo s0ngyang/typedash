@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     }
 
     async function main() {
-      const user_id = await prisma.users.findUnique({
+      const res = await prisma.users.findUnique({
         where: {
           name: username,
         },
@@ -26,12 +26,12 @@ router.post('/', async (req, res) => {
         },
       });
 
-      await prisma.loadout.create({
+      await prisma.loadouts.create({
         data: {
           name: name,
           switches: switches,
           others: others,
-          user_id: user_id,
+          user_id: res.id,
         },
       });
     }

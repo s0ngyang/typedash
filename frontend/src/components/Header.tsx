@@ -59,10 +59,12 @@ const Header: FC<HeaderProps> = ({}) => {
       )}
       {context?.user && (
         <div className="flex items-center gap-4">
-          <h1>Welcome {context?.user}</h1>
-          <NavLink to="/account" className="hover:underline">
-            account
-          </NavLink>
+          <h1>
+            Welcome{' '}
+            <NavLink to="/account/loadout" className="hover:underline">
+              {context?.user}
+            </NavLink>
+          </h1>
           <Tooltip
             label="Log Out"
             aria-label="Log out tooltip"

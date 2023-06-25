@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
@@ -30,6 +29,11 @@ server.listen(port, () => {
 });
 server.on('error', onError);
 server.on('listening', onListening);
+
+const socketServer = require('../socket.js');
+socketServer.listen('3001', () => {
+  console.log(`socket server listening on port ${port}`);
+});
 
 /**
  * Normalize a port into a number, string, or false.
