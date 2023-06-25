@@ -1,19 +1,43 @@
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip, useToast } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
+import http from '../services/api';
 
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
+  const toast = useToast();
   const navigate = useNavigate();
   const logoutHandler = () => {
-    if (confirm('Are you sure you want to log out?')) {
-      navigate('/login');
-      context?.setUser(undefined);
-    }
+    http()
+      .post('logout')
+      .then(() => {
+        toast({
+          title: 'Logout successful.',
+          description: 'You are now logged out.',
+          variant: 'subtle',
+          status: 'success',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate('/');
+        context?.setUser(undefined);
+      })
+      .catch((e) => {
+        toast({
+          title: 'Logout failed.',
+          description: `${e.response.data.message}.`,
+          variant: 'subtle',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
   const context = useContext(authContext);
   return (
