@@ -20,7 +20,6 @@ const CreateLoadout = () => {
       others: loadoutOthers.current!.value!,
       username: context?.user,
     };
-    console.log(params);
     http()
       .post('createloadout', params)
       .then(() => {
@@ -38,7 +37,7 @@ const CreateLoadout = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-center gap-4">
       <form className="flex flex-col gap-3" onSubmit={submitLoadoutHandler}>
         <h1>loadout</h1>
         <input
