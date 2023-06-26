@@ -251,6 +251,7 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
               type="text"
               onChange={handleKeyPress}
               onKeyDown={handleKeyDown}
+              onPasteCapture={(e) => e.preventDefault()}
               ref={inputRef}
               className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
             />
