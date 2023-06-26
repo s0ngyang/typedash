@@ -22,11 +22,11 @@ const CreateLoadout = () => {
       id: state.id,
     };
     http()
-      .post('updateloadout', params)
+      .put('updateloadout', params)
       .then(() => {
         toast({
-          title: 'Loadout updated.',
-          description: 'Loading...',
+          title: 'Loadout updating.',
+          description: '...',
           variant: 'subtle',
           status: 'success',
           position: 'top-right',

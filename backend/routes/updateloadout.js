@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
 
-router.post('/', async (req, res) => {
+router.put('/', async (req, res) => {
   try {
     const { name, switches, others, id } = req.body;
 
