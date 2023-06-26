@@ -11,6 +11,7 @@ import Multiplayer from './routes/Multiplayer';
 import Register from './routes/Register';
 import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
+import UpdateLoadout from './routes/UpdateLoadout';
 
 function App() {
   const [user, setUser] = useState<string>();
@@ -30,6 +31,7 @@ function App() {
           <Route path="account" element={<Account />} />
           <Route path="account/loadout" element={<Loadout />} />
           <Route path="account/loadout/create" element={<CreateLoadout />} />
+          <Route path="account/loadout/update" element={<UpdateLoadout />} />
           <Route path="*" element={<Navigate to="/singleplayer" replace />} />
         </Route>
       </Routes>

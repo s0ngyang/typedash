@@ -4,33 +4,25 @@ const prisma = require('../prisma');
 
 router.get('/', async (req, res) => {
   try {
-    var loadouts = [];
-    //console.log(req.query);
     async function main() {
-      const user = await prisma.users.findUniqueOrThrow({
+      await prisma.loadouts.delete({
         where: {
-          name: req.query.data,
-        },
-      });
-
-      loadouts = await prisma.loadouts.findMany({
-        where: {
-          user_id: user.id,
+          id: Number(req.query.data),
         },
       });
     }
     main()
       .then(async () => {
         await prisma.$disconnect();
-        return res.status(201).json({ loadouts: loadouts });
+        return res.status(201).json({ message: 'Delete successful' });
       })
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        process.exit(1);
+        return res.status(500).json({ message: 'Loadout does not exist.' });
       });
-  } catch (e) {
-    return res.status(500).json({ loadouts: [] });
+  } catch (error) {
+    return res.status(500).json({ message: 'Loadout does not exist.' });
   }
 });
 
