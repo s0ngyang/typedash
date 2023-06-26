@@ -1,11 +1,10 @@
-const app = require('express')();
+const app = require('./app');
 const httpServer = require('http').createServer(app);
-app.use(require('cors')());
 const io = require('socket.io')(httpServer, {
   cors: {
     origin: 'http://127.0.0.1:5173',
     // origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
+    //methods: ['GET', 'POST'],
   },
 });
 
@@ -20,6 +19,7 @@ io.on('connection', (socket) => {
     rooms[roomID] = {
       challenge,
       players: [socket.id],
+      ready: [],
     };
     socket.roomID = roomID;
     socket.join(roomID);
@@ -27,7 +27,10 @@ io.on('connection', (socket) => {
     socket.emit('roomCreated', roomID);
     console.log(`room created, players: ${rooms[roomID].players}`);
 
-    socket.emit('playerJoined', rooms[roomID].players);
+    socket.emit('playerJoined', {
+      players: rooms[roomID].players,
+      challenge: rooms[roomID].challenge,
+    });
   });
 
   socket.on('joinRoom', (roomID) => {
@@ -46,13 +49,57 @@ io.on('connection', (socket) => {
       socket.join(roomID);
       socket.roomID = roomID;
 
-      io.to(roomID).emit('playerJoined', room.players);
+      io.to(roomID).emit('playerJoined', {
+        players: room.players,
+        challenge: room.challenge,
+      });
       console.log('player joined, players:', room.players);
-
       socket.emit('roomJoined', room.challenge);
     } else {
       socket.emit('invalidRoom');
     }
+  });
+
+  socket.on('sendReady', () => {
+    const room = rooms[socket.roomID];
+    if (room.ready.length < room.players.length) {
+      for (let index = 0; index < room.ready.length; index++) {
+        const player = room.ready[index];
+        if (player === socket.id) {
+          return;
+        }
+      }
+      room.ready.push(socket.id);
+      io.to(socket.roomID).emit('receiveReady', room.ready.length);
+    }
+  });
+
+  // socket.on('gameStart', () => {
+  //   setInterval(() => {
+  //     socket.to(socket.roomID).emit('progressUpdate', { playerId: socket.id });
+  //   }, 1000);
+  // });
+
+  socket.on('leaveRoom', () => {
+    socket.leave(socket.roomID);
+    rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
+      (id) => id !== socket.id,
+    );
+    io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+
+    rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
+      (id) => id !== socket.id,
+    );
+    io.to(socket.roomID).emit(
+      'receiveReady',
+      rooms[socket.roomID].ready.length,
+    );
+  });
+
+  socket.on('typingProgress', (progress) => {
+    socket
+      .to(socket.roomID)
+      .emit('progressUpdate', { playerId: socket.id, progress });
   });
 
   socket.on('disconnect', () => {
@@ -66,15 +113,17 @@ io.on('connection', (socket) => {
           (id) => id !== socket.id,
         );
         io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
-        console.log('players left:', rooms[socket.roomID].players);
+
+        rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
+          (id) => id !== socket.id,
+        );
+        io.to(socket.roomID).emit(
+          'receiveReady',
+          rooms[socket.roomID].ready.length,
+        );
       }
     }
   });
 });
 
-const port = process.env.PORT || 3000; // Replace with your desired port number
-httpServer.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
-module.exports = io;
+module.exports = httpServer;

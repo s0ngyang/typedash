@@ -1,6 +1,6 @@
-import io, { Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-const socket: Socket = io('http://localhost:3000');
+const socket = io('http://localhost:3001', {});
 
 socket.onAny((event, ...args) => {
   console.log(event, args);
