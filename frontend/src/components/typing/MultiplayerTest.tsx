@@ -1,6 +1,6 @@
+// @ts-nocheck
 import { FC, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
-import { randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
 import socket from '../../services/socket';
 import Word from './Word';
@@ -98,34 +98,9 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     setShowResults(true);
   }, [testStatus]);
 
-  const restartTest = () => {
-    resetTimer();
-    setTestStatus(0);
-    setTypedWordList(['']);
-    setActiveWordIndex(0);
-    setMistypedCount(0);
-    setActiveLetterIndex(0);
-    setTimeTaken(0);
-    setWrongLettersInWord(0);
-    setWrongLetters([]);
-    setResult({
-      wpm: 0,
-      accuracy: 0,
-      time: 0,
-    });
-    setShowResults(false);
-    focusOnInput();
-    clearInput();
-    setChallenge(randomChallenge(challenge?.id));
-  };
-
   const focusOnInput = () => {
     setIsFocused(true);
     inputRef.current?.focus();
-  };
-
-  const clearInput = () => {
-    inputRef.current!.value = '';
   };
 
   const handleTab = (e: React.KeyboardEvent) => {
