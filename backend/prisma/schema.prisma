@@ -1,6 +1,7 @@
 generator dbml {
   provider = "prisma-dbml-generator"
 }
+
 generator client {
   provider = "prisma-client-js"
 }
