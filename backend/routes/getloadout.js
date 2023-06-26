@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
           name: req.query.data,
         },
       });
-
+      console.log(user);
       loadouts = await prisma.loadouts.findMany({
         where: {
           user_id: user.id,
