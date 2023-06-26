@@ -4,8 +4,9 @@ import.meta.env.MODE;
 const http = () => {
   const api_url: string =
     process.env.NODE_ENV === 'production'
-      ? 'https://typedash-api.onrender.com'
-      : 'http://localhost:3000/';
+      ? 'https://typedash-api-5bqlc.ondigitalocean.app/'
+      : 'http://localhost:3000';
+
   const instance = axios.create({
     // withCredentials: true,
     baseURL: api_url,
