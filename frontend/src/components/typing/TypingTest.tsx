@@ -141,7 +141,14 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ' ') {
+    if (
+      e.key === 'ArrowUp' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight'
+    ) {
+      e.preventDefault();
+    } else if (e.key === ' ') {
       if (wordSet[activeWordIndex] !== typedWordList[activeWordIndex]) {
         e.preventDefault();
       } else {
@@ -151,10 +158,8 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
     } else if (e.key === 'Backspace') {
       if (wrongLettersInWord > 0) setWrongLettersInWord(wrongLettersInWord - 1);
       if (inputRef.current?.value.slice(-1) === ' ') e.preventDefault();
-    } else {
-      if (e.key !== 'Shift') {
-        setTotalStrokes(totalStrokes + 1);
-      }
+    } else if (e.key !== 'Shift') {
+      setTotalStrokes(totalStrokes + 1);
     }
   };
 
