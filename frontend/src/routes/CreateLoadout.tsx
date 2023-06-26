@@ -25,7 +25,6 @@ const CreateLoadout = () => {
     http()
       .post('createloadout', params)
       .then(() => {
-        navigate('/account/loadout');
         toast({
           title: 'Loadout created.',
           description: 'Loading...',
@@ -35,6 +34,7 @@ const CreateLoadout = () => {
           duration: 5000,
           isClosable: true,
         });
+        navigate('/account/loadout');
       })
       .catch((err) =>
         alert(
