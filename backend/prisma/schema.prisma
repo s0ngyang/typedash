@@ -26,4 +26,6 @@ model loadouts {
   others   String? @db.VarChar(128)
   user_id  Int?
   users    users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, user_id], map: "no_dupe_loadout")
 }
