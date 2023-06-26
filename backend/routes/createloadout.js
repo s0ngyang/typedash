@@ -38,14 +38,13 @@ router.post('/', async (req, res) => {
     main()
       .then(async () => {
         await prisma.$disconnect();
+        return res.status(201).json({ message: 'Loadout created' });
       })
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        process.exit(1);
+        return res.status(500).json({ message: 'Error: Loadout not created' });
       });
-
-    return res.status(201).json({ message: 'Loadout created' });
   } catch (error) {
     return res.status(500).json({ message: 'Error: Loadout not created' });
   }

@@ -38,14 +38,13 @@ router.post('/', async (req, res) => {
     main()
       .then(async () => {
         await prisma.$disconnect();
+        return res.status(201).json({ message: 'Registration successful' });
       })
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        process.exit(1);
+        return res.status(500).json({ message: 'Registration failed' });
       });
-
-    return res.status(201).json({ message: 'Registration successful' });
   } catch (error) {
     return res.status(500).json({ message: 'Registration failed' });
   }

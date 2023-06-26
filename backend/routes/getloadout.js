@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        process.exit(1);
+        return res.status(500).json({ loadouts: [] });
       });
   } catch (e) {
     return res.status(500).json({ loadouts: [] });
