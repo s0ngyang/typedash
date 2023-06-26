@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const prisma = require('./prisma');
+const prisma = require('./prismaclient');
 
 function initialize(passport) {
   const authenticateUser = (email, password, done) => {
