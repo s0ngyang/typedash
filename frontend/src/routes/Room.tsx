@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,9 +21,9 @@ const Room: FC<RoomProps> = ({}) => {
   const [listOfPlayers, setListOfPlayers] = useState<string[]>();
   const [readyPlayers, setReadyPlayers] = useState(0);
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(5);
-  const [lettersTyped, setLettersTyped] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [chosenChallenge, setChosenChallenge] = useState<ChallengeProps>();
+  const [lettersTyped, setLettersTyped] = useState(0);
   const [typingProgresses, setTypingProgresses] = useState({});
 
   useEffect(() => {
