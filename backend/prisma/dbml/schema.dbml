@@ -17,6 +17,10 @@ Table loadouts {
   others String
   user_id Int
   users users
+
+  indexes {
+    (name, user_id) [unique]
+  }
 }
 
 Ref: loadouts.user_id > users.id [delete: No Action]
