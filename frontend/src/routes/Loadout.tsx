@@ -44,8 +44,8 @@ const Loadout: FC<LoadoutProps> = () => {
       });
   };
 
-  const editloadoutHandler = () => {
-    navigate('/account/loadout/update');
+  const editloadoutHandler = (loadout: Loadout) => {
+    navigate('/account/loadout/update', { state: loadout });
   };
 
   useEffect(() => {
@@ -63,7 +63,10 @@ const Loadout: FC<LoadoutProps> = () => {
             <p>{loadout.name}</p>
             <p>{loadout.switches}</p>
             <p>{loadout.others}</p>
-            <button className="hover:underline" onClick={editloadoutHandler}>
+            <button
+              className="hover:underline"
+              onClick={() => editloadoutHandler(loadout)}
+            >
               Edit
             </button>
             <button
