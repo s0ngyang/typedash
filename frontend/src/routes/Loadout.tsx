@@ -24,7 +24,7 @@ const Loadout: FC<LoadoutProps> = () => {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-center gap-4">
       <div>Your Loadouts</div>
       <div>
         {loadouts.map((loadout) => (
@@ -35,9 +35,9 @@ const Loadout: FC<LoadoutProps> = () => {
           </>
         ))}
       </div>
-      <NavLink to="/account/loadout/create" className="hover:underline">
-        Create New Loadout
-      </NavLink>
+      <button className="hover:bg-slate-100 transition p-1">
+        <NavLink to="/account/loadout/create">Create New Loadout</NavLink>
+      </button>
     </div>
   );
 };

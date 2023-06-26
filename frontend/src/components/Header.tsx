@@ -1,6 +1,7 @@
 import { Tooltip, useToast } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
+import { CgSmile } from 'react-icons/cg';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
@@ -83,12 +84,13 @@ const Header: FC<HeaderProps> = ({}) => {
       )}
       {context?.user && (
         <div className="flex items-center gap-4">
-          <h1>
-            Welcome{' '}
-            <NavLink to="/account/loadout" className="hover:underline">
-              {context?.user}
-            </NavLink>
-          </h1>
+          <NavLink
+            to="/account/loadout"
+            className="hover:underline flex items-center gap-2"
+          >
+            <CgSmile size={25} />
+            <span>{context?.user}</span>
+          </NavLink>
           <Tooltip
             label="Log Out"
             aria-label="Log out tooltip"
