@@ -118,20 +118,23 @@ const Room: FC<RoomProps> = ({}) => {
         startTyping={time === 0}
         setLettersTyped={setLettersTyped}
       />
-      <div>{`Game is starting in ${time}`}</div>
+      <div>
+        {readyPlayers}/{numPlayers} ready
+      </div>
       {readyPlayers !== numPlayers && (
         <Button onClick={ready} variant="ghost">
           ready
         </Button>
       )}
+
+      <div>{`Game is starting in ${time}`}</div>
+
       <Button onClick={leaveRoom} variant="ghost">
         leave room
       </Button>
 
-      <div>{listOfPlayers}</div>
-      <div>
-        {readyPlayers}/{numPlayers} ready
-      </div>
+      {/* <div>{listOfPlayers}</div> */}
+
       <div>{roomUrl}</div>
     </>
   );

@@ -27,7 +27,7 @@ const CreateLoadout = () => {
       .then(() => {
         navigate('/account/loadout');
         toast({
-          title: 'Loadout created.',
+          title: 'Loadout updated.',
           description: 'Loading...',
           variant: 'subtle',
           status: 'success',
