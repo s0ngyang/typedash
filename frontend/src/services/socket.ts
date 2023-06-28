@@ -1,6 +1,11 @@
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001', {});
+const api_url =
+  process.env.NODE_ENV === 'production'
+    ? 'https://typedash-api-5bqlc.ondigitalocean.app/'
+    : 'http://localhost:3001/';
+
+const socket = io(api_url, {});
 
 socket.onAny((event, ...args) => {
   console.log(event, args);

@@ -4,9 +4,9 @@ const io = require('socket.io')(httpServer, {
   cors: {
     origin: [
       'http://127.0.0.1:5173',
+      'http://localhost:5173',
       'https://main--cosmic-fox-2ad203.netlify.app',
     ],
-    // origin: 'http://localhost:5173',
     //methods: ['GET', 'POST'],
   },
 });
