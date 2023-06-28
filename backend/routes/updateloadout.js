@@ -26,10 +26,8 @@ router.put('/', async (req, res) => {
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        return res.status(500).json({ message: 'Error: Loadout not updated' });
+        throw e;
       });
-
-    return res.status(201).json({ message: 'Loadout updated' });
   } catch (error) {
     return res.status(500).json({ message: 'Error: Loadout not updated' });
   }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
 
-router.get('/', async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
     async function main() {
       await prisma.loadouts.delete({

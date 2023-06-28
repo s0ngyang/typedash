@@ -7,10 +7,10 @@ import http from '../services/api';
 interface LoadoutProps {}
 
 interface Loadout {
-  id: Number;
-  name: String;
-  switches: String | undefined;
-  others: String | undefined;
+  id: number;
+  name: string;
+  switches: string | undefined;
+  others: string | undefined;
 }
 
 const Loadout: FC<LoadoutProps> = () => {
@@ -27,9 +27,9 @@ const Loadout: FC<LoadoutProps> = () => {
       });
   };
 
-  const deleteloadoutHandler = (id: Number) => {
+  const deleteloadoutHandler = (id: number) => {
     http()
-      .get('deleteloadout', { params: { data: id } })
+      .delete('deleteloadout', { params: { data: id } })
       .then(() => {
         toast({
           title: 'Deleting loadout.',
@@ -59,10 +59,13 @@ const Loadout: FC<LoadoutProps> = () => {
       </div>
       <div>
         {loadouts.map((loadout) => (
-          <div className="flex flex-col justify-center gap-4 border">
-            <p>{loadout.name}</p>
-            <p>{loadout.switches}</p>
-            <p>{loadout.others}</p>
+          <ul
+            className="flex flex-col justify-center gap-4 border"
+            key={loadout.id}
+          >
+            <li key={loadout.name}>{loadout.name}</li>
+            <li key={loadout.switches}>{loadout.switches}</li>
+            <li key={loadout.others}>{loadout.others}</li>
             <button
               className="hover:underline"
               onClick={() => editloadoutHandler(loadout)}
@@ -75,7 +78,7 @@ const Loadout: FC<LoadoutProps> = () => {
             >
               Delete
             </button>
-          </div>
+          </ul>
         ))}
       </div>
       <button className="hover:bg-slate-100 transition p-1">
