@@ -5,13 +5,17 @@ import { CgSmile } from 'react-icons/cg';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
+import useMediaQuery from '../helpers/useMediaquery';
 import http from '../services/api';
+// @ts-ignore:next-line
+import { ReactComponent as CatLogo } from '../../src/assets/cat.svg';
 
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
   const toast = useToast();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width: 767px)');
   const logoutHandler = () => {
     http()
       .post('logout')
@@ -44,9 +48,14 @@ const Header: FC<HeaderProps> = ({}) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-8">
-        <Link to={`/`}>
-          <h1 className="font-bold text-2xl">TypeDash</h1>
-        </Link>
+        <div className="flex items-center gap-4">
+          {!isMobile && (
+            <CatLogo className="fill-pink-8008 stroke-black h-14 w-14" />
+          )}
+          <Link to={`/`}>
+            <h1 className="font-bold text-lg md:text-2xl">TypeDash</h1>
+          </Link>
+        </div>
         <div className="flex gap-6">
           <Tooltip
             label="Singleplayer"
