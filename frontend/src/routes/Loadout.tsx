@@ -32,8 +32,8 @@ const Loadout: FC<LoadoutProps> = () => {
       .delete('deleteloadout', { params: { data: id } })
       .then(() => {
         toast({
-          title: 'Deleting loadout.',
-          description: '...',
+          title: 'Loadout deleted.',
+          description: '',
           variant: 'subtle',
           status: 'success',
           position: 'top-right',

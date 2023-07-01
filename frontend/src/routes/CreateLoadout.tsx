@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import { useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
 import http from '../services/api';
 
@@ -27,7 +27,7 @@ const CreateLoadout = () => {
       .then(() => {
         toast({
           title: 'Loadout created.',
-          description: 'Loading...',
+          description: '',
           variant: 'subtle',
           status: 'success',
           position: 'top-right',
@@ -73,6 +73,9 @@ const CreateLoadout = () => {
           create loadout
         </button>
       </form>
+      <NavLink to="/account/loadout" className="hover:underline">
+        back to loadouts
+      </NavLink>
     </div>
   );
 };

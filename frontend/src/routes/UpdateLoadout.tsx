@@ -25,8 +25,8 @@ const CreateLoadout = () => {
       .put('updateloadout', params)
       .then(() => {
         toast({
-          title: 'Loadout updating.',
-          description: '...',
+          title: 'Loadout updated.',
+          description: '',
           variant: 'subtle',
           status: 'success',
           position: 'top-right',

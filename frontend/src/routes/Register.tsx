@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react';
 import { FormikValues, useFormik } from 'formik';
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import http from '../services/api';
 
@@ -167,6 +167,9 @@ const Register: FC<RegisterProps> = ({}) => {
           sign up
         </button>
       </form>
+      <NavLink to="/login" className="hover:underline">
+        back to login
+      </NavLink>
     </div>
   );
 };
