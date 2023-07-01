@@ -26,7 +26,17 @@ const Register: FC<RegisterProps> = ({}) => {
         });
         navigate('/login');
       })
-      .catch((e) => alert(e.response.data.message));
+      .catch((e) => {
+        toast({
+          title: 'Registration failed.',
+          description: `${e.response.data.message}`,
+          variant: 'subtle',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
 
   const getCharacterValidationError = (str: string) => {
