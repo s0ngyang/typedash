@@ -19,7 +19,7 @@ router.delete('/', async (req, res) => {
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        return res.status(500).json({ message: 'Loadout does not exist.' });
+        throw e;
       });
   } catch (error) {
     return res.status(500).json({ message: 'Loadout does not exist.' });

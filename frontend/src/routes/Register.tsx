@@ -11,7 +11,7 @@ const Register: FC<RegisterProps> = ({}) => {
   const toast = useToast();
   const navigate = useNavigate();
   const registerUserHandler = (values: FormikValues) => {
-    console.log(values);
+    //console.log(values);
     http()
       .post('register', values)
       .then(() => {
@@ -26,15 +26,7 @@ const Register: FC<RegisterProps> = ({}) => {
         });
         navigate('/login');
       })
-      .catch((e) =>
-        alert(
-          e.response.data.errors.reduce(
-            (res: any, str: any) => res + '- ' + str.message + '\n',
-            '',
-            '',
-          ),
-        ),
-      );
+      .catch((e) => alert(e.response.data.message));
   };
 
   const getCharacterValidationError = (str: string) => {
