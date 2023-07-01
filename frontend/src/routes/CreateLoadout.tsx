@@ -27,7 +27,7 @@ const CreateLoadout = () => {
       .then(() => {
         toast({
           title: 'Loadout created.',
-          description: 'Loading...',
+          description: '',
           variant: 'subtle',
           status: 'success',
           position: 'top-right',
