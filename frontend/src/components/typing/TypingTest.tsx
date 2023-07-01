@@ -201,7 +201,7 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   return (
     <div
       className={
-        'flex flex-col justify-center items-center gap-8 text-xl relative'
+        'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
       }
       ref={containerRef}
       onKeyDown={handleTab}
@@ -210,19 +210,19 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
       {!isFocused && !showResults && (
         <div
           onClick={focusOnInput}
-          className="flex items-center gap-4 absolute z-10 pb-12 text-white"
+          className="flex items-center gap-4 absolute z-10 text-white"
         >
           <HiCursorClick /> Click here to refocus
         </div>
       )}
       <div
-        className={`flex flex-col justify-center items-center gap-8 h-full overflow-hidden ${
+        className={`flex flex-col justify-center items-center gap-4 h-full overflow-hidden ${
           !isFocused ? 'blur-sm' : ''
         } transition w-full`}
       >
         {!showResults ? (
           <>
-            <div className="w-4/5 h-4 transition">
+            <div className="w-4/5 h-4">
               <SlideFade in={testStatus === 1}>
                 <ProgressBar
                   lettersTyped={activeLetterIndex}
@@ -230,7 +230,13 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
                 />
               </SlideFade>
             </div>
-            <div className="flex flex-wrap h-1/5" onClick={focusOnInput}>
+            <div className="w-full flex justify-start text-pink-8008">
+              {time}
+            </div>
+            <div
+              className="flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12"
+              onClick={focusOnInput}
+            >
               {wordSet.map((word, index) => (
                 <Word
                   key={index}
@@ -255,9 +261,6 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
               ref={inputRef}
               className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
             />
-            <div className="">
-              <h1>{time}</h1>
-            </div>
           </>
         ) : (
           <Result
