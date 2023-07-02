@@ -11,7 +11,7 @@ const Register: FC<RegisterProps> = ({}) => {
   const toast = useToast();
   const navigate = useNavigate();
   const registerUserHandler = (values: FormikValues) => {
-    console.log(values);
+    //console.log(values);
     http()
       .post('register', values)
       .then(() => {
@@ -26,15 +26,17 @@ const Register: FC<RegisterProps> = ({}) => {
         });
         navigate('/login');
       })
-      .catch((e) =>
-        alert(
-          e.response.data.errors.reduce(
-            (res: any, str: any) => res + '- ' + str.message + '\n',
-            '',
-            '',
-          ),
-        ),
-      );
+      .catch((e) => {
+        toast({
+          title: 'Registration failed.',
+          description: `${e.response.data.message}`,
+          variant: 'subtle',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
 
   const getCharacterValidationError = (str: string) => {

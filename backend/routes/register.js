@@ -5,24 +5,29 @@ const prisma = require('../prismaclient');
 
 router.post('/', async (req, res) => {
   try {
-    const { name, email, password, password2 } = req.body;
-
-    const errors = [];
-
-    if (!name || !email || !password || !password2) {
-      errors.push({ message: 'Please enter all fields' });
+    const { name, email, password } = req.body;
+    async function validation() {
+      const checkName = await prisma.users.findUnique({
+        where: {
+          name: name,
+        },
+      });
+      if (checkName !== null) {
+        return res.status(409).json({ message: 'Username already in use' });
+      }
+      const checkEmail = await prisma.users.findUnique({
+        where: {
+          email: email,
+        },
+      });
+      if (checkEmail !== null) {
+        return res.status(409).json({ message: 'Email already registered' });
+      }
     }
-
-    if (password.length < 6) {
-      errors.push({ message: 'Password must be at least 6 characters long' });
-    }
-
-    if (password !== password2) {
-      errors.push({ message: 'Passwords do not match' });
-    }
-
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
+    const error = await validation();
+    if (error !== null) {
+      await prisma.$disconnect();
+      return error;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,7 +48,7 @@ router.post('/', async (req, res) => {
       .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
-        return res.status(500).json({ message: 'Registration failed' });
+        throw e;
       });
   } catch (error) {
     return res.status(500).json({ message: 'Registration failed' });
