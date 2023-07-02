@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
+import { useContext, useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import { authContext } from './context/authContext';
 import Account from './routes/Account';
@@ -12,9 +13,35 @@ import Register from './routes/Register';
 import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
 import UpdateLoadout from './routes/UpdateLoadout';
+import http from './services/api';
 
 function App() {
   const [user, setUser] = useState<string>();
+  const context = useContext(authContext);
+  const toast = useToast();
+  const navigate = useNavigate();
+  useEffect(() => {
+    http()
+      .get('checkauth')
+      .then((res) => {
+        console.log(res.data.user.name);
+        setUser(res.data.user.name);
+        console.log(context);
+      })
+      .catch((e) => {
+        console.log(e);
+        toast({
+          title: 'Session expired.',
+          description: `${e.response.data}.`,
+          variant: 'subtle',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate('/login');
+      });
+  }, []);
   return (
     <authContext.Provider value={{ user, setUser }}>
       <Routes>
