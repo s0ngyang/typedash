@@ -1,12 +1,14 @@
 // @ts-nocheck
 import { Button } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MultiplayerTest from '../components/typing/MultiplayerTest';
 import ProgressBar from '../components/typing/ProgressBar';
 import { ChallengeProps } from '../components/typing/challenges/Books.constants';
+import { authContext } from '../context/authContext';
 import useTimer from '../helpers/useTimer';
 import socket from '../services/socket';
+
 interface RoomProps {}
 interface TypingProgressProps {
   playerId: number;
@@ -25,9 +27,13 @@ const Room: FC<RoomProps> = ({}) => {
   const [chosenChallenge, setChosenChallenge] = useState<ChallengeProps>();
   const [lettersTyped, setLettersTyped] = useState(0);
   const [typingProgresses, setTypingProgresses] = useState({});
+  const context = useContext(authContext);
 
   useEffect(() => {
-    socket.emit('joinRoom', roomID);
+    socket.emit('joinRoom', {
+      roomID: roomID,
+      username: context?.user || 'Guest',
+    });
 
     socket.on('playerJoined', ({ players, challenge }) => {
       setNumPlayers(players.length);
@@ -36,9 +42,9 @@ const Room: FC<RoomProps> = ({}) => {
       //console.log(players.length);
     });
 
-    socket.on('roomJoined', (challenge) => {
-      console.log(challenge);
-    });
+    // socket.on('roomJoined', (challenge) => {
+    //   console.log(challenge);
+    // });
 
     socket.on('invalidRoom', () => {
       // show alert
@@ -105,8 +111,9 @@ const Room: FC<RoomProps> = ({}) => {
           {gameStarted &&
             listOfPlayers!.map((id) => (
               <div className="flex">
-                <div>{id}</div>
+                <div key={id}>{id}</div>
                 <ProgressBar
+                  key={id}
                   lettersTyped={100}
                   totalLetters={chosenChallenge?.content.split('').length!}
                 />

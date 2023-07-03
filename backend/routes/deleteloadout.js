@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
 
-router.delete('/', async (req, res) => {
+router.delete('/', checkAuthenticated, async (req, res) => {
   try {
     async function main() {
       await prisma.loadouts.delete({
@@ -25,5 +25,12 @@ router.delete('/', async (req, res) => {
     return res.status(500).json({ message: 'Loadout does not exist.' });
   }
 });
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.status(401).send('Please log in');
+}
 
 module.exports = router;

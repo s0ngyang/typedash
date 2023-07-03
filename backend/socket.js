@@ -17,37 +17,41 @@ const randomID = () => crypto.randomBytes(8).toString('hex');
 const rooms = {};
 
 io.on('connection', (socket) => {
+  // console.log(io.sockets.adapter.rooms);
+  // console.log(sockets);
+  // console.log(socket.rooms);
+  socket.onAny((event, ...args) => {
+    console.log(event, args);
+  });
+
   socket.on('createRoom', (challenge) => {
     const roomID = randomID();
     rooms[roomID] = {
-      challenge,
-      players: [socket.id],
+      challenge: challenge,
+      players: [],
       ready: [],
     };
     socket.roomID = roomID;
     socket.join(roomID);
 
     socket.emit('roomCreated', roomID);
-    console.log(`room created, players: ${rooms[roomID].players}`);
-
-    socket.emit('playerJoined', {
-      players: rooms[roomID].players,
-      challenge: rooms[roomID].challenge,
-    });
+    //console.log(`room created, players: ${rooms[roomID].players}`);
   });
 
-  socket.on('joinRoom', (roomID) => {
+  socket.on('joinRoom', (data) => {
+    const roomID = data.roomID;
+    const username = data.username;
     // if room exists
     if (rooms[roomID]) {
       const room = rooms[roomID];
-      if (room.players.includes(socket.id)) {
+      if (room.players.includes(username)) {
         return;
       }
       if (room.players.length >= 4) {
         socket.emit('roomFull');
         return;
       }
-      room.players.push(socket.id);
+      room.players.push(username);
 
       socket.join(roomID);
       socket.roomID = roomID;
@@ -56,8 +60,8 @@ io.on('connection', (socket) => {
         players: room.players,
         challenge: room.challenge,
       });
-      console.log('player joined, players:', room.players);
-      socket.emit('roomJoined', room.challenge);
+      //console.log('player joined, players:', room.players);
+      // socket.emit('roomJoined', room.challenge);
     } else {
       socket.emit('invalidRoom');
     }

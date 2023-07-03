@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
 
-router.get('/', async (req, res) => {
+router.get('/', checkAuthenticated, async (req, res) => {
   try {
     var loadouts = [];
     //console.log(req.query);
@@ -33,5 +33,12 @@ router.get('/', async (req, res) => {
     return res.status(500).json({ loadouts: [] });
   }
 });
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.status(401).send('Please log in');
+}
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
 
-router.post('/', async (req, res) => {
+router.post('/', checkAuthenticated, async (req, res) => {
   try {
     const { name, switches, others, username } = req.body;
 
@@ -49,5 +49,12 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ message: 'Error: Loadout not created' });
   }
 });
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.status(401).send('Please log in');
+}
 
 module.exports = router;

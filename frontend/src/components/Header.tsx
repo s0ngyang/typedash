@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({}) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 767px)');
   const context = useContext(authContext);
-  console.log(context?.user);
+  //console.log(context?.user);
   const logoutHandler = () => {
     http()
       .post('logout')
