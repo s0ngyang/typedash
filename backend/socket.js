@@ -7,7 +7,7 @@ const io = require('socket.io')(httpServer, {
       'http://localhost:5173',
       'https://main--cosmic-fox-2ad203.netlify.app',
     ],
-    //methods: ['GET', 'POST'],
+    methods: ['GET', 'POST'],
   },
 });
 
