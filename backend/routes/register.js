@@ -23,6 +23,7 @@ router.post('/', async (req, res) => {
       if (checkEmail !== null) {
         return res.status(409).json({ message: 'Email already registered' });
       }
+      return null;
     }
     const error = await validation();
     if (error !== null) {
