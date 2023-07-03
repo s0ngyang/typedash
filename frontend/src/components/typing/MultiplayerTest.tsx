@@ -165,25 +165,24 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
         setWrongLetters(filtered);
       }
     }
+
     setTypedWordList(typed.split(' '));
-    socket.emit('typingProgress', {
-      username: username,
-      progress: activeLetterIndex,
-    });
+    socket.emit('typingProgress', activeLetterIndex);
   };
 
   return (
     <div
       className={
-        'flex flex-col justify-center items-center gap-8 text-xl relative'
+        'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
       }
       ref={containerRef}
       onKeyDown={handleTab}
+      onClick={focusOnInput}
     >
       {!isFocused && !showResults && (
         <div
           onClick={focusOnInput}
-          className="flex items-center gap-4 absolute z-10 pb-12 text-white"
+          className="flex items-center gap-4 absolute z-10 text-white"
         >
           <HiCursorClick /> Click here to refocus
         </div>
@@ -203,7 +202,13 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
                 />
               </SlideFade>
             </div> */}
-            <div className="flex flex-wrap h-1/5">
+            <div className="w-full flex justify-start text-pink-8008">
+              {time}
+            </div>
+            <div
+              className="flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12"
+              onClick={focusOnInput}
+            >
               {wordSet.map((word, index) => (
                 <Word
                   key={index}
@@ -229,15 +234,13 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
                 className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
               />
             )}
-            <div className="">
-              <h1>{time}</h1>
-            </div>
           </>
         ) : (
           <Result
             result={result}
             showResults={showResults}
             challenge={challenge}
+            timerRanOut={time === 0}
           />
         )}
       </div>

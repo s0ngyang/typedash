@@ -70,39 +70,38 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('gameStart', () => {
-    setInterval(() => {
-      socket.to(socket.roomID).emit('progressUpdate', { playerId: socket.id });
-    }, 1000);
+  socket.on('typingProgress', (progress) => {
+    io.to(socket.roomID).emit('progressUpdate', {
+      id: socket.id,
+      progress: progress,
+    });
   });
 
   socket.on('leaveRoom', () => {
     socket.leave(socket.roomID);
-    rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
-      (player) => player.id !== socket.id,
-    );
-    io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+    if (rooms[socket.roomID].players.length <= 1) {
+      delete rooms[socket.roomID];
+      io.to(socket.roomID).emit('playerLeft', []);
+    } else {
+      rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
+        (player) => player.id !== socket.id,
+      );
+      io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
 
-    rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
-      (player) => player.id !== socket.id,
-    );
-    io.to(socket.roomID).emit(
-      'receiveReady',
-      rooms[socket.roomID].ready.length,
-    );
-  });
-
-  socket.on('typingProgress', ({ username, progress }) => {
-    socket
-      .to(socket.roomID)
-      .emit('progressUpdate', { username: username, progress: progress });
+      rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
+        (player) => player.id !== socket.id,
+      );
+      io.to(socket.roomID).emit(
+        'receiveReady',
+        rooms[socket.roomID].ready.length,
+      );
+    }
   });
 
   socket.on('disconnect', () => {
     if (rooms[socket.roomID]) {
       if (rooms[socket.roomID].players.length <= 1) {
         delete rooms[socket.roomID];
-        console.log('delete, rooms:', rooms);
         io.to(socket.roomID).emit('playerLeft', []);
       } else {
         rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
