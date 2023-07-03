@@ -1,6 +1,7 @@
 // @ts-nocheck
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
+import { authContext } from '../../context/authContext';
 import useTimer from '../../helpers/useTimer';
 import socket from '../../services/socket';
 import Word from './Word';
@@ -40,6 +41,8 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const restartRef = useRef<HTMLButtonElement>(null);
+  const context = useContext(authContext);
+  const username = context?.user || 'Guest';
 
   useEffect(() => {
     socket.on('playerJoined', ({ challenge }) => {
@@ -163,7 +166,10 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       }
     }
     setTypedWordList(typed.split(' '));
-    socket.emit('typingProgress', activeLetterIndex);
+    socket.emit('typingProgress', {
+      username: username,
+      progress: activeLetterIndex,
+    });
   };
 
   return (

@@ -28,11 +28,12 @@ const Room: FC<RoomProps> = ({}) => {
   const [lettersTyped, setLettersTyped] = useState(0);
   const [typingProgresses, setTypingProgresses] = useState({});
   const context = useContext(authContext);
+  const username = context?.user || 'Guest';
 
   useEffect(() => {
     socket.emit('joinRoom', {
       roomID: roomID,
-      username: context?.user || 'Guest',
+      username: username,
     });
 
     socket.on('playerJoined', ({ players, challenge }) => {
@@ -61,10 +62,10 @@ const Room: FC<RoomProps> = ({}) => {
       setReadyPlayers(readyCount);
     });
 
-    socket.on('progressUpdate', ({ playerId, progress }) => {
+    socket.on('progressUpdate', ({ username, progress }) => {
       setTypingProgresses((prevProgress) => ({
         ...prevProgress,
-        [playerId]: progress,
+        [username]: progress,
       }));
     });
   }, []);
@@ -78,7 +79,7 @@ const Room: FC<RoomProps> = ({}) => {
         for (let i = 0; i < listOfPlayers!.length; i++) {
           setTypingProgresses((prevProgress) => ({
             ...prevProgress,
-            [listOfPlayers[i]]: 0,
+            [listOfPlayers[i].username]: 0,
           }));
         }
       }
@@ -86,12 +87,12 @@ const Room: FC<RoomProps> = ({}) => {
   }, [readyPlayers, numPlayers]);
 
   const leaveRoom = () => {
-    socket.emit('leaveRoom');
+    socket.emit('leaveRoom', username);
     navigate('/singleplayer');
   };
 
   const ready = () => {
-    socket.emit('sendReady');
+    socket.emit('sendReady', username);
   };
 
   return (
@@ -109,11 +110,11 @@ const Room: FC<RoomProps> = ({}) => {
               </div>
             ))} */}
           {gameStarted &&
-            listOfPlayers!.map((id) => (
-              <div className="flex">
-                <div key={id}>{id}</div>
+            listOfPlayers!.map((player) => (
+              <div key={player} className="flex">
+                <div key={player.username}>{player.username}</div>
                 <ProgressBar
-                  key={id}
+                  key={player.id}
                   lettersTyped={100}
                   totalLetters={chosenChallenge?.content.split('').length!}
                 />
