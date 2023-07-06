@@ -32,6 +32,7 @@ const Header: FC<HeaderProps> = ({}) => {
         });
         navigate('/');
         context?.setUser(undefined);
+        localStorage.removeItem('token');
       })
       .catch((e) => {
         toast({
