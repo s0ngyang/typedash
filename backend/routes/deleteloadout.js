@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
+const authenticateToken = require('./authenticate-token');
 
-router.delete('/', async (req, res) => {
+router.delete('/', authenticateToken, async (req, res) => {
   try {
     async function main() {
       await prisma.loadouts.delete({

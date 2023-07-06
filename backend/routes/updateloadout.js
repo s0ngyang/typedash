@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
+const authenticateToken = require('./authenticate-token');
 
-router.put('/', async (req, res) => {
+router.put('/', authenticateToken, async (req, res) => {
   try {
     const { name, switches, others, id } = req.body;
 
