@@ -23,7 +23,6 @@ const createloadoutRouter = require('./routes/createloadout');
 const getloadoutRouter = require('./routes/getloadout');
 const updateloadoutRouter = require('./routes/updateloadout');
 const deleteloadoutRouter = require('./routes/deleteloadout');
-const checkauthRouter = require('./routes/checkauth');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -36,7 +35,7 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -46,31 +45,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      // secure: true,
-      maxAge: 3600000, // 1 hour
-    },
   }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-const whitelist = [
-  'http://127.0.0.1:5173',
-  'http://localhost:5173',
-  'https://main--cosmic-fox-2ad203.netlify.app',
-];
-const corsOptions = {
-  credentials: true,
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -81,7 +60,6 @@ app.use('/createloadout', createloadoutRouter);
 app.use('/getloadout', getloadoutRouter);
 app.use('/updateloadout', updateloadoutRouter);
 app.use('/deleteloadout', deleteloadoutRouter);
-app.use('/checkauth', checkauthRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
