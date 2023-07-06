@@ -25,7 +25,6 @@ function App() {
     const token = localStorage.getItem('token');
     if (token) {
       const decoded = jwt_decode<JwtPayload>(token || '') || null;
-      console.log(decoded);
       setUser(decoded.name);
     } else {
       toast({

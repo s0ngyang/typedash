@@ -16,7 +16,6 @@ export const Login: FC<LoginProps> = ({}) => {
     http()
       .post('login', values)
       .then((res) => {
-        console.log(res);
         context?.setUser(res.data.user.name);
         localStorage.setItem('token', res.data.token);
         toast({
