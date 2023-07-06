@@ -42,7 +42,12 @@ function initialize(passport) {
       authenticateUser,
     ),
   );
-  passport.serializeUser((user, done) => done(null, user.id));
+  passport.serializeUser((user, done) => {
+    process.nextTick(() => {
+      return done(null, user.id);
+    });
+  });
+
   passport.deserializeUser((id, done) => {
     async function main() {
       try {

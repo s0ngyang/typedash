@@ -11,7 +11,6 @@ const Register: FC<RegisterProps> = ({}) => {
   const toast = useToast();
   const navigate = useNavigate();
   const registerUserHandler = (values: FormikValues) => {
-    //console.log(values);
     http()
       .post('register', values)
       .then(() => {

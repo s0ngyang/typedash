@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
+const authenticateToken = require('./authenticate-token');
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     var loadouts = [];
     //console.log(req.query);
