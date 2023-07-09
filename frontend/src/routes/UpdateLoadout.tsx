@@ -35,15 +35,18 @@ const CreateLoadout = () => {
         });
         navigate('/account/loadout');
       })
-      .catch((err) =>
-        alert(
-          err.response.data.errors.reduce(
-            (res: any, str: any) => res + '- ' + str.message + '\n',
-            '',
-            '',
-          ),
-        ),
-      );
+      .catch((err) => {
+        toast({
+          title: 'Session expired.',
+          description: 'Please login again',
+          variant: 'subtle',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate(0);
+      });
   };
 
   return (

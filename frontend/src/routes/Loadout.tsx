@@ -24,7 +24,8 @@ const Loadout: FC<LoadoutProps> = () => {
       .get('getloadout', { params: { data: context?.user } })
       .then((res) => {
         setLoadouts(res.data.loadouts);
-      });
+      })
+      .catch(() => navigate('/'));
   };
 
   const deleteloadoutHandler = (id: number) => {
