@@ -23,6 +23,7 @@ const createloadoutRouter = require('./routes/createloadout');
 const getloadoutRouter = require('./routes/getloadout');
 const updateloadoutRouter = require('./routes/updateloadout');
 const deleteloadoutRouter = require('./routes/deleteloadout');
+const refreshTokenRouter = require('./routes/refresh-token');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -49,7 +50,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -60,6 +61,7 @@ app.use('/createloadout', createloadoutRouter);
 app.use('/getloadout', getloadoutRouter);
 app.use('/updateloadout', updateloadoutRouter);
 app.use('/deleteloadout', deleteloadoutRouter);
+app.use('/refresh', refreshTokenRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
