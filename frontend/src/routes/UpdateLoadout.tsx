@@ -35,7 +35,7 @@ const CreateLoadout = () => {
         });
         navigate('/account/loadout');
       })
-      .catch((err) => {
+      .catch(() => {
         toast({
           title: 'Session expired.',
           description: 'Please login again',

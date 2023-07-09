@@ -36,7 +36,7 @@ const CreateLoadout = () => {
         });
         navigate('/account/loadout');
       })
-      .catch((err) => {
+      .catch(() => {
         navigate(0);
       });
   };
