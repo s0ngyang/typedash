@@ -52,13 +52,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 const whitelist = [
   'http://localhost:5173',
+  'http://127.0.0.1:5173',
   'https://cosmic-fox-2ad203.netlify.app/',
   'https://feature-issue-66-refresh-token--cosmic-fox-2ad203.netlify.app/',
 ];
 const corsOptions = {
   credentials: true,
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
+  origin: (req, callback) => {
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
       callback(null, true);
     } else {
       callback(new Error());
