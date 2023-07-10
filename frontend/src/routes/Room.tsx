@@ -80,8 +80,6 @@ const Room: FC<RoomProps> = ({}) => {
         [id]: progress,
       }));
     });
-
-    console.log(typingProgresses);
   }, []);
 
   useEffect(() => {
@@ -91,8 +89,6 @@ const Room: FC<RoomProps> = ({}) => {
       socket.emit('typingProgress', 0);
     }
   }, [readyPlayers, numPlayers]);
-
-  console.log(typingProgresses);
 
   return (
     <>
