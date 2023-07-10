@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useToast } from '@chakra-ui/react';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
@@ -21,26 +22,22 @@ function App() {
   const toast = useToast();
   const navigate = useNavigate();
   useEffect(() => {
-    http()
-      .get('checkauth')
-      .then((res) => {
-        console.log(res.data.user.name);
-        setUser(res.data.user.name);
-        console.log(context);
-      })
-      .catch((e) => {
-        console.log(e);
-        toast({
-          title: 'Session expired.',
-          description: `${e.response.data}.`,
-          variant: 'subtle',
-          status: 'error',
-          position: 'top-right',
-          duration: 5000,
-          isClosable: true,
-        });
-        navigate('/login');
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwt_decode<JwtPayload>(token || '') || null;
+      setUser(decoded.name);
+    } else {
+      toast({
+        title: 'Session expired.',
+        description: 'Please login again',
+        variant: 'subtle',
+        status: 'error',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true,
       });
+      navigate('/login');
+    }
   }, []);
   return (
     <authContext.Provider value={{ user, setUser }}>
