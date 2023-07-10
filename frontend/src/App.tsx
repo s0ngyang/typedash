@@ -1,4 +1,6 @@
+// @ts-nocheck
 import { useToast } from '@chakra-ui/react';
+import jwt_decode from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
@@ -21,26 +23,52 @@ function App() {
   const toast = useToast();
   const navigate = useNavigate();
   useEffect(() => {
-    http()
-      .get('checkauth')
-      .then((res) => {
-        console.log(res.data.user.name);
-        setUser(res.data.user.name);
-        console.log(context);
-      })
-      .catch((e) => {
-        console.log(e);
-        toast({
-          title: 'Session expired.',
-          description: `${e.response.data}.`,
-          variant: 'subtle',
-          status: 'error',
-          position: 'top-right',
-          duration: 5000,
-          isClosable: true,
-        });
-        navigate('/login');
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwt_decode(token);
+      const currentTime = Date.now() / 1000; // get the current time in seconds
+      // check if token has expired
+      if (decoded.exp < currentTime) {
+        // try to use refresh token to get new access token
+        http()
+          .post('refresh')
+          .then((res) => {
+            localStorage.setItem('token', res.data.accessToken);
+            setUser(decoded.user?.name);
+          })
+          // if cannot get new access token, remove JWT token in LocalStorage and ask user to login again
+          .catch((e) => {
+            toast({
+              title: 'Session expired.',
+              description: 'Please login again',
+              variant: 'subtle',
+              status: 'error',
+              position: 'top-right',
+              duration: 5000,
+              isClosable: true,
+            });
+            localStorage.removeItem('token');
+            setUser(undefined);
+            navigate('/login');
+            return;
+          });
+      } else {
+        setUser(decoded.user?.name);
+      }
+    } else {
+      toast({
+        title: 'Session expired.',
+        description: 'Please login again',
+        variant: 'subtle',
+        status: 'error',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true,
       });
+      localStorage.removeItem('token');
+      navigate('/login');
+      setUser(undefined);
+    }
   }, []);
   return (
     <authContext.Provider value={{ user, setUser }}>
