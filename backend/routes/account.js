@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaclient');
-const authenticateToken = require('./authenticate-token');
 
-router.post('/loadout/create', authenticateToken, async (req, res) => {
+router.post('/loadout/create', async (req, res) => {
   try {
     const { name, switches, others, username } = req.body;
 
@@ -51,7 +50,7 @@ router.post('/loadout/create', authenticateToken, async (req, res) => {
   }
 });
 
-router.get('/loadout', authenticateToken, async (req, res) => {
+router.get('/loadout', async (req, res) => {
   try {
     var loadouts = [];
     //console.log(req.query);
@@ -83,7 +82,7 @@ router.get('/loadout', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/loadout/update', authenticateToken, async (req, res) => {
+router.put('/loadout/update', async (req, res) => {
   try {
     const { name, switches, others, id } = req.body;
 
@@ -114,7 +113,7 @@ router.put('/loadout/update', authenticateToken, async (req, res) => {
   }
 });
 
-router.delete('/loadout/delete', authenticateToken, async (req, res) => {
+router.delete('/loadout/delete', async (req, res) => {
   try {
     async function main() {
       await prisma.loadouts.delete({
