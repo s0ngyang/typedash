@@ -16,7 +16,6 @@ const Header: FC<HeaderProps> = ({}) => {
   const toast = useToast();
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 767px)');
-  const context = useContext(authContext);
   const logoutHandler = () => {
     http()
       .post('logout')
@@ -46,6 +45,7 @@ const Header: FC<HeaderProps> = ({}) => {
         });
       });
   };
+  const context = useContext(authContext);
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-8">
