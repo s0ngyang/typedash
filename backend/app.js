@@ -19,10 +19,7 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 const logoutRouter = require('./routes/logout');
-const createloadoutRouter = require('./routes/createloadout');
-const getloadoutRouter = require('./routes/getloadout');
-const updateloadoutRouter = require('./routes/updateloadout');
-const deleteloadoutRouter = require('./routes/deleteloadout');
+const accountRouter = require('./routes/account');
 const refreshTokenRouter = require('./routes/refresh-token');
 
 const app = express();
@@ -73,10 +70,7 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
-app.use('/createloadout', createloadoutRouter);
-app.use('/getloadout', getloadoutRouter);
-app.use('/updateloadout', updateloadoutRouter);
-app.use('/deleteloadout', deleteloadoutRouter);
+app.use('/account', accountRouter);
 app.use('/refresh', refreshTokenRouter);
 
 // catch 404 and forward to error handler

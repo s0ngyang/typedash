@@ -22,7 +22,7 @@ const CreateLoadout = () => {
       id: state.id,
     };
     http()
-      .put('updateloadout', params)
+      .put('account/loadout/update', params)
       .then(() => {
         toast({
           title: 'Loadout updated.',
