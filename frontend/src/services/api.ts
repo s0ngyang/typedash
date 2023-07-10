@@ -7,7 +7,7 @@ const http = () => {
       ? 'https://typedash-api-5bqlc.ondigitalocean.app/'
       : 'http://localhost:3000/';
   const instance = axios.create({
-    withCredentials: true,
+    // withCredentials: true,
     baseURL: api_url,
     headers: {
       'Content-Type': 'application/json',
