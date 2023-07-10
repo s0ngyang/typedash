@@ -3,24 +3,19 @@ const router = express.Router();
 const prisma = require('../prismaclient');
 const authenticateToken = require('./authenticate-token');
 
-
 router.post('/loadout/create', authenticateToken, async (req, res) => {
   try {
     const { name, switches, others, username } = req.body;
 
-
     const errors = [];
-
 
     if (!name) {
       errors.push({ message: 'Name cannot be empty' });
     }
 
-
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
-
 
     async function main() {
       const res = await prisma.users.findUnique({
@@ -31,7 +26,6 @@ router.post('/loadout/create', authenticateToken, async (req, res) => {
           id: true,
         },
       });
-
 
       await prisma.loadouts.create({
         data: {
@@ -57,7 +51,6 @@ router.post('/loadout/create', authenticateToken, async (req, res) => {
   }
 });
 
-
 router.get('/loadout', authenticateToken, async (req, res) => {
   try {
     var loadouts = [];
@@ -68,7 +61,6 @@ router.get('/loadout', authenticateToken, async (req, res) => {
           name: req.query.data,
         },
       });
-
 
       loadouts = await prisma.loadouts.findMany({
         where: {
@@ -91,11 +83,9 @@ router.get('/loadout', authenticateToken, async (req, res) => {
   }
 });
 
-
 router.put('/loadout/update', authenticateToken, async (req, res) => {
   try {
     const { name, switches, others, id } = req.body;
-
 
     async function main() {
       await prisma.loadouts.update({
@@ -124,7 +114,6 @@ router.put('/loadout/update', authenticateToken, async (req, res) => {
   }
 });
 
-
 router.delete('/loadout/delete', authenticateToken, async (req, res) => {
   try {
     async function main() {
@@ -148,6 +137,5 @@ router.delete('/loadout/delete', authenticateToken, async (req, res) => {
     return res.status(500).json({ message: 'Loadout does not exist.' });
   }
 });
-
 
 module.exports = router;

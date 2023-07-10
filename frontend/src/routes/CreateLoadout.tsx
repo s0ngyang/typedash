@@ -23,7 +23,7 @@ const CreateLoadout = () => {
       username: context?.user,
     };
     http()
-      .post('createloadout', params)
+      .post('account/loadout/create', params)
       .then(() => {
         toast({
           title: 'Loadout created.',
