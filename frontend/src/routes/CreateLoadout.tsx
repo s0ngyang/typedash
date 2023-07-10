@@ -23,7 +23,7 @@ const CreateLoadout = () => {
       username: context?.user,
     };
     http()
-      .post('createloadout', params)
+      .post('account/loadout/create', params)
       .then(() => {
         toast({
           title: 'Loadout created.',
@@ -36,15 +36,9 @@ const CreateLoadout = () => {
         });
         navigate('/account/loadout');
       })
-      .catch((err) =>
-        alert(
-          err.response.data.errors.reduce(
-            (res: any, str: any) => res + '- ' + str.message + '\n',
-            '',
-            '',
-          ),
-        ),
-      );
+      .catch(() => {
+        navigate(0);
+      });
   };
 
   return (

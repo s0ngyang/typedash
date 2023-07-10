@@ -19,10 +19,8 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 const logoutRouter = require('./routes/logout');
-const createloadoutRouter = require('./routes/createloadout');
-const getloadoutRouter = require('./routes/getloadout');
-const updateloadoutRouter = require('./routes/updateloadout');
-const deleteloadoutRouter = require('./routes/deleteloadout');
+const accountRouter = require('./routes/account');
+const refreshTokenRouter = require('./routes/refresh-token');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -49,17 +47,31 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+const whitelist = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://cosmic-fox-2ad203.netlify.app/',
+  'https://feature-issue-66-refresh-token--cosmic-fox-2ad203.netlify.app/',
+];
+const corsOptions = {
+  credentials: true,
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error());
+    }
+  },
+};
+app.use(cors(corsOptions));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
-app.use('/createloadout', createloadoutRouter);
-app.use('/getloadout', getloadoutRouter);
-app.use('/updateloadout', updateloadoutRouter);
-app.use('/deleteloadout', deleteloadoutRouter);
+app.use('/account', accountRouter);
+app.use('/refresh', refreshTokenRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
