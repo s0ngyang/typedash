@@ -21,7 +21,7 @@ const Loadout: FC<LoadoutProps> = () => {
 
   const getloadoutHandler = () => {
     http()
-      .get('getloadout', { params: { data: context?.user } })
+      .get('accouht/loadout', { params: { data: context?.user } })
       .then((res) => {
         setLoadouts(res.data.loadouts);
       });
@@ -29,7 +29,7 @@ const Loadout: FC<LoadoutProps> = () => {
 
   const deleteloadoutHandler = (id: number) => {
     http()
-      .delete('deleteloadout', { params: { data: id } })
+      .delete('account/loadout/delete', { params: { data: id } })
       .then(() => {
         toast({
           title: 'Loadout deleted.',
