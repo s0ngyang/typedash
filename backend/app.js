@@ -55,8 +55,8 @@ const whitelist = [
 ];
 const corsOptions = {
   credentials: true,
-  origin: (req, callback) => {
-    if (whitelist.indexOf(req.header('Origin')) !== -1) {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error());
