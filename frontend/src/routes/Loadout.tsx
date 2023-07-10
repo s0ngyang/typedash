@@ -21,7 +21,7 @@ const Loadout: FC<LoadoutProps> = () => {
 
   const getloadoutHandler = () => {
     http()
-      .get('accouht/loadout', { params: { data: context?.user } })
+      .get('account/loadout', { params: { data: context?.user } })
       .then((res) => {
         setLoadouts(res.data.loadouts);
       });
