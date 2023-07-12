@@ -47,67 +47,67 @@ const Header: FC<HeaderProps> = ({}) => {
       });
   };
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center gap-8">
-        <div className="flex items-center gap-4">
+    <div className='flex justify-between items-center'>
+      <div className='flex items-center gap-8'>
+        <div className='flex items-center gap-4'>
           {!isMobile && (
-            <CatLogo className="fill-pink-8008 stroke-black h-14 w-14" />
+            <CatLogo className='fill-pink-8008 stroke-black h-14 w-14' />
           )}
           <Link to={`/`}>
-            <h1 className="font-bold text-lg md:text-2xl">TypeDash</h1>
+            <h1 className='font-bold text-lg md:text-2xl'>TypeDash</h1>
           </Link>
         </div>
-        <div className="flex gap-6">
+        <div className='flex gap-6'>
           <Tooltip
-            label="Singleplayer"
-            aria-label="Singleplayer tooltip"
-            className="font-mono"
+            label='Singleplayer'
+            aria-label='Singleplayer tooltip'
+            className='font-mono'
           >
             <Link to={`/singleplayer`}>
               <BsFillPersonFill
                 size={25}
-                className="hover:text-white transition"
+                className='hover:text-white transition'
               />
             </Link>
           </Tooltip>
           <Tooltip
-            label="Multiplayer"
-            aria-label="Multiplayer tooltip"
-            className="font-mono"
+            label='Multiplayer'
+            aria-label='Multiplayer tooltip'
+            className='font-mono'
           >
             <Link to={`/multiplayer`}>
-              <BsPeopleFill size={25} className="hover:text-white transition" />
+              <BsPeopleFill size={25} className='hover:text-white transition' />
             </Link>
           </Tooltip>
         </div>
       </div>
       {!context?.user && (
         <Tooltip
-          label="Log In"
-          aria-label="Log in tooltip"
-          className="font-mono"
+          label='Log In'
+          aria-label='Log in tooltip'
+          className='font-mono'
         >
           <Link to={`login`}>
-            <FiLogIn size={25} className="hover:text-white transition" />
+            <FiLogIn size={25} className='hover:text-white transition' />
           </Link>
         </Tooltip>
       )}
       {context?.user && (
-        <div className="flex items-center gap-4">
+        <div className='flex items-center gap-4'>
           <NavLink
-            to="/account/loadout"
-            className="hover:underline flex items-center gap-2"
+            to='/account'
+            className='hover:underline flex items-center gap-2'
           >
             <CgSmile size={25} />
             <span>{context?.user}</span>
           </NavLink>
           <Tooltip
-            label="Log Out"
-            aria-label="Log out tooltip"
-            className="font-mono"
+            label='Log Out'
+            aria-label='Log out tooltip'
+            className='font-mono'
           >
             <button onClick={logoutHandler}>
-              <FiLogOut size={25} className="hover:text-white transition" />
+              <FiLogOut size={25} className='hover:text-white transition' />
             </button>
           </Tooltip>
         </div>
