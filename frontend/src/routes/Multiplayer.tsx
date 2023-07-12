@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { randomChallenge } from '../helpers/randomChallenge';
 import socket from '../services/socket';
@@ -11,11 +11,14 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
   const challenge = randomChallenge();
   const createRoom = () => {
     socket.emit('createRoom', challenge);
+  };
+
+  useEffect(() => {
     socket.on('roomCreated', (roomID) => {
-      socket.emit('joinRoom', roomID);
+      //socket.emit('joinRoom', roomID);
       navigate(`/multiplayer/${roomID}`);
     });
-  };
+  }, []);
 
   return (
     <div className="flex flex-col justify-center">
