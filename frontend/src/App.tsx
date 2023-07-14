@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useToast } from '@chakra-ui/react';
-import jwt_decode, { JwtPayload } from 'jwt-decode';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import Room from './components/Room';
@@ -21,24 +20,24 @@ function App() {
   const context = useContext(authContext);
   const toast = useToast();
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = jwt_decode<JwtPayload>(token || '') || null;
-      setUser(decoded.name);
-    } else {
-      toast({
-        title: 'Session expired.',
-        description: 'Please login again',
-        variant: 'subtle',
-        status: 'error',
-        position: 'top-right',
-        duration: 5000,
-        isClosable: true,
-      });
-      navigate('/login');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     const decoded = jwt_decode<JwtPayload>(token || '') || null;
+  //     setUser(decoded.name);
+  //   } else {
+  //     toast({
+  //       title: 'Session expired.',
+  //       description: 'Please login again',
+  //       variant: 'subtle',
+  //       status: 'error',
+  //       position: 'top-right',
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //     navigate('/login');
+  //   }
+  // }, []);
   return (
     <authContext.Provider value={{ user, setUser }}>
       <Routes>
