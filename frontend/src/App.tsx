@@ -4,6 +4,7 @@ import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import Room from './components/Room';
 import { authContext } from './context/authContext';
 import Account from './routes/Account';
 import CreateLoadout from './routes/CreateLoadout';
@@ -12,7 +13,6 @@ import Loadout from './routes/Loadout';
 import Login from './routes/Login';
 import Multiplayer from './routes/Multiplayer';
 import Register from './routes/Register';
-import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
 import UpdateLoadout from './routes/UpdateLoadout';
 

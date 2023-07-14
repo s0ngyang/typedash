@@ -2,12 +2,12 @@
 import { Button, SlideFade, useToast } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import MultiplayerTest from '../components/typing/MultiplayerTest';
-import ProgressBar from '../components/typing/ProgressBar';
-import { ChallengeProps } from '../components/typing/challenges/Books.constants';
 import { authContext } from '../context/authContext';
 import useTimer from '../helpers/useTimer';
 import socket from '../services/socket';
+import MultiplayerTest from './typing/MultiplayerTest';
+import ProgressBar from './typing/ProgressBar';
+import { ChallengeProps } from './typing/challenges/Books.constants';
 
 interface RoomProps {}
 interface TypingProgressProps {
@@ -113,7 +113,7 @@ const Room: FC<RoomProps> = ({}) => {
       <div>
         {readyPlayers}/{numPlayers} ready
       </div>
-      {readyPlayers !== numPlayers && (
+      {readyPlayers !== numPlayers && numPlayers !== 1 && (
         <Button onClick={ready} variant="ghost">
           ready
         </Button>

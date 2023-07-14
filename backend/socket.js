@@ -5,9 +5,10 @@ const io = require('socket.io')(httpServer, {
     origin: [
       'http://127.0.0.1:5173',
       'http://localhost:5173',
-      'https://main--cosmic-fox-2ad203.netlify.app',
+      'https://cosmic-fox-2ad203.netlify.app',
+      'https://feature-multiplayer--cosmic-fox-2ad203.netlify.app',
     ],
-    methods: ['GET', 'POST'],
+    //methods: ['GET', 'POST'],
   },
 });
 
