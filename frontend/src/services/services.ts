@@ -1,6 +1,6 @@
 import { createStandaloneToast } from '@chakra-ui/react';
 import { FormikValues } from 'formik';
-import { Loadout as LoadoutProps } from '../routes/Loadout';
+import { LoadoutProps } from '../routes/Account';
 import http from './api';
 const { toast } = createStandaloneToast();
 

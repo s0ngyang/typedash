@@ -15,7 +15,7 @@ import {
 import { Field, Form, Formik } from 'formik';
 import { FC } from 'react';
 import * as Yup from 'yup';
-import { Loadout as LoadoutProps } from '../../routes/Loadout';
+import { LoadoutProps } from '../../routes/Account';
 import { updateLoadout } from '../../services/services';
 
 interface UpdateLoadoutModalProps {
