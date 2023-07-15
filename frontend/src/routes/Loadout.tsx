@@ -1,15 +1,17 @@
-import { SimpleGrid, Tooltip, useToast } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
+import { SimpleGrid, Tooltip, useDisclosure } from '@chakra-ui/react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
-import { NavLink, useNavigate } from 'react-router-dom';
-import http from '../services/api';
+import CreateLoadoutModal from '../components/loadouts/CreateLoadoutModal';
+import DeleteLoadoutDialog from '../components/loadouts/DeleteLoadoutDialog';
+import UpdateLoadoutModal from '../components/loadouts/UpdateLoadoutModal';
+import { getLoadouts } from '../services/services';
 
 interface LoadoutProps {
-  user: string;
+  user: string | undefined;
 }
 
-interface Loadout {
+export interface Loadout {
   id: number;
   name: string;
   switches: string | undefined;
@@ -17,46 +19,53 @@ interface Loadout {
 }
 
 const Loadout: FC<LoadoutProps> = ({ user }) => {
-  const toast = useToast();
-  const navigate = useNavigate();
+  const {
+    isOpen: isUpdateOpen,
+    onOpen: onUpdateOpen,
+    onClose: onUpdateClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCreateOpen,
+    onOpen: onCreateOpen,
+    onClose: onCreateClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const cancelDeleteRef = useRef<any>();
   const [loadouts, setLoadouts] = useState<Loadout[]>([]);
   const [maxLoadouts, setMaxLoadouts] = useState(false);
+  const [loadoutToUpdate, setLoadoutToUpdate] = useState<Loadout>();
+  const [loadoutToDeleteId, setLoadoutToDeleteId] = useState<number>();
 
-  const getloadoutHandler = () => {
-    http()
-      .get('account/loadout', { params: { data: user } })
-      .then((res) => {
-        const loadouts = res.data.loadouts;
-        // sort loadouts by id in ascending order
-        loadouts.sort((a: Loadout, b: Loadout) => a.id - b.id);
-        setLoadouts(loadouts);
-        setMaxLoadouts(loadouts.length === 9);
-      });
+  const getLoadoutHandler = () => {
+    getLoadouts({ data: user }).then((res) => {
+      const loadouts = res?.data.loadouts;
+      // sort loadouts by id in ascending order
+      loadouts.sort((a: Loadout, b: Loadout) => a.id - b.id);
+      setLoadouts(loadouts);
+      setMaxLoadouts(loadouts.length === 9);
+    });
   };
 
-  const deleteloadoutHandler = (id: number) => {
-    http()
-      .delete('account/loadout/delete', { params: { data: id } })
-      .then(() => {
-        toast({
-          title: 'Loadout deleted.',
-          description: '',
-          variant: 'subtle',
-          status: 'success',
-          position: 'top-right',
-          duration: 5000,
-          isClosable: true,
-        });
-        getloadoutHandler();
-      });
+  // const editloadoutHandler = (loadout: Loadout) => {
+  //   navigate('/account/loadout/update', { state: loadout });
+  // };
+
+  const editModalHandler = (loadout: Loadout) => {
+    onUpdateOpen();
+    setLoadoutToUpdate(loadout);
   };
 
-  const editloadoutHandler = (loadout: Loadout) => {
-    navigate('/account/loadout/update', { state: loadout });
+  const deleteAlertHandler = (loadout: Loadout) => {
+    onDeleteOpen();
+    setLoadoutToDeleteId(loadout.id);
   };
 
   useEffect(() => {
-    if (user) getloadoutHandler();
+    if (user) getLoadoutHandler();
   }, [user]);
 
   return (
@@ -72,6 +81,7 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
           <button
             disabled={maxLoadouts}
             className='bg-pink-8008 text-grey-8008 px-4 py-1 rounded-md disabled:opacity-30'
+            onClick={onCreateOpen}
           >
             Create Loadout
           </button>
@@ -83,11 +93,9 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
             className='flex flex-col justify-center bg-grey-8008 brightness-90 rounded-md p-4 text-left'
             key={loadout.id}
           >
-            <div className='font-semibold text-white' key={loadout.name}>
-              {loadout.name}
-            </div>
-            <div key={loadout.switches}>{loadout.switches}</div>
-            <div key={loadout.others}>{loadout.others}</div>
+            <div className='font-semibold text-white'>{loadout.name}</div>
+            <div>{loadout.switches}</div>
+            <div>{loadout.others}</div>
             <div className='flex items-center justify-end gap-2'>
               <Tooltip
                 label='Edit Loadout'
@@ -96,7 +104,7 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
               >
                 <button
                   className='hover:brightness-150 transition'
-                  onClick={() => editloadoutHandler(loadout)}
+                  onClick={() => editModalHandler(loadout)}
                 >
                   <FiEdit size={17} />
                 </button>
@@ -108,7 +116,7 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
               >
                 <button
                   className='hover:brightness-150 transition'
-                  onClick={() => deleteloadoutHandler(loadout.id)}
+                  onClick={() => deleteAlertHandler(loadout)}
                 >
                   <MdDeleteOutline size={20} />
                 </button>
@@ -117,9 +125,28 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
           </div>
         ))}
       </SimpleGrid>
-      <button className='hover:bg-slate-100 transition p-1'>
+      {/* <button className='hover:bg-slate-100 transition p-1'>
         <NavLink to='/account/loadout/create'>Create New Loadout</NavLink>
-      </button>
+      </button> */}
+      <UpdateLoadoutModal
+        isUpdateOpen={isUpdateOpen}
+        onUpdateClose={onUpdateClose}
+        loadout={loadoutToUpdate!}
+        getLoadoutHandler={getLoadoutHandler}
+      />
+      <CreateLoadoutModal
+        isCreateOpen={isCreateOpen}
+        onCreateClose={onCreateClose}
+        user={user!}
+        getLoadoutHandler={getLoadoutHandler}
+      />
+      <DeleteLoadoutDialog
+        isDeleteOpen={isDeleteOpen}
+        onDeleteClose={onDeleteClose}
+        loadoutID={loadoutToDeleteId!}
+        cancelDeleteRef={cancelDeleteRef}
+        getLoadoutHandler={getLoadoutHandler}
+      />
     </div>
   );
 };
