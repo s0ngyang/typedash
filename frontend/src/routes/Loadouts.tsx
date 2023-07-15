@@ -1,24 +1,19 @@
 import { SimpleGrid, Tooltip, useDisclosure } from '@chakra-ui/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
 import CreateLoadoutModal from '../components/loadouts/CreateLoadoutModal';
 import DeleteLoadoutDialog from '../components/loadouts/DeleteLoadoutDialog';
 import UpdateLoadoutModal from '../components/loadouts/UpdateLoadoutModal';
-import { getLoadouts } from '../services/services';
+import { LoadoutProps } from './Account';
 
-interface LoadoutProps {
+interface LoadoutsProps {
   user: string | undefined;
+  loadouts: LoadoutProps[];
+  getLoadoutHandler: () => void;
 }
 
-export interface Loadout {
-  id: number;
-  name: string;
-  switches: string | undefined;
-  others: string | undefined;
-}
-
-const Loadout: FC<LoadoutProps> = ({ user }) => {
+const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, getLoadoutHandler }) => {
   const {
     isOpen: isUpdateOpen,
     onOpen: onUpdateOpen,
@@ -35,38 +30,19 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
     onClose: onDeleteClose,
   } = useDisclosure();
   const cancelDeleteRef = useRef<any>();
-  const [loadouts, setLoadouts] = useState<Loadout[]>([]);
-  const [maxLoadouts, setMaxLoadouts] = useState(false);
-  const [loadoutToUpdate, setLoadoutToUpdate] = useState<Loadout>();
+  const [loadoutToUpdate, setLoadoutToUpdate] = useState<LoadoutProps>();
   const [loadoutToDeleteId, setLoadoutToDeleteId] = useState<number>();
+  const maxLoadouts = loadouts.length === 9;
 
-  const getLoadoutHandler = () => {
-    getLoadouts({ data: user }).then((res) => {
-      const loadouts = res?.data.loadouts;
-      // sort loadouts by id in ascending order
-      loadouts.sort((a: Loadout, b: Loadout) => a.id - b.id);
-      setLoadouts(loadouts);
-      setMaxLoadouts(loadouts.length === 9);
-    });
-  };
-
-  // const editloadoutHandler = (loadout: Loadout) => {
-  //   navigate('/account/loadout/update', { state: loadout });
-  // };
-
-  const editModalHandler = (loadout: Loadout) => {
+  const editModalHandler = (loadout: LoadoutProps) => {
     onUpdateOpen();
     setLoadoutToUpdate(loadout);
   };
 
-  const deleteAlertHandler = (loadout: Loadout) => {
+  const deleteAlertHandler = (loadout: LoadoutProps) => {
     onDeleteOpen();
     setLoadoutToDeleteId(loadout.id);
   };
-
-  useEffect(() => {
-    if (user) getLoadoutHandler();
-  }, [user]);
 
   return (
     <div className='flex flex-col gap-2'>
@@ -151,4 +127,4 @@ const Loadout: FC<LoadoutProps> = ({ user }) => {
   );
 };
 
-export default Loadout;
+export default Loadouts;
