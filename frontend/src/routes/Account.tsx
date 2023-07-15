@@ -9,7 +9,7 @@ const Account: FC<AccountProps> = () => {
   const context = useContext(authContext);
   return (
     <div className='flex flex-col gap-4'>
-      <div className='w-full h-1/5 brightness-90 bg-grey-8008 rounded-md flex justify-center items-center gap-24'>
+      <div className='w-full h-1/5 brightness-90 bg-grey-8008 rounded-md flex justify-center items-center gap-24 px-4'>
         <div className='flex flex-col text-left'>
           <div className='font-semibold text-2xl text-white'>
             {context?.user}
