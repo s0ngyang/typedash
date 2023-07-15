@@ -18,7 +18,7 @@ const Account: FC<AccountProps> = () => {
   const context = useContext(authContext);
   const user = context?.user;
 
-  const getLoadoutHandler = () => {
+  const initialGetLoadouts = () => {
     setIsLoading(true);
     getLoadouts({ data: user }).then((res) => {
       const loadouts = res?.data.loadouts;
@@ -30,7 +30,7 @@ const Account: FC<AccountProps> = () => {
   };
 
   useEffect(() => {
-    if (user) getLoadoutHandler();
+    if (user) initialGetLoadouts();
   }, [user]);
 
   return isLoading ? (
@@ -74,7 +74,7 @@ const Account: FC<AccountProps> = () => {
         <Loadouts
           user={context?.user}
           loadouts={loadouts}
-          getLoadoutHandler={getLoadoutHandler}
+          setLoadouts={setLoadouts}
         />
       </div>
     </Fade>

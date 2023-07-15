@@ -5,15 +5,16 @@ import { MdDeleteOutline } from 'react-icons/md';
 import CreateLoadoutModal from '../components/loadouts/CreateLoadoutModal';
 import DeleteLoadoutDialog from '../components/loadouts/DeleteLoadoutDialog';
 import UpdateLoadoutModal from '../components/loadouts/UpdateLoadoutModal';
+import { getLoadouts } from '../services/services';
 import { LoadoutProps } from './Account';
 
 interface LoadoutsProps {
   user: string | undefined;
   loadouts: LoadoutProps[];
-  getLoadoutHandler: () => void;
+  setLoadouts: React.Dispatch<React.SetStateAction<LoadoutProps[]>>;
 }
 
-const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, getLoadoutHandler }) => {
+const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
   const {
     isOpen: isUpdateOpen,
     onOpen: onUpdateOpen,
@@ -42,6 +43,15 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, getLoadoutHandler }) => {
   const deleteAlertHandler = (loadout: LoadoutProps) => {
     onDeleteOpen();
     setLoadoutToDeleteId(loadout.id);
+  };
+
+  const getLoadoutsOnCrud = () => {
+    getLoadouts({ data: user }).then((res) => {
+      const loadouts = res?.data.loadouts;
+      // sort loadouts by id in ascending order
+      loadouts.sort((a: LoadoutProps, b: LoadoutProps) => a.id - b.id);
+      setLoadouts(loadouts);
+    });
   };
 
   return (
@@ -108,20 +118,20 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, getLoadoutHandler }) => {
         isUpdateOpen={isUpdateOpen}
         onUpdateClose={onUpdateClose}
         loadout={loadoutToUpdate!}
-        getLoadoutHandler={getLoadoutHandler}
+        getLoadoutHandler={getLoadoutsOnCrud}
       />
       <CreateLoadoutModal
         isCreateOpen={isCreateOpen}
         onCreateClose={onCreateClose}
         user={user!}
-        getLoadoutHandler={getLoadoutHandler}
+        getLoadoutHandler={getLoadoutsOnCrud}
       />
       <DeleteLoadoutDialog
         isDeleteOpen={isDeleteOpen}
         onDeleteClose={onDeleteClose}
         loadoutID={loadoutToDeleteId!}
         cancelDeleteRef={cancelDeleteRef}
-        getLoadoutHandler={getLoadoutHandler}
+        getLoadoutHandler={getLoadoutsOnCrud}
       />
     </div>
   );
