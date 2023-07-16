@@ -20,7 +20,7 @@ const Room: FC<RoomProps> = ({}) => {
   const roomUrl = `https://typedash.com/multiplayer/${roomID}`;
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(1);
-  const [listOfPlayers, setListOfPlayers] = useState<string[]>([]);
+  const [listOfPlayers, setListOfPlayers] = useState([]);
   const [readyPlayers, setReadyPlayers] = useState(0);
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(5);
   const [gameStarted, setGameStarted] = useState(false);
@@ -30,6 +30,7 @@ const Room: FC<RoomProps> = ({}) => {
   const context = useContext(authContext);
   const username = context?.user || 'Guest';
   const toast = useToast();
+  var ranking = 1;
 
   const leaveRoom = () => {
     socket.emit('leaveRoom');
@@ -80,6 +81,14 @@ const Room: FC<RoomProps> = ({}) => {
         [id]: progress,
       }));
     });
+
+    socket.on('playerCompleted', (id) => {
+      for (let i = 0; i < listOfPlayers.length; i++) {
+        if (listOfPlayers[i].id === id) {
+          listOfPlayers[i].ranking = ranking++;
+        }
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -95,7 +104,8 @@ const Room: FC<RoomProps> = ({}) => {
       {listOfPlayers!.map((player) => (
         <div key={player.id}>
           <div>{player.username}</div>
-          <div className="w h-4 transition">
+          <div className="h-4 transition">
+            {player.ranking !== null && <div>{player.ranking}</div>}
             <SlideFade in={time === 0}>
               <ProgressBar
                 lettersTyped={typingProgresses[player.id]}

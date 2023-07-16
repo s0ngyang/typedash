@@ -48,6 +48,10 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     socket.on('playerJoined', ({ challenge }) => {
       setChallenge(challenge);
     });
+
+    socket.on('allCompleted', (result) => {
+      setShowResults(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -98,7 +102,8 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
-    setShowResults(true);
+
+    socket.emit('testCompleted');
   }, [testStatus]);
 
   const focusOnInput = () => {

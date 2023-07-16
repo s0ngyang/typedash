@@ -15,7 +15,6 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
 
   useEffect(() => {
     socket.on('roomCreated', (roomID) => {
-      //socket.emit('joinRoom', roomID);
       navigate(`/multiplayer/${roomID}`);
     });
   }, []);

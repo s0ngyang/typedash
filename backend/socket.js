@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
       challenge: challenge,
       players: [],
       ready: [],
+      completed: [],
     };
     socket.emit('roomCreated', roomID);
   });
@@ -43,7 +44,7 @@ io.on('connection', (socket) => {
         socket.emit('roomFull');
         return;
       }
-      room.players.push({ id: socket.id, username: username });
+      room.players.push({ id: socket.id, username, ranking: null });
 
       socket.join(roomID);
       socket.roomID = roomID;
@@ -74,8 +75,17 @@ io.on('connection', (socket) => {
   socket.on('typingProgress', (progress) => {
     io.to(socket.roomID).emit('progressUpdate', {
       id: socket.id,
-      progress: progress,
+      progress,
     });
+  });
+
+  socket.on('testCompleted', () => {
+    var completedArr = rooms[socket.roomID].completed;
+    completedArr.push(socket.id);
+    io.to(socket.roomID).emit('playerCompleted', socket.id);
+    if (completedArr.length === rooms[socket.roomID].players.length) {
+      io.to(socket.roomID).emit('allCompleted');
+    }
   });
 
   socket.on('leaveRoom', () => {
