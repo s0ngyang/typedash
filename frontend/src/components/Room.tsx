@@ -40,10 +40,10 @@ const Room: FC<RoomProps> = ({}) => {
 
   const displayBadges = (position: number) => {
     const badges = [
-      <TbRosetteNumber1 size={25} className="text-pink-8008" />,
-      <TbRosetteNumber2 size={25} className="text-pink-8008" />,
-      <TbRosetteNumber3 size={25} className="text-pink-8008" />,
-      <TbRosetteNumber4 size={25} className="text-pink-8008" />,
+      <TbRosetteNumber1 size={25} className='text-pink-8008' />,
+      <TbRosetteNumber2 size={25} className='text-pink-8008' />,
+      <TbRosetteNumber3 size={25} className='text-pink-8008' />,
+      <TbRosetteNumber4 size={25} className='text-pink-8008' />,
     ];
     return badges[position - 1];
   };
@@ -66,6 +66,19 @@ const Room: FC<RoomProps> = ({}) => {
     socket.on('invalidRoom', () => {
       toast({
         title: 'Room not found.',
+        description: '',
+        variant: 'subtle',
+        status: 'error',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/singleplayer');
+    });
+
+    socket.on('roomFull', () => {
+      toast({
+        title: 'Room is full.',
         description: '',
         variant: 'subtle',
         status: 'error',
@@ -113,24 +126,24 @@ const Room: FC<RoomProps> = ({}) => {
   }, [readyPlayers, numPlayers]);
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className='flex flex-col justify-between'>
       <SlideFade in={time === 0}>
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           {listOfPlayers!.map((player) => (
             <div
               key={player.id}
-              className="flex items-center justify-between gap-6"
+              className='flex items-center justify-between gap-6'
             >
-              <div className="flex w-full items-center gap-6">
+              <div className='flex w-full items-center gap-6'>
                 <div>{player.username}</div>
-                <div className="transition w-[95%]">
+                <div className='transition w-[95%]'>
                   <ProgressBar
                     lettersTyped={typingProgresses[player.id]}
                     totalLetters={chosenChallenge?.content.split('').length!}
                   />
                 </div>
               </div>
-              <div className="flex justify-end items-center w-8 h-8">
+              <div className='flex justify-end items-center w-8 h-8'>
                 <SlideFade in={rankings[player.id]}>
                   {displayBadges(rankings[player.id])}
                 </SlideFade>
@@ -151,14 +164,14 @@ const Room: FC<RoomProps> = ({}) => {
       )}
 
       {readyPlayers !== numPlayers && numPlayers !== 1 && time !== 0 && (
-        <Button onClick={ready} variant="ghost">
+        <Button onClick={ready} variant='ghost'>
           ready
         </Button>
       )}
 
       {time !== 0 && <div>{`Game is starting in ${time}`}</div>}
 
-      <Button onClick={leaveRoom} variant="ghost">
+      <Button onClick={leaveRoom} variant='ghost'>
         leave room
       </Button>
 
