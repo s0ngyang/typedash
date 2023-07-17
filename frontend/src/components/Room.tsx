@@ -27,10 +27,10 @@ const Room: FC<RoomProps> = ({}) => {
   const [chosenChallenge, setChosenChallenge] = useState<ChallengeProps>();
   const [lettersTyped, setLettersTyped] = useState(0);
   const [typingProgresses, setTypingProgresses] = useState({});
+  const [rankings, setRankings] = useState({});
   const context = useContext(authContext);
   const username = context?.user || 'Guest';
   const toast = useToast();
-  var ranking = 1;
 
   const leaveRoom = () => {
     socket.emit('leaveRoom');
@@ -82,12 +82,9 @@ const Room: FC<RoomProps> = ({}) => {
       }));
     });
 
-    socket.on('playerCompleted', (id) => {
-      for (let i = 0; i < listOfPlayers.length; i++) {
-        if (listOfPlayers[i].id === id) {
-          listOfPlayers[i].ranking = ranking++;
-        }
-      }
+    socket.on('playerCompleted', (rankings) => {
+      setRankings(rankings);
+      console.log('after set', rankings);
     });
   }, []);
 
@@ -104,8 +101,8 @@ const Room: FC<RoomProps> = ({}) => {
       {listOfPlayers!.map((player) => (
         <div key={player.id}>
           <div>{player.username}</div>
+          <div>{rankings[player.id]}</div>
           <div className="h-4 transition">
-            {player.ranking !== null && <div>{player.ranking}</div>}
             <SlideFade in={time === 0}>
               <ProgressBar
                 lettersTyped={typingProgresses[player.id]}

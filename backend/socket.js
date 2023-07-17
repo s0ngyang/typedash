@@ -28,10 +28,10 @@ io.on('connection', (socket) => {
   socket.on('createRoom', (challenge) => {
     const roomID = randomID();
     rooms[roomID] = {
-      challenge: challenge,
+      challenge,
       players: [],
       ready: [],
-      completed: [],
+      rankings: {},
     };
     socket.emit('roomCreated', roomID);
   });
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
         socket.emit('roomFull');
         return;
       }
-      room.players.push({ id: socket.id, username, ranking: null });
+      room.players.push({ id: socket.id, username });
 
       socket.join(roomID);
       socket.roomID = roomID;
@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
           return;
         }
       }
-      room.ready.push({ id: socket.id, username: username });
+      room.ready.push({ id: socket.id, username });
       io.to(socket.roomID).emit('receiveReady', room.ready.length);
     }
   });
@@ -80,16 +80,22 @@ io.on('connection', (socket) => {
   });
 
   socket.on('testCompleted', () => {
-    var completedArr = rooms[socket.roomID].completed;
-    completedArr.push(socket.id);
-    io.to(socket.roomID).emit('playerCompleted', socket.id);
-    if (completedArr.length === rooms[socket.roomID].players.length) {
+    const rankings = rooms[socket.roomID].rankings;
+    rooms[socket.roomID].rankings[socket.id] = Object.keys(rankings).length + 1;
+    io.to(socket.roomID).emit('playerCompleted', rooms[socket.roomID].rankings);
+    if (
+      rooms[socket.roomID].rankings.length ===
+      rooms[socket.roomID].players.length
+    ) {
       io.to(socket.roomID).emit('allCompleted');
     }
   });
 
   socket.on('leaveRoom', () => {
     socket.leave(socket.roomID);
+    if (!rooms[socket.roomID]) {
+      return;
+    }
     if (rooms[socket.roomID].players.length <= 1) {
       delete rooms[socket.roomID];
       io.to(socket.roomID).emit('playerLeft', []);
