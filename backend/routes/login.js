@@ -16,7 +16,7 @@ router.post('/', checkNotAuthenticated, (req, res, next) => {
       if (err) {
         return res.status(500).json({ message: 'Authentication failed' });
       }
-      const token = jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign(user, JWT_SECRET, { expiresIn: '24h' });
       return res
         .status(200)
         .json({ message: 'Authentication successful', user, token });

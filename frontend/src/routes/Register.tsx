@@ -1,41 +1,17 @@
-import { useToast } from '@chakra-ui/react';
 import { FormikValues, useFormik } from 'formik';
 import { FC } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import http from '../services/api';
+import { registerUser } from '../services/services';
 
 interface RegisterProps {}
 
 const Register: FC<RegisterProps> = ({}) => {
-  const toast = useToast();
   const navigate = useNavigate();
   const registerUserHandler = (values: FormikValues) => {
-    http()
-      .post('register', values)
-      .then(() => {
-        toast({
-          title: 'Registered successfully.',
-          description: 'Your account has been created.',
-          variant: 'subtle',
-          status: 'success',
-          position: 'top-right',
-          duration: 5000,
-          isClosable: true,
-        });
-        navigate('/login');
-      })
-      .catch((e) => {
-        toast({
-          title: 'Registration failed.',
-          description: `${e.response.data.message}`,
-          variant: 'subtle',
-          status: 'error',
-          position: 'top-right',
-          duration: 5000,
-          isClosable: true,
-        });
-      });
+    registerUser(values).then(() => {
+      navigate('/login');
+    });
   };
 
   const getCharacterValidationError = (str: string) => {
@@ -70,105 +46,105 @@ const Register: FC<RegisterProps> = ({}) => {
     onSubmit: registerUserHandler,
   });
   return (
-    <div className="flex flex-col justify-center items-center gap-6">
+    <div className='flex flex-col justify-center items-center gap-6'>
       <form
-        className="flex flex-col gap-2 w-1/2 text-left"
+        className='flex flex-col gap-2 w-1/2 text-left'
         onSubmit={formik.handleSubmit}
       >
         <h1>register</h1>
-        <div className="flex flex-col gap-2">
+        <div className='flex flex-col gap-2'>
           <input
-            id="name"
-            name="name"
+            id='name'
+            name='name'
             className={`bg-transparent border-solid border-2 rounded p-2 ${
               formik.touched.name && formik.errors.name
                 ? 'border-red-600'
                 : 'border-lightgrey-8008'
             }`}
-            type="text"
-            placeholder="username"
+            type='text'
+            placeholder='username'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.name}
           />
           {formik.touched.name && formik.errors.name ? (
-            <div className="text-red-600 font-bold">{formik.errors.name}</div>
+            <div className='text-red-600 font-bold'>{formik.errors.name}</div>
           ) : (
             <div>&nbsp;</div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className='flex flex-col gap-2'>
           <input
-            id="email"
-            name="email"
+            id='email'
+            name='email'
             className={`bg-transparent border-solid border-2 rounded p-2 ${
               formik.touched.email && formik.errors.email
                 ? 'border-red-600'
                 : 'border-lightgrey-8008'
             }`}
-            type="email"
-            placeholder="email"
+            type='email'
+            placeholder='email'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.email}
           />
           {formik.touched.email && formik.errors.email ? (
-            <div className="text-red-600 font-bold">{formik.errors.email}</div>
+            <div className='text-red-600 font-bold'>{formik.errors.email}</div>
           ) : (
             <div>&nbsp;</div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className='flex flex-col gap-2'>
           <input
-            id="password"
-            name="password"
+            id='password'
+            name='password'
             className={`bg-transparent border-solid border-2 rounded p-2 ${
               formik.touched.password && formik.errors.password
                 ? 'border-red-600'
                 : 'border-lightgrey-8008'
             }`}
-            type="password"
-            placeholder="password"
+            type='password'
+            placeholder='password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.password}
           />
           {formik.touched.password && formik.errors.password ? (
-            <div className="text-red-600 font-bold">
+            <div className='text-red-600 font-bold'>
               {formik.errors.password}
             </div>
           ) : (
             <div>&nbsp;</div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className='flex flex-col gap-2'>
           <input
-            id="password2"
-            name="password2"
+            id='password2'
+            name='password2'
             className={`bg-transparent border-solid border-2 rounded p-2 ${
               formik.touched.password2 && formik.errors.password2
                 ? 'border-red-600'
                 : 'border-lightgrey-8008'
             }`}
-            type="password"
-            placeholder="verify password"
+            type='password'
+            placeholder='verify password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.password2}
           />
           {formik.touched.password2 && formik.errors.password2 ? (
-            <div className="text-red-600 font-bold">
+            <div className='text-red-600 font-bold'>
               {formik.errors.password2}
             </div>
           ) : (
             <div>&nbsp;</div>
           )}
         </div>
-        <button type="submit" className="hover:bg-slate-100 transition p-1">
+        <button type='submit' className='hover:bg-slate-100 transition p-1'>
           sign up
         </button>
       </form>
-      <NavLink to="/login" className="hover:underline">
+      <NavLink to='/login' className='hover:underline'>
         back to login
       </NavLink>
     </div>
