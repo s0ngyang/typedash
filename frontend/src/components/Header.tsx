@@ -1,11 +1,10 @@
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip, useMediaQuery } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { CgSmile } from 'react-icons/cg';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
-import useMediaQuery from '../helpers/useMediaquery';
 // @ts-ignore:next-line
 import { ReactComponent as CatLogo } from '../../src/assets/cat.svg';
 import { logoutUser } from '../services/services';
@@ -14,7 +13,7 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({}) => {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery('(max-width: 767px)');
+  const [isMobile] = useMediaQuery('(max-width: 767px)');
   const context = useContext(authContext);
   const logoutHandler = () => {
     logoutUser().then(() => {
