@@ -1,17 +1,33 @@
-import { Button } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { CheckIcon } from '@chakra-ui/icons';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { FC, useEffect, useState } from 'react';
+import { FaKeyboard } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { randomChallenge } from '../helpers/randomChallenge';
+import { ChallengeProps } from '../components/typing/challenges/challenge.interface';
+import { challengeItems, randomChallenge } from '../helpers/randomChallenge';
 import socket from '../services/socket';
 
 interface MultiplayerProps {}
 
 const Multiplayer: FC<MultiplayerProps> = ({}) => {
+  const [challengeType, setChallengeType] = useState('Books');
+  const [challenge, setChallenge] = useState<ChallengeProps>();
   const navigate = useNavigate();
-  const challenge = randomChallenge();
-  const createRoom = () => {
-    socket.emit('createRoom', challenge);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    const chosenChallenge = randomChallenge(challengeType);
+    setChallenge(chosenChallenge);
+  }, [challengeType]);
 
   useEffect(() => {
     socket.on('roomCreated', (roomID) => {
@@ -20,9 +36,54 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
     });
   }, []);
 
+  const createRoom = () => {
+    socket.emit('createRoom', challenge);
+  };
+
+  const handleChallengeTypeSwitch = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setChallengeType(e.currentTarget.value);
+    onClose();
+  };
+
   return (
-    <div className="flex flex-col justify-center">
-      <Button variant="ghost" onClick={createRoom}>
+    <div className='flex flex-col justify-center'>
+      <>
+        <Button
+          iconSpacing={3}
+          leftIcon={<FaKeyboard size={20} />}
+          variant='ghost'
+          onClick={onOpen}
+        >
+          {challengeType}
+        </Button>
+        <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Challenge Type</ModalHeader>
+            <ModalBody className='flex flex-col gap-2'>
+              {challengeItems.map((type, i) => (
+                <Button
+                  key={i}
+                  leftIcon={
+                    challengeType === type.name ? <CheckIcon /> : <div />
+                  }
+                  onClick={handleChallengeTypeSwitch}
+                  value={type.name}
+                >
+                  <div className='w-full flex justify-between'>
+                    <div>{type.name}</div>
+                    <div className='text-lightgrey-8008'>{type.desc}</div>
+                  </div>
+                </Button>
+              ))}
+            </ModalBody>
+            <ModalFooter />
+          </ModalContent>
+        </Modal>
+      </>
+      <Button variant='ghost' onClick={createRoom}>
         Create Room
       </Button>
     </div>

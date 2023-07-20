@@ -4,7 +4,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MultiplayerTest from '../components/typing/MultiplayerTest';
 import ProgressBar from '../components/typing/ProgressBar';
-import { ChallengeProps } from '../components/typing/challenges/Books.constants';
+import { ChallengeProps } from '../components/typing/challenges/challenge.interface';
 import { authContext } from '../context/authContext';
 import useTimer from '../helpers/useTimer';
 import socket from '../services/socket';
@@ -95,7 +95,7 @@ const Room: FC<RoomProps> = ({}) => {
       {listOfPlayers!.map((player) => (
         <div key={player.id}>
           <div>{player.username}</div>
-          <div className="w h-4 transition">
+          <div className='w h-4 transition'>
             <SlideFade in={time === 0}>
               <ProgressBar
                 lettersTyped={typingProgresses[player.id]}
@@ -114,14 +114,14 @@ const Room: FC<RoomProps> = ({}) => {
         {readyPlayers}/{numPlayers} ready
       </div>
       {readyPlayers !== numPlayers && (
-        <Button onClick={ready} variant="ghost">
+        <Button onClick={ready} variant='ghost'>
           ready
         </Button>
       )}
 
       <div>{`Game is starting in ${time}`}</div>
 
-      <Button onClick={leaveRoom} variant="ghost">
+      <Button onClick={leaveRoom} variant='ghost'>
         leave room
       </Button>
 
