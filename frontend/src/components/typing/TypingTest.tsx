@@ -1,19 +1,32 @@
-import { SlideFade, Tooltip } from '@chakra-ui/react';
+import { CheckIcon } from '@chakra-ui/icons';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SlideFade,
+  Tooltip,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
+import { FaKeyboard } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
-import { randomChallenge } from '../../helpers/randomChallenge';
+import { challengeItems, randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
 import ProgressBar from './ProgressBar';
 import Word from './Word';
-import { ChallengeProps } from './challenges/Books.constants';
+import { ChallengeProps } from './challenges/challenge.interface';
 import Result from './results/Result';
 
 interface TypingTestProps {
   specificChallenge?: ChallengeProps;
 }
 
-const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
+const TypingTest: FC<TypingTestProps> = ({}) => {
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
@@ -28,6 +41,7 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   const [isFocused, setIsFocused] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [wrongLetters, setWrongLetters] = useState<number[]>([]);
+  const [challengeType, setChallengeType] = useState('Books');
   const [result, setResult] = useState({
     wpm: 0,
     accuracy: 0,
@@ -38,17 +52,14 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const restartRef = useRef<HTMLButtonElement>(null);
+  const challengeSwitchRef = useRef<HTMLButtonElement>(null);
+  const challengeOptionRef = useRef<Array<HTMLButtonElement | null>>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    // first load
-    let firstChallenge;
-    if (specificChallenge) {
-      firstChallenge = specificChallenge;
-    } else {
-      firstChallenge = randomChallenge();
-    }
-    setChallenge(firstChallenge);
-  }, []);
+    const challenge = randomChallenge(challengeType);
+    setChallenge(challenge);
+  }, [challengeType]);
 
   useEffect(() => {
     if (challenge) {
@@ -60,6 +71,13 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
   useEffect(() => {
     const handleClickAway = (e: MouseEvent) => {
       if (showResults) return;
+      if (
+        challengeSwitchRef.current?.contains(e.target as Node) ||
+        challengeOptionRef.current[0]?.contains(e.target as Node) ||
+        challengeOptionRef.current[1]?.contains(e.target as Node) ||
+        challengeOptionRef.current[2]?.contains(e.target as Node)
+      )
+        return;
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
@@ -120,7 +138,7 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
     setShowResults(false);
     focusOnInput();
     clearInput();
-    setChallenge(randomChallenge(challenge?.id));
+    setChallenge(randomChallenge(challengeType, challenge?.id));
   };
 
   const focusOnInput = () => {
@@ -198,95 +216,147 @@ const TypingTest: FC<TypingTestProps> = ({ specificChallenge }) => {
     setTypedWordList(typed.split(' '));
   };
 
+  const handleChallengeTypeSwitch = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setChallengeType(e.currentTarget.value);
+    onClose();
+  };
   return (
-    <div
-      className={
-        'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
-      }
-      ref={containerRef}
-      onKeyDown={handleTab}
-      onClick={focusOnInput}
-    >
-      {!isFocused && !showResults && (
-        <div
-          onClick={focusOnInput}
-          className="flex items-center gap-4 absolute z-10 text-white"
-        >
-          <HiCursorClick /> Click here to refocus
-        </div>
-      )}
+    <>
       <div
-        className={`flex flex-col justify-center items-center gap-4 h-full overflow-hidden ${
-          !isFocused ? 'blur-sm' : ''
-        } transition w-full`}
+        className={
+          'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
+        }
+        ref={containerRef}
+        onKeyDown={handleTab}
+        onClick={focusOnInput}
       >
-        {!showResults ? (
-          <>
-            <div className="w-4/5 h-4">
-              <SlideFade in={testStatus === 1}>
-                <ProgressBar
-                  lettersTyped={activeLetterIndex}
-                  totalLetters={letterSet.length}
-                />
-              </SlideFade>
-            </div>
-            <div className="w-full flex justify-start text-pink-8008">
-              {time}
-            </div>
-            <div
-              className="flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12"
-              onClick={focusOnInput}
-            >
-              {wordSet.map((word, index) => (
-                <Word
-                  key={index}
-                  word={word}
-                  typedWord={typedWordList[index]}
-                  status={
-                    index === activeWordIndex
-                      ? 'active'
-                      : index < activeWordIndex && typedWordList[index] === word
-                      ? 'completed'
-                      : 'idle'
-                  }
-                />
-              ))}
-            </div>
-            <input
-              autoFocus
-              type="text"
-              onChange={handleKeyPress}
-              onKeyDown={handleKeyDown}
-              onPasteCapture={(e) => e.preventDefault()}
-              ref={inputRef}
-              className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
-            />
-          </>
-        ) : (
-          <Result
-            result={result}
-            showResults={showResults}
-            challenge={challenge}
-            timerRanOut={time === 0}
-          />
-        )}
-        <Tooltip
-          label="Restart Test"
-          fontSize="md"
-          aria-label="Restart test tooltip"
-          className="font-mono"
-        >
-          <button
-            onClick={restartTest}
-            ref={restartRef}
-            className="p-4 hover:text-white transition focus:text-white outline-none "
-            tabIndex={0}
+        {!isFocused && !showResults && (
+          <div
+            onClick={focusOnInput}
+            className='flex items-center gap-4 absolute z-10 text-white'
           >
-            <VscDebugRestart size={25} />
-          </button>
-        </Tooltip>
+            <HiCursorClick /> Click here to refocus
+          </div>
+        )}
+        <div
+          className={`flex flex-col justify-center items-center gap-4 h-full overflow-hidden ${
+            !isFocused ? 'blur-sm' : ''
+          } transition w-full`}
+        >
+          {!showResults ? (
+            <>
+              <div className='w-4/5 h-4'>
+                <SlideFade in={testStatus === 1}>
+                  <ProgressBar
+                    lettersTyped={activeLetterIndex}
+                    totalLetters={letterSet.length}
+                  />
+                </SlideFade>
+              </div>
+              <div
+                className={`h-12 w-full flex items-center ${
+                  testStatus === 1 ? 'justify-start' : 'justify-center'
+                }`}
+              >
+                {testStatus === 1 && (
+                  <SlideFade in={testStatus === 1}>
+                    <div className='text-pink-8008'>{time}</div>
+                  </SlideFade>
+                )}
+                {testStatus === 0 && (
+                  <Button
+                    ref={challengeSwitchRef}
+                    iconSpacing={3}
+                    leftIcon={<FaKeyboard size={20} />}
+                    variant='ghost'
+                    onClick={onOpen}
+                  >
+                    {challengeType}
+                  </Button>
+                )}
+              </div>
+              <div
+                className='flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12 w-full'
+                onClick={focusOnInput}
+              >
+                {wordSet.map((word, index) => (
+                  <Word
+                    key={index}
+                    word={word}
+                    typedWord={typedWordList[index]}
+                    status={
+                      index === activeWordIndex
+                        ? 'active'
+                        : index < activeWordIndex &&
+                          typedWordList[index] === word
+                        ? 'completed'
+                        : 'idle'
+                    }
+                  />
+                ))}
+              </div>
+              <input
+                autoFocus
+                type='text'
+                onChange={handleKeyPress}
+                onKeyDown={handleKeyDown}
+                onPasteCapture={(e) => e.preventDefault()}
+                ref={inputRef}
+                className='absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent'
+              />
+            </>
+          ) : (
+            <Result
+              result={result}
+              showResults={showResults}
+              challenge={challenge}
+              timerRanOut={time === 0}
+            />
+          )}
+          <Tooltip
+            label='Restart Test'
+            fontSize='md'
+            aria-label='Restart test tooltip'
+            className='font-mono'
+          >
+            <button
+              onClick={restartTest}
+              ref={restartRef}
+              className='p-4 hover:text-white transition focus:text-white outline-none '
+              tabIndex={0}
+            >
+              <VscDebugRestart size={25} />
+            </button>
+          </Tooltip>
+        </div>
       </div>
-    </div>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Challenge Type</ModalHeader>
+          <ModalBody className='flex flex-col gap-2'>
+            {challengeItems.map((type, i) => (
+              <Button
+                key={i}
+                // @ts-ignore
+                ref={(el) => (challengeOptionRef.current[i] = el)}
+                leftIcon={challengeType === type.name ? <CheckIcon /> : <div />}
+                onClick={handleChallengeTypeSwitch}
+                value={type.name}
+              >
+                <div className='w-full flex justify-between'>
+                  <div>{type.name}</div>
+                  <div className='text-lightgrey-8008'>{type.desc}</div>
+                </div>
+              </Button>
+            ))}
+          </ModalBody>
+          <ModalFooter />
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 
