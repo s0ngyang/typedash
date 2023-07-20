@@ -41,7 +41,6 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   const [isFocused, setIsFocused] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [wrongLetters, setWrongLetters] = useState<number[]>([]);
-  const [challengeType, setChallengeType] = useState('Books');
   const [result, setResult] = useState({
     wpm: 0,
     accuracy: 0,
@@ -55,6 +54,14 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   const challengeSwitchRef = useRef<HTMLButtonElement>(null);
   const challengeOptionRef = useRef<Array<HTMLButtonElement | null>>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const getDefaultChallengeType = () => {
+    const storedChallenge = localStorage.getItem('challenge-type');
+    if (storedChallenge !== null) return storedChallenge;
+    else return 'Books';
+  };
+
+  const [challengeType, setChallengeType] = useState(getDefaultChallengeType());
 
   useEffect(() => {
     const challenge = randomChallenge(challengeType);
@@ -219,9 +226,12 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   const handleChallengeTypeSwitch = (
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    setChallengeType(e.currentTarget.value);
+    const challengeType = e.currentTarget.value;
+    setChallengeType(challengeType);
     onClose();
+    localStorage.setItem('challenge-type', challengeType);
   };
+
   return (
     <>
       <div
