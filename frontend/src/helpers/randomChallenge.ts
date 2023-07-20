@@ -26,7 +26,7 @@ export const randomChallenge = (
   excludedChallengeId?: number,
 ) => {
   const currentChallengeType = challengeType.toLowerCase();
-  let challenges;
+  let challenges: ChallengeProps[];
   switch (currentChallengeType) {
     case 'books':
       challenges = books;
