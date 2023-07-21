@@ -47,7 +47,22 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+// const whitelist = [
+//   'http://localhost:5173',
+//   'https://cosmic-fox-2ad203.netlify.app/',
+//   'https://feature-issue-66-refresh-token--cosmic-fox-2ad203.netlify.app/',
+// ];
+const corsOptions = {
+  credentials: true,
+  // origin: (origin, callback) => {
+  //   if (whitelist.indexOf(origin) !== -1) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error());
+  //   }
+  // },
+};
+app.use(cors(corsOptions));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
