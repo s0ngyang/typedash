@@ -23,7 +23,7 @@ const CreateLoadout = () => {
       username: context?.user,
     };
     http()
-      .post('createloadout', params)
+      .post('account/loadout/create', params)
       .then(() => {
         toast({
           title: 'Loadout created.',
@@ -42,32 +42,32 @@ const CreateLoadout = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4">
-      <form className="flex flex-col gap-3" onSubmit={submitLoadoutHandler}>
+    <div className='flex flex-col justify-center gap-4'>
+      <form className='flex flex-col gap-3' onSubmit={submitLoadoutHandler}>
         <h1>loadout</h1>
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="keyboard name"
+          type='text'
+          placeholder='keyboard name'
           ref={loadoutName}
         />
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="switches (optional)"
+          type='text'
+          placeholder='switches (optional)'
           ref={loadoutSwitches}
         />
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="others - plate, pe foam... (optional)"
+          type='text'
+          placeholder='others - plate, pe foam... (optional)'
           ref={loadoutOthers}
         />
-        <button type="submit" className="hover:bg-slate-100 transition p-1">
+        <button type='submit' className='hover:bg-slate-100 transition p-1'>
           create loadout
         </button>
       </form>
-      <NavLink to="/account/loadout" className="hover:underline">
+      <NavLink to='/account/loadout' className='hover:underline'>
         back to loadouts
       </NavLink>
     </div>

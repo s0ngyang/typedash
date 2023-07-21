@@ -19,11 +19,8 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 const logoutRouter = require('./routes/logout');
-const createloadoutRouter = require('./routes/createloadout');
-const getloadoutRouter = require('./routes/getloadout');
-const updateloadoutRouter = require('./routes/updateloadout');
-const deleteloadoutRouter = require('./routes/deleteloadout');
 const refreshTokenRouter = require('./routes/refresh-token');
+const accountRouter = require('./routes/account');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -72,11 +69,8 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
-app.use('/createloadout', createloadoutRouter);
-app.use('/getloadout', getloadoutRouter);
-app.use('/updateloadout', updateloadoutRouter);
-app.use('/deleteloadout', deleteloadoutRouter);
 app.use('/refresh', refreshTokenRouter);
+app.use('/account', accountRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

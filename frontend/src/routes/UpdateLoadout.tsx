@@ -22,7 +22,7 @@ const CreateLoadout = () => {
       id: state.id,
     };
     http()
-      .put('updateloadout', params)
+      .put('account/loadout/update', params)
       .then(() => {
         toast({
           title: 'Loadout updated.',
@@ -50,31 +50,31 @@ const CreateLoadout = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4">
-      <form className="flex flex-col gap-3" onSubmit={submitLoadoutHandler}>
+    <div className='flex flex-col justify-center gap-4'>
+      <form className='flex flex-col gap-3' onSubmit={submitLoadoutHandler}>
         <h1>loadout</h1>
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="keyboard name"
+          type='text'
+          placeholder='keyboard name'
           defaultValue={state.name}
           ref={loadoutName}
         />
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="switches (optional)"
+          type='text'
+          placeholder='switches (optional)'
           defaultValue={state.switches}
           ref={loadoutSwitches}
         />
         <input
           className={textfieldStyleString}
-          type="text"
-          placeholder="others - plate, pe foam... (optional)"
+          type='text'
+          placeholder='others - plate, pe foam... (optional)'
           defaultValue={state.others}
           ref={loadoutOthers}
         />
-        <button type="submit" className="hover:bg-slate-100 transition p-1">
+        <button type='submit' className='hover:bg-slate-100 transition p-1'>
           update loadout
         </button>
       </form>
