@@ -22,20 +22,23 @@ function App() {
     const token = localStorage.getItem('token');
     if (token) {
       const decoded = jwt_decode<JwtPayload>(token || '') || null;
-      setUser(decoded.name);
+      const currentTime = Date.now() / 1000;
+      // check if token has expired
+      if (decoded.exp < currentTime) {
+        localStorage.removeItem('token');
+        setUser(undefined);
+        return;
+      } else {
+        // if token has not expired, set user details as per normal
+        setUser(decoded.name);
+      }
     } else {
-      toast({
-        title: 'Session expired.',
-        description: 'Please login again',
-        variant: 'subtle',
-        status: 'error',
-        position: 'top-right',
-        duration: 5000,
-        isClosable: true,
-      });
-      navigate('/login');
+      // if token does not exist, user is undefined
+      localStorage.removeItem('token');
+      setUser(undefined);
     }
   }, []);
+
   return (
     <authContext.Provider value={{ user, setUser }}>
       <Routes>
