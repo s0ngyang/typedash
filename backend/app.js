@@ -69,7 +69,7 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/logout', logoutRouter);
-app.use('/refresh', refreshTokenRouter);
+app.use('/refresh-token', refreshTokenRouter);
 app.use('/account', accountRouter);
 
 // catch 404 and forward to error handler

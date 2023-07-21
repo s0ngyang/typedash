@@ -12,6 +12,7 @@ import Multiplayer from './routes/Multiplayer';
 import Register from './routes/Register';
 import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
+import { refreshUser } from './services/services';
 
 function App() {
   const [user, setUser] = useState<string>();
@@ -25,44 +26,22 @@ function App() {
       const currentTime = Date.now() / 1000; // get the current time in seconds
       // check if token has expired
       if (decoded.exp < currentTime) {
-        // try to use refresh token to get new access token
-        http()
-          .post('refresh')
+        refreshUser()
           .then((res) => {
             localStorage.setItem('token', res.data.accessToken);
             setUser(decoded.user?.name);
           })
-          // if cannot get new access token, remove JWT token in LocalStorage and ask user to login again
-          .catch((e) => {
-            toast({
-              title: 'Session expired.',
-              description: 'Please login again',
-              variant: 'subtle',
-              status: 'error',
-              position: 'top-right',
-              duration: 5000,
-              isClosable: true,
-            });
+          .catch(() => {
             localStorage.removeItem('token');
             setUser(undefined);
-            navigate('/login');
             return;
           });
       } else {
+        // if token has not expired
         setUser(decoded.user?.name);
       }
     } else {
-      toast({
-        title: 'Session expired.',
-        description: 'Please login again',
-        variant: 'subtle',
-        status: 'error',
-        position: 'top-right',
-        duration: 5000,
-        isClosable: true,
-      });
       localStorage.removeItem('token');
-      navigate('/login');
       setUser(undefined);
     }
   }, []);

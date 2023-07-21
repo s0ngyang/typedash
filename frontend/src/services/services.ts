@@ -66,6 +66,18 @@ export const registerUser = async (params: FormikValues) => {
   }
 };
 
+export const refreshUser = async () => {
+  try {
+    const res = await http()
+      .post('refresh-token')
+      .then((response) => {
+        console.log(response);
+        return response;
+      });
+    return res;
+  } catch (e) {}
+};
+
 export const logoutUser = async () => {
   try {
     const res = await http()
