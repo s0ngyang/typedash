@@ -15,8 +15,10 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { FaKeyboard } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
+import { useLocation } from 'react-router-dom';
 import { challengeItems, randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
+import http from '../../services/api';
 import ProgressBar from './ProgressBar';
 import Word from './Word';
 import { ChallengeProps } from './challenges/challenge.interface';
@@ -54,6 +56,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   const challengeSwitchRef = useRef<HTMLButtonElement>(null);
   const challengeOptionRef = useRef<Array<HTMLButtonElement | null>>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { state } = useLocation();
 
   const getDefaultChallengeType = () => {
     const storedChallenge = localStorage.getItem('challenge-type');
@@ -124,6 +127,16 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
       accuracy,
       time: timeTaken,
     });
+    const params = {
+      challenge_id: [challenge?.id],
+      type: challengeType,
+      wpm: WPM,
+      accuracy,
+      time_taken: timeTaken,
+      date: new Date().toDateString,
+      user_id: state.id,
+    };
+    http().post('/results', params);
     setShowResults(true);
   }, [testStatus]);
 

@@ -29,9 +29,9 @@ router.post('/loadout/create', authenticateToken, async (req, res) => {
 
       await prisma.loadouts.create({
         data: {
-          name: name,
-          switches: switches,
-          others: others,
+          name,
+          switches,
+          others,
           user_id: res.id,
         },
       });
