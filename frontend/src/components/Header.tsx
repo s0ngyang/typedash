@@ -9,6 +9,7 @@ import {
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { CgSmile } from 'react-icons/cg';
+import { FaInfo } from 'react-icons/fa';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { RiPaletteFill } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
@@ -76,6 +77,20 @@ const Header: FC<HeaderProps> = ({ currentTheme, setCurrentTheme }) => {
               _hover={{ color: 'text.secondary' }}
               aria-label='Multiplayer tooltip'
               icon={<BsPeopleFill size={25} />}
+            />
+          </Tooltip>
+          <Tooltip
+            label='About'
+            aria-label='About tooltip'
+            className='font-mono'
+          >
+            <IconButton
+              onClick={() => navigate('/about')}
+              variant='ghost'
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              aria-label='About tooltip'
+              icon={<FaInfo size={20} />}
             />
           </Tooltip>
         </div>
