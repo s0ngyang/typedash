@@ -109,7 +109,7 @@ const Account: FC<AccountProps> = () => {
             <div className='flex flex-col text-left'>
               <div className='text-sm'>average wpm</div>
               <Box color='text.secondary' className='text-2xl font-semibold'>
-                {stats.averageWPM}
+                {stats.averageWPM.toFixed(2)}
               </Box>
             </div>
           </div>
