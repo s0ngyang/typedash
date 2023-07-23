@@ -73,7 +73,7 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
           isDisabled={!maxLoadouts}
         >
           <Button
-            disabled={maxLoadouts}
+            isDisabled={maxLoadouts}
             onClick={onCreateOpen}
             colorScheme='accent'
           >
