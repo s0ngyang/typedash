@@ -1,9 +1,6 @@
 export interface ThemeProps {
   id: string;
   name: string;
-  config: {
-    initialColorMode: string;
-  };
   colors: {
     bg: {
       primary: string;
