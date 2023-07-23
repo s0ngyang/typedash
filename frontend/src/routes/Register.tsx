@@ -1,5 +1,5 @@
-import { Button } from '@chakra-ui/react';
-import { FormikValues, useFormik } from 'formik';
+import { Button, FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
+import { Formik, FormikValues, useFormik } from 'formik';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -48,103 +48,128 @@ const Register: FC<RegisterProps> = ({}) => {
   });
   return (
     <div className='flex flex-col justify-center items-center gap-6'>
-      <form
-        className='flex flex-col gap-2 w-1/2 text-left'
-        onSubmit={formik.handleSubmit}
+      <Formik
+        initialValues={{
+          name: '',
+          email: '',
+          password: '',
+          password2: '',
+        }}
+        validationSchema={Yup.object({
+          name: Yup.string()
+            .min(6, 'Username must be at least 6 characters')
+            .max(15, 'Username must be 15 characters or less')
+            .required('Username is required'),
+          email: Yup.string()
+            .email('Invalid email address')
+            .required('Email is required'),
+          password: Yup.string()
+            .required('Please enter a password')
+            .min(8, 'Password must have at least 8 characters')
+            .matches(/[0-9]/, getCharacterValidationError('digit'))
+            .matches(/[a-z]/, getCharacterValidationError('lowercase'))
+            .matches(/[A-Z]/, getCharacterValidationError('uppercase')),
+          password2: Yup.string()
+            .required('Please re-type your password')
+            .oneOf([Yup.ref('password')], 'Passwords does not match'),
+        })}
+        onSubmit={(values) => registerUserHandler(values)}
       >
-        <h1>register</h1>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='name'
-            name='name'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.name && formik.errors.name
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='text'
-            placeholder='username'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.name}
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className='text-red-600 font-bold'>{formik.errors.name}</div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='email'
-            name='email'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.email && formik.errors.email
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='email'
-            placeholder='email'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div className='text-red-600 font-bold'>{formik.errors.email}</div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='password'
-            name='password'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.password && formik.errors.password
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='password'
-            placeholder='password'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div className='text-red-600 font-bold'>
-              {formik.errors.password}
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          errors,
+          touched,
+        }) => (
+          <form
+            className='flex flex-col gap-6 w-1/2 text-left'
+            onSubmit={handleSubmit}
+          >
+            <div>register</div>
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.name && !!errors.name}>
+                <Input
+                  id='name'
+                  name='name'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='text'
+                  placeholder='name'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.name}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.name}
+                </FormErrorMessage>
+              </FormControl>
             </div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='password2'
-            name='password2'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.password2 && formik.errors.password2
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='password'
-            placeholder='verify password'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password2}
-          />
-          {formik.touched.password2 && formik.errors.password2 ? (
-            <div className='text-red-600 font-bold'>
-              {formik.errors.password2}
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.email && !!errors.email}>
+                <Input
+                  id='email'
+                  name='email'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='email'
+                  placeholder='email'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.email}
+                </FormErrorMessage>
+              </FormControl>
             </div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <Button type='submit' variant='ghost' colorScheme='primary'>
-          sign up
-        </Button>
-      </form>
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.password && !!errors.password}>
+                <Input
+                  id='password'
+                  name='password'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='password'
+                  placeholder='password'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.password}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.password2 && !!errors.password2}>
+                <Input
+                  id='password2'
+                  name='password2'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='password'
+                  placeholder='verify password'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password2}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.password2}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
+            <Button type='submit' variant='ghost' colorScheme='primary'>
+              sign up
+            </Button>
+          </form>
+        )}
+      </Formik>
       <Button
         variant='link'
         colorScheme='primary'
