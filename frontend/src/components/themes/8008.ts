@@ -3,6 +3,9 @@ import { ThemeProps } from './theme.inteface';
 const theme: ThemeProps = {
   id: '8008',
   name: '8008',
+  config: {
+    initialColorMode: 'dark',
+  },
   colors: {
     bg: {
       primary: '#363e49',

@@ -6,6 +6,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import { customTheme } from './chakra-theme';
 import theme_8008 from './components/themes/8008';
+import { themeItems } from './components/themes/themes';
 import { authContext } from './context/authContext';
 import Account from './routes/Account';
 import Layout from './routes/Layout';
@@ -16,9 +17,12 @@ import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
 
 function App() {
-  const [currentTheme, setCurrentTheme] = useState(theme_8008);
-  const mergedTheme = extendTheme(customTheme, { colors: currentTheme.colors });
   const [user, setUser] = useState<string>();
+  const [currentTheme, setCurrentTheme] = useState(
+    themeItems.find((theme) => theme.name === localStorage.getItem('theme')) ||
+      theme_8008,
+  );
+  const mergedTheme = extendTheme(customTheme, { colors: currentTheme.colors });
   const context = useContext(authContext);
   const navigate = useNavigate();
   useEffect(() => {

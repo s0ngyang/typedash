@@ -3,6 +3,9 @@ import { ThemeProps } from './theme.inteface';
 const theme: ThemeProps = {
   id: 'terminal',
   name: 'terminal',
+  config: {
+    initialColorMode: 'dark',
+  },
   colors: {
     bg: {
       primary: '#191a1c',

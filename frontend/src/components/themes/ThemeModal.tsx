@@ -9,9 +9,8 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { FC } from 'react';
-import theme_8008 from './8008';
-import theme_terminal from './terminal';
 import { ThemeProps } from './theme.inteface';
+import { themeItems } from './themes';
 
 interface ThemeModalProps {
   isThemeOpen: boolean;
@@ -26,10 +25,10 @@ const ThemeModal: FC<ThemeModalProps> = ({
   currentTheme,
   setCurrentTheme,
 }) => {
-  const themeItems: ThemeProps[] = [theme_8008, theme_terminal];
   const themeSwitchHandler = (nextTheme: ThemeProps) => {
     setCurrentTheme(nextTheme);
     onThemeClose();
+    localStorage.setItem('theme', nextTheme.name);
   };
   return (
     <Modal
