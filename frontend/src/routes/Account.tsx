@@ -15,7 +15,12 @@ export interface LoadoutProps {
 const Account: FC<AccountProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadouts, setLoadouts] = useState<LoadoutProps[]>([]);
-  const [stats, setStats] = useState({ completed: 0, time: 0 });
+  const [stats, setStats] = useState({
+    completed: 0,
+    time: 0,
+    highestWPM: 0,
+    averageWPM: 0,
+  });
   const context = useContext(authContext);
   const user = context?.user;
 
@@ -23,13 +28,22 @@ const Account: FC<AccountProps> = () => {
     setIsLoading(true);
     getStatistics({ user }).then((res) => {
       const statsArr = res?.data.stats;
-      console.log(statsArr);
-      var time = 0;
+      let time: number = 0;
+      let totalWPM: number = 0;
+      let highestWPM: number = 0;
       const completed = statsArr.length;
       for (let i = 0; i < completed; i++) {
         time += statsArr[i].time_taken;
+        const wpm: number = statsArr[i].wpm;
+        totalWPM += wpm;
+        if (wpm > highestWPM) highestWPM = wpm;
       }
-      setStats({ completed, time });
+      setStats({
+        completed,
+        time,
+        highestWPM,
+        averageWPM: totalWPM / completed,
+      });
     });
     getLoadouts({ data: user }).then((res) => {
       const loadouts = res?.data.loadouts;
@@ -79,7 +93,20 @@ const Account: FC<AccountProps> = () => {
             <div className='flex flex-col text-left'>
               <div className='text-sm'>time typed</div>
               <div className='text-2xl text-white font-semibold'>
-                {stats.time}
+                {Math.floor(stats.time / 3600)}h {Math.floor(stats.time / 60)}m{' '}
+                {stats.time % 60}s
+              </div>
+            </div>
+            <div className='flex flex-col text-left'>
+              <div className='text-sm'>highest wpm</div>
+              <div className='text-2xl text-white font-semibold'>
+                {stats.highestWPM}
+              </div>
+            </div>
+            <div className='flex flex-col text-left'>
+              <div className='text-sm'>average wpm</div>
+              <div className='text-2xl text-white font-semibold'>
+                {stats.averageWPM}
               </div>
             </div>
           </div>
