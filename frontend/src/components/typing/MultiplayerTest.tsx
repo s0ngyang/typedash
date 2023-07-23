@@ -1,8 +1,10 @@
 // @ts-nocheck
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
+import { useLocation } from 'react-router-dom';
 import { authContext } from '../../context/authContext';
 import useTimer from '../../helpers/useTimer';
+import http from '../../services/api';
 import socket from '../../services/socket';
 import Word from './Word';
 import { ChallengeProps } from './challenges/challenge.interface';
@@ -42,7 +44,8 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const restartRef = useRef<HTMLButtonElement>(null);
   const context = useContext(authContext);
-  const username = context?.user || 'Guest';
+  const user = context?.user;
+  const { state } = useLocation();
 
   useEffect(() => {
     socket.on('playerJoined', ({ challenge }) => {
@@ -101,7 +104,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     if (user) {
       const params = {
         challenge_id: challenge?.id,
-        type: challengeType,
+        type: state,
         wpm: WPM,
         accuracy,
         time_taken: timeTaken,
