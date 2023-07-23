@@ -1,4 +1,11 @@
-import { SimpleGrid, Tooltip, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  IconButton,
+  SimpleGrid,
+  Tooltip,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { FC, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -64,22 +71,25 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
           className='font-mono'
           isDisabled={!maxLoadouts}
         >
-          <button
+          <Button
             disabled={maxLoadouts}
-            className='bg-pink-8008 text-grey-8008 px-4 py-1 rounded-md disabled:opacity-30'
             onClick={onCreateOpen}
+            colorScheme='accent'
           >
             Create Loadout
-          </button>
+          </Button>
         </Tooltip>
       </div>
       <SimpleGrid columns={3} spacing={5}>
         {loadouts.map((loadout) => (
-          <div
-            className='flex flex-col justify-center bg-grey-8008 brightness-90 rounded-md p-4 text-left'
+          <Box
+            bg='bg.secondary'
+            className='flex flex-col justify-center rounded-md p-4 text-left'
             key={loadout.id}
           >
-            <div className='font-semibold text-white'>{loadout.name}</div>
+            <Box color='text.secondary' className='font-semibold'>
+              {loadout.name}
+            </Box>
             <div>{loadout.switches}</div>
             <div>{loadout.others}</div>
             <div className='flex items-center justify-end gap-2'>
@@ -88,32 +98,33 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
                 aria-label='Edit loadout tooltip'
                 className='font-mono'
               >
-                <button
-                  className='hover:brightness-150 transition'
+                <IconButton
+                  variant='ghost'
+                  color='text.primary'
+                  _hover={{ color: 'text.secondary' }}
                   onClick={() => editModalHandler(loadout)}
-                >
-                  <FiEdit size={17} />
-                </button>
+                  icon={<FiEdit size={17} />}
+                  aria-label='Edit loadout'
+                />
               </Tooltip>
               <Tooltip
                 label='Delete Loadout'
                 aria-label='Delete loadout tooltip'
                 className='font-mono'
               >
-                <button
-                  className='hover:brightness-150 transition'
+                <IconButton
+                  variant='ghost'
+                  color='text.primary'
+                  _hover={{ color: 'text.secondary' }}
                   onClick={() => deleteAlertHandler(loadout)}
-                >
-                  <MdDeleteOutline size={20} />
-                </button>
+                  icon={<MdDeleteOutline size={20} />}
+                  aria-label='Delete loadout'
+                />
               </Tooltip>
             </div>
-          </div>
+          </Box>
         ))}
       </SimpleGrid>
-      {/* <button className='hover:bg-slate-100 transition p-1'>
-        <NavLink to='/account/loadout/create'>Create New Loadout</NavLink>
-      </button> */}
       <UpdateLoadoutModal
         isUpdateOpen={isUpdateOpen}
         onUpdateClose={onUpdateClose}

@@ -1,6 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
 
 export const customTheme = extendTheme({
+  config: {
+    useSystemColorMode: false,
+  },
   components: {
     Tooltip: {
       baseStyle: {

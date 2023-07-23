@@ -1,5 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -55,6 +56,8 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           leftIcon={<FaKeyboard size={20} />}
           variant='ghost'
           onClick={onOpen}
+          colorScheme='primary'
+          color='text.primary'
         >
           {challengeType}
         </Button>
@@ -74,7 +77,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
                 >
                   <div className='w-full flex justify-between'>
                     <div>{type.name}</div>
-                    <div className='text-lightgrey-8008'>{type.desc}</div>
+                    <Box color='text.primary'>{type.desc}</Box>
                   </div>
                 </Button>
               ))}
@@ -83,7 +86,12 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           </ModalContent>
         </Modal>
       </>
-      <Button variant='ghost' onClick={createRoom}>
+      <Button
+        variant='ghost'
+        colorScheme='primary'
+        color='text.primary'
+        onClick={createRoom}
+      >
         Create Room
       </Button>
     </div>

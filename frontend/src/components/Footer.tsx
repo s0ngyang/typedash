@@ -6,9 +6,9 @@ const Footer: FC<FooterProps> = ({}) => {
   return (
     <div>
       <a
-        className="underline"
-        href="https://github.com/raynertjx/typedash"
-        target="_blank"
+        className='underline'
+        href='https://github.com/raynertjx/typedash'
+        target='_blank'
       >
         Github
       </a>

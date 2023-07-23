@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Box } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
 import { useLocation } from 'react-router-dom';
@@ -195,12 +196,13 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       onClick={focusOnInput}
     >
       {!isFocused && !showResults && (
-        <div
+        <Box
+          color='text.secondary'
           onClick={focusOnInput}
-          className='flex items-center gap-4 absolute z-10 text-white'
+          className='flex items-center gap-4 absolute z-10'
         >
           <HiCursorClick /> Click here to refocus
-        </div>
+        </Box>
       )}
       <div
         className={`flex flex-col justify-center items-center gap-8 h-full overflow-hidden ${
@@ -217,9 +219,9 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
                 />
               </SlideFade>
             </div> */}
-            <div className='w-full flex justify-start text-pink-8008'>
+            <Box color='accent.200' className='w-full flex justify-start'>
               {time}
-            </div>
+            </Box>
             <div
               className='flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12'
               onClick={focusOnInput}

@@ -19,14 +19,14 @@ const Word: FC<WordProps> = ({ word, typedWord, status }) => {
   };
   const offset = calculateOffset();
   const letters = word.split('').map((char, i) => {
-    let letterStatus = 'letter-idle';
+    let letterStatus = 'idle';
     if (status === 'completed') {
-      letterStatus = 'letter-correct';
+      letterStatus = 'correct';
     } else if (status === 'active') {
       if (typedWord?.charAt(i) === char) {
-        letterStatus = 'letter-correct';
+        letterStatus = 'correct';
       } else if (typedWord?.charAt(i) !== char && typedWord?.charAt(i)) {
-        letterStatus = 'letter-incorrect';
+        letterStatus = 'incorrect';
       }
     }
     return <Letter key={i} status={letterStatus} char={char} />;
@@ -35,7 +35,7 @@ const Word: FC<WordProps> = ({ word, typedWord, status }) => {
     ?.slice(word.length)
     .split('')
     .map((char, i) => {
-      return <Letter key={i} status={'letter-incorrect'} char={char} />;
+      return <Letter key={i} status={'incorrect'} char={char} />;
     });
   return (
     <div className={`flex word-active h-8`}>

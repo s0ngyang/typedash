@@ -9,13 +9,13 @@ interface ProgressBarProps {
 const ProgressBar: FC<ProgressBarProps> = ({ lettersTyped, totalLetters }) => {
   return (
     <Progress
-      size="md"
+      size='md'
       value={lettersTyped}
       max={totalLetters}
+      colorScheme='accent'
       sx={{
         '& > div:first-child': {
           transitionProperty: 'width',
-          backgroundColor: '#f44c7f',
         },
       }}
     />
