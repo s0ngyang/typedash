@@ -5,8 +5,9 @@ import {
   SimpleGrid,
   Tooltip,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
 import CreateLoadoutModal from '../components/loadouts/CreateLoadoutModal';
@@ -40,8 +41,21 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
   const cancelDeleteRef = useRef<any>();
   const [loadoutToUpdate, setLoadoutToUpdate] = useState<LoadoutProps>();
   const [loadoutToDeleteId, setLoadoutToDeleteId] = useState<number>();
+  const [selectedLoadoutId, setSelectedLoadoutId] = useState<number>();
+  const toast = useToast();
   const maxLoadouts = loadouts.length === 9;
   const noLoadouts = loadouts.length === 0;
+
+  useEffect(() => {
+    const storedLoadoutId = localStorage.getItem('selected-loadout');
+    if (storedLoadoutId) setSelectedLoadoutId(+storedLoadoutId);
+    if (loadouts.length === 1) setSelectedLoadoutId(loadouts[0].id);
+  }, [loadouts]);
+
+  useEffect(() => {
+    if (selectedLoadoutId)
+      localStorage.setItem('selected-loadout', selectedLoadoutId.toString());
+  }, [selectedLoadoutId]);
 
   const editModalHandler = (loadout: LoadoutProps) => {
     onUpdateOpen();
@@ -59,6 +73,17 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
       // sort loadouts by id in ascending order
       loadouts.sort((a: LoadoutProps, b: LoadoutProps) => a.id - b.id);
       setLoadouts(loadouts);
+    });
+  };
+
+  const selectLoadoutHandler = (id: number) => {
+    setSelectedLoadoutId(id);
+    toast({
+      position: 'top-right',
+      title: 'Current loadout updated.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
     });
   };
 
@@ -88,12 +113,22 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
           {loadouts.map((loadout) => (
             <Box
               bg='bg.secondary'
-              className='flex flex-col justify-center rounded-md p-4 text-left'
+              borderWidth='2px'
+              borderRadius='md'
+              borderColor={
+                loadout.id === selectedLoadoutId ? 'accent.200' : 'bg.secondary'
+              }
+              className='flex flex-col justify-center p-4 text-left'
               key={loadout.id}
             >
-              <Box color='text.secondary' className='font-semibold'>
+              <Button
+                variant='unstyled'
+                color='text.secondary'
+                className='text-left font-semibold'
+                onClick={() => selectLoadoutHandler(loadout.id)}
+              >
                 {loadout.name}
-              </Box>
+              </Button>
               <div>{loadout.switches}</div>
               <div>{loadout.others}</div>
               <div className='flex items-center justify-end gap-2'>
