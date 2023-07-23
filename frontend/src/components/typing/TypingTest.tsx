@@ -16,6 +16,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { FaKeyboard } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
+import { useOutletContext } from 'react-router-dom';
 import { challengeItems, randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
 import ProgressBar from './ProgressBar';
@@ -49,6 +50,8 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   });
   const INITIAL_TIME = 120;
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(INITIAL_TIME); // default time is 120 seconds
+  // @ts-ignore
+  const [middleContainerRef] = useOutletContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const restartRef = useRef<HTMLButtonElement>(null);
@@ -78,17 +81,19 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
 
   useEffect(() => {
     const handleClickAway = (e: MouseEvent) => {
+      const themeModal = document.querySelector('#chakra-modal-theme-modal');
       if (showResults) return;
       if (
         challengeSwitchRef.current?.contains(e.target as Node) ||
         challengeOptionRef.current[0]?.contains(e.target as Node) ||
         challengeOptionRef.current[1]?.contains(e.target as Node) ||
-        challengeOptionRef.current[2]?.contains(e.target as Node)
+        challengeOptionRef.current[2]?.contains(e.target as Node) ||
+        themeModal?.contains(e.target as Node)
       )
         return;
       if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
+        middleContainerRef.current &&
+        !middleContainerRef.current.contains(e.target as Node)
       ) {
         setTimeout(() => setIsFocused(false), 1000);
       }
@@ -279,6 +284,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
                 )}
                 {testStatus === 0 && (
                   <Button
+                    color='text.primary'
                     ref={challengeSwitchRef}
                     iconSpacing={3}
                     leftIcon={<FaKeyboard size={20} />}
@@ -365,7 +371,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 <div className='w-full flex justify-between'>
                   <div>{type.name}</div>
-                  <Box color='text.primary'>{type.desc}</Box>
+                  <Box>{type.desc}</Box>
                 </div>
               </Button>
             ))}

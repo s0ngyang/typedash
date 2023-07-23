@@ -36,6 +36,11 @@ const theme: ThemeProps = {
       primary: '#99a3b3',
       secondary: '#fff',
     },
+    letter: {
+      idle: '#99a3b3',
+      correct: '#fff',
+      incorrect: '#ef4444',
+    },
   },
 };
 

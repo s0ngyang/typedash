@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
+import { Box, FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
 import { Formik, FormikValues } from 'formik';
 import { FC, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,7 @@ export const Login: FC<LoginProps> = ({}) => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center gap-6'>
+    <Box className='flex flex-col justify-center items-center gap-6'>
       <Formik
         initialValues={{
           email: '',
@@ -56,6 +56,8 @@ export const Login: FC<LoginProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='email'
                   placeholder='email'
+                  _placeholder={{ color: 'inherit' }}
+                  color='text.primary'
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
@@ -75,6 +77,7 @@ export const Login: FC<LoginProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='password'
                   placeholder='password'
+                  _placeholder={{ color: 'inherit' }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
@@ -84,7 +87,7 @@ export const Login: FC<LoginProps> = ({}) => {
                 </FormErrorMessage>
               </FormControl>
             </div>
-            <Button type='submit' variant='ghost' colorScheme='primary'>
+            <Button type='submit' variant='ghost' color='text.primary'>
               sign in
             </Button>
           </form>
@@ -93,12 +96,12 @@ export const Login: FC<LoginProps> = ({}) => {
       <Button
         type='submit'
         variant='link'
-        colorScheme='primary'
+        color='text.primary'
         onClick={() => navigate('/register')}
       >
         don't have an account? sign up
       </Button>
-    </div>
+    </Box>
   );
 };
 

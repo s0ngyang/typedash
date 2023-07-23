@@ -34,5 +34,10 @@ export interface ThemeProps {
       primary: string;
       secondary: string;
     };
+    letter: {
+      idle: string;
+      correct: string;
+      incorrect: string;
+    };
   };
 }

@@ -98,6 +98,7 @@ const Register: FC<RegisterProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='text'
                   placeholder='name'
+                  _placeholder={{ color: 'inherit' }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
@@ -117,6 +118,7 @@ const Register: FC<RegisterProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='email'
                   placeholder='email'
+                  _placeholder={{ color: 'inherit' }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
@@ -136,6 +138,7 @@ const Register: FC<RegisterProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='password'
                   placeholder='password'
+                  _placeholder={{ color: 'inherit' }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
@@ -155,6 +158,7 @@ const Register: FC<RegisterProps> = ({}) => {
                   errorBorderColor='red.600'
                   type='password'
                   placeholder='verify password'
+                  _placeholder={{ color: 'inherit' }}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password2}
@@ -164,7 +168,7 @@ const Register: FC<RegisterProps> = ({}) => {
                 </FormErrorMessage>
               </FormControl>
             </div>
-            <Button type='submit' variant='ghost' colorScheme='primary'>
+            <Button type='submit' variant='ghost' color='text.primary'>
               sign up
             </Button>
           </form>
@@ -172,7 +176,7 @@ const Register: FC<RegisterProps> = ({}) => {
       </Formik>
       <Button
         variant='link'
-        colorScheme='primary'
+        color='text.primary'
         onClick={() => navigate('/login')}
       >
         back to login

@@ -39,7 +39,7 @@ const Account: FC<AccountProps> = () => {
         thickness='3px'
         speed='0.65s'
         emptyColor='gray.200'
-        color='pink.500'
+        color='accent.300'
         size='lg'
       />
     </div>

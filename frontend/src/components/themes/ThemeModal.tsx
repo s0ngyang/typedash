@@ -32,7 +32,12 @@ const ThemeModal: FC<ThemeModalProps> = ({
     onThemeClose();
   };
   return (
-    <Modal onClose={onThemeClose} isOpen={isThemeOpen} isCentered>
+    <Modal
+      onClose={onThemeClose}
+      isOpen={isThemeOpen}
+      isCentered
+      id='theme-modal'
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Theme</ModalHeader>
