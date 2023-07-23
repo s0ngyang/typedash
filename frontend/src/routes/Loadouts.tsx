@@ -41,6 +41,7 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
   const [loadoutToUpdate, setLoadoutToUpdate] = useState<LoadoutProps>();
   const [loadoutToDeleteId, setLoadoutToDeleteId] = useState<number>();
   const maxLoadouts = loadouts.length === 9;
+  const noLoadouts = loadouts.length === 0;
 
   const editModalHandler = (loadout: LoadoutProps) => {
     onUpdateOpen();
@@ -80,51 +81,55 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
           </Button>
         </Tooltip>
       </div>
-      <SimpleGrid columns={3} spacing={5}>
-        {loadouts.map((loadout) => (
-          <Box
-            bg='bg.secondary'
-            className='flex flex-col justify-center rounded-md p-4 text-left'
-            key={loadout.id}
-          >
-            <Box color='text.secondary' className='font-semibold'>
-              {loadout.name}
+      {noLoadouts ? (
+        <div>No loadouts present.</div>
+      ) : (
+        <SimpleGrid columns={3} spacing={5}>
+          {loadouts.map((loadout) => (
+            <Box
+              bg='bg.secondary'
+              className='flex flex-col justify-center rounded-md p-4 text-left'
+              key={loadout.id}
+            >
+              <Box color='text.secondary' className='font-semibold'>
+                {loadout.name}
+              </Box>
+              <div>{loadout.switches}</div>
+              <div>{loadout.others}</div>
+              <div className='flex items-center justify-end gap-2'>
+                <Tooltip
+                  label='Edit Loadout'
+                  aria-label='Edit loadout tooltip'
+                  className='font-mono'
+                >
+                  <IconButton
+                    variant='ghost'
+                    color='text.primary'
+                    _hover={{ color: 'text.secondary' }}
+                    onClick={() => editModalHandler(loadout)}
+                    icon={<FiEdit size={17} />}
+                    aria-label='Edit loadout'
+                  />
+                </Tooltip>
+                <Tooltip
+                  label='Delete Loadout'
+                  aria-label='Delete loadout tooltip'
+                  className='font-mono'
+                >
+                  <IconButton
+                    variant='ghost'
+                    color='text.primary'
+                    _hover={{ color: 'text.secondary' }}
+                    onClick={() => deleteAlertHandler(loadout)}
+                    icon={<MdDeleteOutline size={20} />}
+                    aria-label='Delete loadout'
+                  />
+                </Tooltip>
+              </div>
             </Box>
-            <div>{loadout.switches}</div>
-            <div>{loadout.others}</div>
-            <div className='flex items-center justify-end gap-2'>
-              <Tooltip
-                label='Edit Loadout'
-                aria-label='Edit loadout tooltip'
-                className='font-mono'
-              >
-                <IconButton
-                  variant='ghost'
-                  color='text.primary'
-                  _hover={{ color: 'text.secondary' }}
-                  onClick={() => editModalHandler(loadout)}
-                  icon={<FiEdit size={17} />}
-                  aria-label='Edit loadout'
-                />
-              </Tooltip>
-              <Tooltip
-                label='Delete Loadout'
-                aria-label='Delete loadout tooltip'
-                className='font-mono'
-              >
-                <IconButton
-                  variant='ghost'
-                  color='text.primary'
-                  _hover={{ color: 'text.secondary' }}
-                  onClick={() => deleteAlertHandler(loadout)}
-                  icon={<MdDeleteOutline size={20} />}
-                  aria-label='Delete loadout'
-                />
-              </Tooltip>
-            </div>
-          </Box>
-        ))}
-      </SimpleGrid>
+          ))}
+        </SimpleGrid>
+      )}
       <UpdateLoadoutModal
         isUpdateOpen={isUpdateOpen}
         onUpdateClose={onUpdateClose}
