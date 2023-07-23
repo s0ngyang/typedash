@@ -1,6 +1,7 @@
+import { Button } from '@chakra-ui/button';
 import { FormikValues, useFormik } from 'formik';
 import { FC, useContext } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { authContext } from '../context/authContext';
 import { loginUser } from '../services/services';
@@ -81,13 +82,18 @@ export const Login: FC<LoginProps> = ({}) => {
             <div>&nbsp;</div>
           )}
         </div>
-        <button type='submit' className='hover:bg-slate-100 transition p-1'>
+        <Button type='submit' variant='ghost' colorScheme='primary'>
           sign in
-        </button>
+        </Button>
       </form>
-      <NavLink to='/register' className='hover:underline'>
+      <Button
+        type='submit'
+        variant='link'
+        colorScheme='primary'
+        onClick={() => navigate('/register')}
+      >
         don't have an account? sign up
-      </NavLink>
+      </Button>
     </div>
   );
 };

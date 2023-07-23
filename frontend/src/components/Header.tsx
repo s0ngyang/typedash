@@ -1,4 +1,4 @@
-import { Tooltip, useMediaQuery } from '@chakra-ui/react';
+import { Box, IconButton, Tooltip, useMediaQuery } from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { CgSmile } from 'react-icons/cg';
@@ -25,35 +25,40 @@ const Header: FC<HeaderProps> = ({}) => {
   return (
     <div className='flex justify-between items-center'>
       <div className='flex items-center gap-8'>
-        <div className='flex items-center gap-4'>
-          {!isMobile && (
-            <CatLogo className='fill-pink-8008 stroke-black h-14 w-14' />
-          )}
+        <Box fill='accent.300' className='flex items-center gap-4'>
+          {!isMobile && <CatLogo className='h-14 w-14' />}
           <Link to={`/`}>
             <h1 className='font-bold text-lg md:text-2xl'>TypeDash</h1>
           </Link>
-        </div>
-        <div className='flex gap-6'>
+        </Box>
+        <div className='flex gap-2'>
           <Tooltip
             label='Singleplayer'
             aria-label='Singleplayer tooltip'
             className='font-mono'
           >
-            <Link to={`/singleplayer`}>
-              <BsFillPersonFill
-                size={25}
-                className='hover:text-white transition'
-              />
-            </Link>
+            <IconButton
+              onClick={() => navigate('/singleplayer')}
+              variant='ghost'
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              aria-label='Singleplayer tooltip'
+              icon={<BsFillPersonFill size={25} />}
+            />
           </Tooltip>
           <Tooltip
             label='Multiplayer'
             aria-label='Multiplayer tooltip'
             className='font-mono'
           >
-            <Link to={`/multiplayer`}>
-              <BsPeopleFill size={25} className='hover:text-white transition' />
-            </Link>
+            <IconButton
+              onClick={() => navigate('/multiplayer')}
+              variant='ghost'
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              aria-label='Multiplayer tooltip'
+              icon={<BsPeopleFill size={25} />}
+            />
           </Tooltip>
         </div>
       </div>
@@ -63,9 +68,14 @@ const Header: FC<HeaderProps> = ({}) => {
           aria-label='Log in tooltip'
           className='font-mono'
         >
-          <Link to={`login`}>
-            <FiLogIn size={25} className='hover:text-white transition' />
-          </Link>
+          <IconButton
+            onClick={() => navigate('/login')}
+            variant='ghost'
+            color='text.primary'
+            _hover={{ color: 'text.secondary' }}
+            aria-label='Login tooltip'
+            icon={<FiLogIn size={25} />}
+          />
         </Tooltip>
       )}
       {context?.user && (
@@ -82,9 +92,14 @@ const Header: FC<HeaderProps> = ({}) => {
             aria-label='Log out tooltip'
             className='font-mono'
           >
-            <button onClick={logoutHandler}>
-              <FiLogOut size={25} className='hover:text-white transition' />
-            </button>
+            <IconButton
+              onClick={logoutHandler}
+              variant='ghost'
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              aria-label='Login tooltip'
+              icon={<FiLogOut size={25} />}
+            />
           </Tooltip>
         </div>
       )}

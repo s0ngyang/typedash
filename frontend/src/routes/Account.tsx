@@ -1,4 +1,4 @@
-import { Divider, Fade, Spinner } from '@chakra-ui/react';
+import { Box, Divider, Fade, Spinner } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useState } from 'react';
 import { authContext } from '../context/authContext';
 import { getLoadouts } from '../services/services';
@@ -46,7 +46,10 @@ const Account: FC<AccountProps> = () => {
   ) : (
     <Fade in={!isLoading} delay={0.3}>
       <div className='flex flex-col gap-4 h-full'>
-        <div className='w-full h-1/5 brightness-90 bg-grey-8008 rounded-md flex justify-center items-center gap-24 px-4'>
+        <Box
+          bg='bg.secondary'
+          className='w-full h-1/5 rounded-md flex justify-center items-center gap-24 px-4'
+        >
           <div className='flex flex-col text-left'>
             <div className='font-semibold text-2xl text-white'>
               {context?.user}
@@ -70,7 +73,7 @@ const Account: FC<AccountProps> = () => {
               <div className='text-2xl text-white font-semibold'>9999</div>
             </div>
           </div>
-        </div>
+        </Box>
         <Loadouts
           user={context?.user}
           loadouts={loadouts}

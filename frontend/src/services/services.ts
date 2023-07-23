@@ -12,7 +12,7 @@ export const loginUser = async (params: FormikValues) => {
         toast({
           title: 'Login successful.',
           description: 'You are now logged in.',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,
@@ -26,7 +26,7 @@ export const loginUser = async (params: FormikValues) => {
       toast({
         title: 'Login failed.',
         description: `${e.message}.`,
-        variant: 'subtle',
+        variant: 'solid',
         status: 'error',
         position: 'top-right',
         duration: 5000,
@@ -43,7 +43,7 @@ export const registerUser = async (params: FormikValues) => {
         toast({
           title: 'Registered successfully.',
           description: 'Your account has been created.',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,
@@ -57,7 +57,7 @@ export const registerUser = async (params: FormikValues) => {
       toast({
         title: 'Registration failed.',
         description: `${e.message}`,
-        variant: 'subtle',
+        variant: 'solid',
         status: 'error',
         position: 'top-right',
         duration: 5000,
@@ -74,7 +74,7 @@ export const logoutUser = async () => {
         toast({
           title: 'Logout successful.',
           description: 'You are now logged out.',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,
@@ -88,7 +88,7 @@ export const logoutUser = async () => {
       toast({
         title: 'Logout failed.',
         description: `${e.message}.`,
-        variant: 'subtle',
+        variant: 'solid',
         status: 'error',
         position: 'top-right',
         duration: 5000,
@@ -114,7 +114,7 @@ export const createLoadout = async (params: any) => {
         toast({
           title: 'Loadout created.',
           description: '',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,
@@ -135,7 +135,7 @@ export const updateLoadout = async (params: LoadoutProps) => {
         toast({
           title: 'Loadout updated.',
           description: '',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,
@@ -155,7 +155,7 @@ export const deleteLoadout = async (params: { data: number }) => {
         toast({
           title: 'Loadout deleted.',
           description: '',
-          variant: 'subtle',
+          variant: 'solid',
           status: 'success',
           position: 'top-right',
           duration: 5000,

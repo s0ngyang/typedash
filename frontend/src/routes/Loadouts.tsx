@@ -1,4 +1,10 @@
-import { SimpleGrid, Tooltip, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  SimpleGrid,
+  Tooltip,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { FC, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -64,19 +70,20 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
           className='font-mono'
           isDisabled={!maxLoadouts}
         >
-          <button
+          <Button
             disabled={maxLoadouts}
-            className='bg-pink-8008 text-grey-8008 px-4 py-1 rounded-md disabled:opacity-30'
             onClick={onCreateOpen}
+            colorScheme='accent'
           >
             Create Loadout
-          </button>
+          </Button>
         </Tooltip>
       </div>
       <SimpleGrid columns={3} spacing={5}>
         {loadouts.map((loadout) => (
-          <div
-            className='flex flex-col justify-center bg-grey-8008 brightness-90 rounded-md p-4 text-left'
+          <Box
+            bg='bg.secondary'
+            className='flex flex-col justify-center rounded-md p-4 text-left'
             key={loadout.id}
           >
             <div className='font-semibold text-white'>{loadout.name}</div>
@@ -108,7 +115,7 @@ const Loadouts: FC<LoadoutsProps> = ({ user, loadouts, setLoadouts }) => {
                 </button>
               </Tooltip>
             </div>
-          </div>
+          </Box>
         ))}
       </SimpleGrid>
       {/* <button className='hover:bg-slate-100 transition p-1'>

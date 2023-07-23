@@ -138,7 +138,7 @@ const UpdateLoadoutModal: FC<UpdateLoadoutModalProps> = ({
                 <Button onClick={onUpdateClose}>Close</Button>
                 <Button
                   ml={4}
-                  colorScheme='pink'
+                  colorScheme='accent'
                   isLoading={props.isSubmitting}
                   type='submit'
                 >

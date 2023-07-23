@@ -55,6 +55,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           leftIcon={<FaKeyboard size={20} />}
           variant='ghost'
           onClick={onOpen}
+          colorScheme='primary'
         >
           {challengeType}
         </Button>
@@ -83,7 +84,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           </ModalContent>
         </Modal>
       </>
-      <Button variant='ghost' onClick={createRoom}>
+      <Button variant='ghost' colorScheme='primary' onClick={createRoom}>
         Create Room
       </Button>
     </div>

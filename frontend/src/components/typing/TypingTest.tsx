@@ -1,5 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -243,12 +244,13 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
         onClick={focusOnInput}
       >
         {!isFocused && !showResults && (
-          <div
+          <Box
+            color='text.secondary'
             onClick={focusOnInput}
-            className='flex items-center gap-4 absolute z-10 text-white'
+            className='flex items-center gap-4 absolute z-10'
           >
             <HiCursorClick /> Click here to refocus
-          </div>
+          </Box>
         )}
         <div
           className={`flex flex-col justify-center items-center gap-4 h-full overflow-hidden ${
@@ -282,6 +284,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
                     leftIcon={<FaKeyboard size={20} />}
                     variant='ghost'
                     onClick={onOpen}
+                    colorScheme='primary'
                   >
                     {challengeType}
                   </Button>
@@ -331,18 +334,27 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
             aria-label='Restart test tooltip'
             className='font-mono'
           >
-            <button
+            <Button
+              variant='unstyled'
               onClick={restartTest}
               ref={restartRef}
-              className='p-4 hover:text-white transition focus:text-white outline-none '
+              _hover={{ color: 'text.secondary' }}
+              _focus={{ color: 'text.secondary' }}
+              className='p-4 transition outline-none '
               tabIndex={0}
             >
               <VscDebugRestart size={25} />
-            </button>
+            </Button>
           </Tooltip>
         </div>
       </div>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
+      <Modal
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+        size='2xl'
+        colorScheme='purple'
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Challenge Type</ModalHeader>

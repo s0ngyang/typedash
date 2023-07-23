@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useToast } from '@chakra-ui/react';
+import { useColorMode } from '@chakra-ui/react';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
@@ -15,8 +15,8 @@ import Singleplayer from './routes/Singleplayer';
 
 function App() {
   const [user, setUser] = useState<string>();
+  const { colorMode, toggleColorMode } = useColorMode();
   const context = useContext(authContext);
-  const toast = useToast();
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('token');
