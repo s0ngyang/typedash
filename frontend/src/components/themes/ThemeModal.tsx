@@ -41,20 +41,22 @@ const ThemeModal: FC<ThemeModalProps> = ({
       <ModalContent>
         <ModalHeader>Theme</ModalHeader>
         <ModalBody className='flex flex-col gap-2'>
-          {themeItems.map((theme, i) => (
-            <Button
-              key={i}
-              leftIcon={
-                currentTheme.name === theme.name ? <CheckIcon /> : <div />
-              }
-              onClick={() => themeSwitchHandler(theme)}
-              value={theme.name}
-            >
-              <div className='w-full flex justify-between'>
-                <div>{theme.name}</div>
-              </div>
-            </Button>
-          ))}
+          {themeItems
+            .sort((a, b) => (a.name < b.name ? -1 : 1))
+            .map((theme, i) => (
+              <Button
+                key={i}
+                leftIcon={
+                  currentTheme.name === theme.name ? <CheckIcon /> : <div />
+                }
+                onClick={() => themeSwitchHandler(theme)}
+                value={theme.name}
+              >
+                <div className='w-full flex justify-between'>
+                  <div>{theme.name}</div>
+                </div>
+              </Button>
+            ))}
         </ModalBody>
         <ModalFooter />
       </ModalContent>

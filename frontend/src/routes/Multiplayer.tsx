@@ -57,6 +57,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           variant='ghost'
           onClick={onOpen}
           colorScheme='primary'
+          color='text.primary'
         >
           {challengeType}
         </Button>
@@ -85,7 +86,12 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
           </ModalContent>
         </Modal>
       </>
-      <Button variant='ghost' colorScheme='primary' onClick={createRoom}>
+      <Button
+        variant='ghost'
+        colorScheme='primary'
+        color='text.primary'
+        onClick={createRoom}
+      >
         Create Room
       </Button>
     </div>

@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { FC } from 'react';
 
 interface CaretProps {
@@ -5,7 +6,7 @@ interface CaretProps {
 }
 
 const Caret: FC<CaretProps> = ({ offset }) => {
-  return <div className="caret" style={{ left: offset }} />;
+  return <Box bg='accent.200' className='caret' style={{ left: offset }} />;
 };
 
 export default Caret;
