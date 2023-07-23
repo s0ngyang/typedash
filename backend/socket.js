@@ -70,6 +70,7 @@ io.on('connection', (socket) => {
       }
       room.ready.push({ id: socket.id, username });
       io.to(socket.roomID).emit('receiveReady', room.ready.length);
+      io.to(socket.roomID).emit('restartTest');
     }
   });
 
@@ -80,15 +81,21 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('testCompleted', () => {
-    const rankings = rooms[socket.roomID].rankings;
-    rooms[socket.roomID].rankings[socket.id] = Object.keys(rankings).length + 1;
+  socket.on('testCompleted', (nextChallenge) => {
+    rooms[socket.roomID].rankings[socket.id] =
+      Object.keys(rooms[socket.roomID].rankings).length + 1;
     io.to(socket.roomID).emit('playerCompleted', rooms[socket.roomID].rankings);
     if (
-      rooms[socket.roomID].rankings.length ===
+      Object.keys(rooms[socket.roomID].rankings).length ===
       rooms[socket.roomID].players.length
     ) {
       io.to(socket.roomID).emit('allCompleted');
+      rooms[socket.roomID] = {
+        ...rooms[socket.roomID],
+        challenge: nextChallenge,
+        ready: [],
+        rankings: {},
+      };
     }
   });
 
@@ -98,6 +105,7 @@ io.on('connection', (socket) => {
       return;
     }
     if (rooms[socket.roomID].players.length <= 1) {
+      console.log('delete room');
       delete rooms[socket.roomID];
       io.to(socket.roomID).emit('playerLeft', []);
     } else {
@@ -116,10 +124,15 @@ io.on('connection', (socket) => {
       io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
 
       if (
-        rooms[socket.roomID].rankings.length ===
+        Object.keys(rooms[socket.roomID].rankings).length ===
         rooms[socket.roomID].players.length
       ) {
         io.to(socket.roomID).emit('allCompleted');
+        rooms[socket.roomID] = {
+          ...rooms[socket.roomID],
+          ready: [],
+          rankings: {},
+        };
       }
     }
   });
@@ -145,10 +158,15 @@ io.on('connection', (socket) => {
         io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
 
         if (
-          rooms[socket.roomID].rankings.length ===
+          Object.keys(rooms[socket.roomID].rankings).length ===
           rooms[socket.roomID].players.length
         ) {
           io.to(socket.roomID).emit('allCompleted');
+          rooms[socket.roomID] = {
+            ...rooms[socket.roomID],
+            ready: [],
+            rankings: {},
+          };
         }
       }
     }

@@ -14,6 +14,7 @@ import Layout from './routes/Layout';
 import Login from './routes/Login';
 import Multiplayer from './routes/Multiplayer';
 import Register from './routes/Register';
+import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
 
 function App() {
