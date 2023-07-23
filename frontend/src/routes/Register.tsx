@@ -10,8 +10,10 @@ interface RegisterProps {}
 const Register: FC<RegisterProps> = ({}) => {
   const navigate = useNavigate();
   const registerUserHandler = (values: FormikValues) => {
-    registerUser(values).then(() => {
-      navigate('/login');
+    registerUser(values).then((res) => {
+      if (res?.status === 201) {
+        navigate('/login');
+      }
     });
   };
 
