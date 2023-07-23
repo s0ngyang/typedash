@@ -1,4 +1,5 @@
 import { createStandaloneToast } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { FormikValues } from 'formik';
 import { LoadoutProps } from '../routes/Account';
 import http from './api';
@@ -22,10 +23,11 @@ export const loginUser = async (params: FormikValues) => {
       });
     return res;
   } catch (e) {
-    if (e instanceof Error)
+    console.log(e);
+    if (e instanceof AxiosError)
       toast({
         title: 'Login failed.',
-        description: `${e.message}.`,
+        description: `${e.response?.data.message}.`,
         variant: 'solid',
         status: 'error',
         position: 'top-right',
@@ -53,10 +55,10 @@ export const registerUser = async (params: FormikValues) => {
       });
     return res;
   } catch (e) {
-    if (e instanceof Error)
+    if (e instanceof AxiosError)
       toast({
         title: 'Registration failed.',
-        description: `${e.message}`,
+        description: `${e.response?.data.message}`,
         variant: 'solid',
         status: 'error',
         position: 'top-right',
@@ -84,10 +86,10 @@ export const logoutUser = async () => {
       });
     return res;
   } catch (e) {
-    if (e instanceof Error)
+    if (e instanceof AxiosError)
       toast({
         title: 'Logout failed.',
-        description: `${e.message}.`,
+        description: `${e.response?.data.message}.`,
         variant: 'solid',
         status: 'error',
         position: 'top-right',

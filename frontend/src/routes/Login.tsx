@@ -14,9 +14,11 @@ export const Login: FC<LoginProps> = ({}) => {
 
   const loginUserHandler = (values: FormikValues) => {
     loginUser(values).then((res) => {
-      context?.setUser(res?.data.user.name);
-      localStorage.setItem('token', res?.data.token);
-      navigate('/');
+      if (res?.status === 200) {
+        context?.setUser(res?.data.user.name);
+        localStorage.setItem('token', res?.data.token);
+        navigate('/');
+      }
     });
   };
 
