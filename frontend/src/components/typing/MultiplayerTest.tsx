@@ -5,7 +5,7 @@ import { authContext } from '../../context/authContext';
 import useTimer from '../../helpers/useTimer';
 import socket from '../../services/socket';
 import Word from './Word';
-import { ChallengeProps } from './challenges/Books.constants';
+import { ChallengeProps } from './challenges/challenge.interface';
 import Result from './results/Result';
 
 interface MultiplayerTestProps {
@@ -187,7 +187,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       {!isFocused && !showResults && (
         <div
           onClick={focusOnInput}
-          className="flex items-center gap-4 absolute z-10 text-white"
+          className='flex items-center gap-4 absolute z-10 text-white'
         >
           <HiCursorClick /> Click here to refocus
         </div>
@@ -207,11 +207,11 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
                 />
               </SlideFade>
             </div> */}
-            <div className="w-full flex justify-start text-pink-8008">
+            <div className='w-full flex justify-start text-pink-8008'>
               {time}
             </div>
             <div
-              className="flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12"
+              className='flex flex-wrap h-1/2 md:h-1/5 lg:sm:h-1/6 content-start 2xl:gap-y-4 mb-12'
               onClick={focusOnInput}
             >
               {wordSet.map((word, index) => (
@@ -232,11 +232,11 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
             {startTyping && (
               <input
                 autoFocus
-                type="text"
+                type='text'
                 onChange={handleKeyPress}
                 onKeyDown={handleKeyDown}
                 ref={inputRef}
-                className="absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent"
+                className='absolute -z-10 border-none bg-transparent focus:outline-none caret-transparent text-transparent'
               />
             )}
           </>

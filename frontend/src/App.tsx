@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useToast } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import Room from './components/Room';
@@ -17,24 +17,27 @@ function App() {
   const context = useContext(authContext);
   const toast = useToast();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   if (token) {
-  //     const decoded = jwt_decode<JwtPayload>(token || '') || null;
-  //     setUser(decoded.name);
-  //   } else {
-  //     toast({
-  //       title: 'Session expired.',
-  //       description: 'Please login again',
-  //       variant: 'subtle',
-  //       status: 'error',
-  //       position: 'top-right',
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //     navigate('/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwt_decode<JwtPayload>(token || '') || null;
+      const currentTime = Date.now() / 1000;
+      // check if token has expired
+      if (decoded.exp < currentTime) {
+        localStorage.removeItem('token');
+        setUser(undefined);
+        return;
+      } else {
+        // if token has not expired, set user details as per normal
+        setUser(decoded.name);
+      }
+    } else {
+      // if token does not exist, user is undefined
+      localStorage.removeItem('token');
+      setUser(undefined);
+    }
+  }, []);
+
   return (
     <authContext.Provider value={{ user, setUser }}>
       <Routes>
