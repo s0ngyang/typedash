@@ -2,8 +2,8 @@
 import { Box } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
-import { useLocation } from 'react-router-dom';
 import { authContext } from '../../context/authContext';
+import { randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
 import http from '../../services/api';
 import socket from '../../services/socket';
@@ -46,11 +46,28 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   const restartRef = useRef<HTMLButtonElement>(null);
   const context = useContext(authContext);
   const user = context?.user;
-  const { state } = useLocation();
 
   useEffect(() => {
     socket.on('playerJoined', ({ challenge }) => {
       setChallenge(challenge);
+    });
+
+    socket.on('restartTest', () => {
+      setTestStatus(0);
+      setTypedWordList(['']);
+      setActiveWordIndex(0);
+      setMistypedCount(0);
+      setActiveLetterIndex(0);
+      setTimeTaken(0);
+      setWrongLettersInWord(0);
+      setWrongLetters([]);
+      setResult({
+        wpm: 0,
+        accuracy: 0,
+        time: 0,
+      });
+      setShowResults(false);
+      focusOnInput();
     });
   }, []);
 
@@ -102,10 +119,12 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
+
+    socket.emit('testCompleted', randomChallenge(challenge?.type));
     if (user) {
       const params = {
         challenge_id: challenge?.id,
-        type: state,
+        type: challenge?.type,
         wpm: WPM,
         accuracy,
         time_taken: timeTaken,
@@ -183,7 +202,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     }
 
     setTypedWordList(typed.split(' '));
-    socket.emit('typingProgress', activeLetterIndex);
+    socket.emit('typingProgress', activeLetterIndex + 1);
   };
 
   return (

@@ -19,6 +19,11 @@ export const challengeItems = [
     name: 'Algorithms',
     desc: 'CS is already tough, why bother...',
   },
+  // {
+  //   id: 3,
+  //   name: 'test',
+  //   desc: 'test',
+  // },
 ];
 
 export const randomChallenge = (
@@ -37,6 +42,17 @@ export const randomChallenge = (
     case 'algorithms':
       challenges = algorithms;
       break;
+    // case 'test':
+    //   challenges = [
+    //     {
+    //       id: 0,
+    //       type: 'test',
+    //       title: 'test',
+    //       author: 'test',
+    //       content: 'test',
+    //     },
+    //   ];
+    //   break;
   }
   const filteredChallenges = excludedChallengeId
     ? challenges!.filter(
