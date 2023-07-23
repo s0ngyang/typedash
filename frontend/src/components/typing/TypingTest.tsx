@@ -187,6 +187,28 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     // inputRef.current?.focus();
   };
 
+  const preventCrtlA = (event: KeyboardEvent) => {
+    // Check if the user presses either Ctrl (for Windows/Linux) or Command (for macOS) key
+    const isCtrlKey = event.ctrlKey || event.metaKey;
+
+    // Check if the user presses the 'A' key
+    const isAKey = event.key === 'a' || event.keyCode === 65;
+
+    if (isCtrlKey && isAKey) {
+      // Prevent the default behavior (selecting all text)
+      event.preventDefault();
+    }
+  };
+
+  // prevent crtl A and backspace to delete all words
+  useEffect(() => {
+    document.addEventListener('keydown', preventCrtlA);
+
+    return () => {
+      document.removeEventListener('keydown', preventCrtlA);
+    };
+  }, []);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       e.key === 'ArrowUp' ||
