@@ -24,7 +24,7 @@ export const Layout: FC<LayoutProps> = ({ currentTheme, setCurrentTheme }) => {
     <Box
       bg='bg.primary'
       color='text.primary'
-      className='w-full h-screen grid grid-cols-[1fr_10fr_1fr] md:grid-cols-[1fr_6fr_1fr] xl:grid-cols-[2.5fr_6fr_2.5fr] font-mono'
+      className='w-full h-screen grid grid-cols-[1fr_10fr_1fr] md:grid-cols-[1fr_6fr_1fr] xl:grid-cols-[2.5fr_6fr_2.5fr]'
     >
       <div
         ref={middleContainerRef}

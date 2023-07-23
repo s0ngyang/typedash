@@ -258,7 +258,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     <>
       <div
         className={
-          'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
+          'flex flex-col justify-center items-center gap-8 text-xl relative'
         }
         ref={containerRef}
         onKeyDown={handleTab}
