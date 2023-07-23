@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
       }
       room.ready.push({ id: socket.id, username });
       io.to(socket.roomID).emit('receiveReady', room.ready.length);
-      io.to(socket.roomID).emit('restartTest');
+      socket.emit('restartTest', room.challenge);
     }
   });
 

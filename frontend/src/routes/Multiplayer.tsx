@@ -20,10 +20,17 @@ import socket from '../services/socket';
 interface MultiplayerProps {}
 
 const Multiplayer: FC<MultiplayerProps> = ({}) => {
-  const [challengeType, setChallengeType] = useState('Books');
   const [challenge, setChallenge] = useState<ChallengeProps>();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const getDefaultChallengeType = () => {
+    const storedChallenge = localStorage.getItem('challenge-type');
+    if (storedChallenge !== null) return storedChallenge;
+    else return 'Books';
+  };
+
+  const [challengeType, setChallengeType] = useState(getDefaultChallengeType());
 
   useEffect(() => {
     const chosenChallenge = randomChallenge(challengeType);
