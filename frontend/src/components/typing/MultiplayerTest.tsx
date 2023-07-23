@@ -49,7 +49,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       setChallenge(challenge);
     });
 
-    socket.on('allCompleted', (result) => {
+    socket.on('allCompleted', () => {
       setShowResults(true);
     });
   }, []);
@@ -102,7 +102,6 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
-
     socket.emit('testCompleted');
   }, [testStatus]);
 

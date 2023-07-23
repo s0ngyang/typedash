@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useToast } from '@chakra-ui/react';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';

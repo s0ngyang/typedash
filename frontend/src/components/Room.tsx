@@ -27,7 +27,8 @@ const Room: FC<RoomProps> = ({}) => {
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(1);
   const [listOfPlayers, setListOfPlayers] = useState([]);
-  const [readyPlayers, setReadyPlayers] = useState(0);
+  const [numReady, setNumReady] = useState(0);
+  const [completedPlayers, setCompletedPlayers] = useState(0);
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(5);
   const [gameStarted, setGameStarted] = useState(false);
   const [chosenChallenge, setChosenChallenge] = useState<ChallengeProps>();
@@ -58,10 +59,7 @@ const Room: FC<RoomProps> = ({}) => {
   };
 
   useEffect(() => {
-    socket.emit('joinRoom', {
-      roomID: roomID,
-      username: username,
-    });
+    socket.emit('joinRoom', { roomID, username });
 
     socket.on('invalidRoom', () => {
       toast({
@@ -89,7 +87,8 @@ const Room: FC<RoomProps> = ({}) => {
       navigate('/singleplayer');
     });
 
-    socket.on('playerJoined', ({ players, challenge }) => {
+    socket.on('playerJoined', ({ ready, players, challenge }) => {
+      setNumReady(ready);
       setNumPlayers(players.length);
       setListOfPlayers(players);
       setChosenChallenge(challenge);
@@ -101,7 +100,7 @@ const Room: FC<RoomProps> = ({}) => {
     });
 
     socket.on('receiveReady', (readyCount) => {
-      setReadyPlayers(readyCount);
+      setNumReady(readyCount);
     });
 
     socket.on('progressUpdate', ({ id, progress }) => {
@@ -113,17 +112,22 @@ const Room: FC<RoomProps> = ({}) => {
 
     socket.on('playerCompleted', (rankings) => {
       setRankings(rankings);
-      console.log('after set', rankings);
+      setCompletedPlayers(completedPlayers + 1);
     });
   }, []);
 
   useEffect(() => {
-    if (readyPlayers === numPlayers) {
+    if (!gameStarted && numReady === numPlayers) {
       startTimer();
       setGameStarted(true);
       socket.emit('typingProgress', 0);
     }
-  }, [readyPlayers, numPlayers]);
+  }, [numReady, numPlayers]);
+
+  useEffect(() => {
+    if (numPlayers === completedPlayers) {
+    }
+  }, [numPlayers, completedPlayers]);
 
   return (
     <div className='flex flex-col justify-between'>
@@ -135,7 +139,7 @@ const Room: FC<RoomProps> = ({}) => {
               className='flex items-center justify-between gap-6'
             >
               <div className='flex w-full items-center gap-6'>
-                <div>{player.username}</div>
+                <div className='w-20'>{player.username}</div>
                 <div className='transition w-[95%]'>
                   <ProgressBar
                     lettersTyped={typingProgresses[player.id]}
@@ -159,11 +163,11 @@ const Room: FC<RoomProps> = ({}) => {
       />
       {time !== 0 && (
         <div>
-          {readyPlayers}/{numPlayers} ready
+          {numReady}/{numPlayers} ready
         </div>
       )}
 
-      {readyPlayers !== numPlayers && numPlayers !== 1 && time !== 0 && (
+      {numReady !== numPlayers && numPlayers !== 1 && time !== 0 && (
         <Button onClick={ready} variant='ghost'>
           ready
         </Button>

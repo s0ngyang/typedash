@@ -5,7 +5,7 @@ const io = require('socket.io')(httpServer, {
     origin: [
       'http://127.0.0.1:5173',
       'http://localhost:5173',
-      'https://cosmic-fox-2ad203.netlify.app',
+      'https://main--cosmic-fox-2ad203.netlify.app',
       'https://feature-multiplayer--cosmic-fox-2ad203.netlify.app',
     ],
     //methods: ['GET', 'POST'],
@@ -50,6 +50,7 @@ io.on('connection', (socket) => {
       socket.roomID = roomID;
 
       io.to(roomID).emit('playerJoined', {
+        ready: room.ready.length,
         players: room.players,
         challenge: room.challenge,
       });
@@ -100,11 +101,7 @@ io.on('connection', (socket) => {
       delete rooms[socket.roomID];
       io.to(socket.roomID).emit('playerLeft', []);
     } else {
-      rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
-        (player) => player.id !== socket.id,
-      );
-      io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
-
+      // Minus one ready player
       rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
         (player) => player.id !== socket.id,
       );
@@ -112,6 +109,18 @@ io.on('connection', (socket) => {
         'receiveReady',
         rooms[socket.roomID].ready.length,
       );
+      // Minus one player
+      rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
+        (player) => player.id !== socket.id,
+      );
+      io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+
+      if (
+        rooms[socket.roomID].rankings.length ===
+        rooms[socket.roomID].players.length
+      ) {
+        io.to(socket.roomID).emit('allCompleted');
+      }
     }
   });
 
@@ -121,6 +130,7 @@ io.on('connection', (socket) => {
         delete rooms[socket.roomID];
         io.to(socket.roomID).emit('playerLeft', []);
       } else {
+        // Minus one ready player
         rooms[socket.roomID].ready = rooms[socket.roomID].ready.filter(
           (player) => player.id !== socket.id,
         );
@@ -128,11 +138,18 @@ io.on('connection', (socket) => {
           'receiveReady',
           rooms[socket.roomID].ready.length,
         );
-
+        // Minus one player
         rooms[socket.roomID].players = rooms[socket.roomID].players.filter(
           (player) => player.id !== socket.id,
         );
         io.to(socket.roomID).emit('playerLeft', rooms[socket.roomID].players);
+
+        if (
+          rooms[socket.roomID].rankings.length ===
+          rooms[socket.roomID].players.length
+        ) {
+          io.to(socket.roomID).emit('allCompleted');
+        }
       }
     }
   });
