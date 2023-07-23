@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 
 interface LetterProps {
@@ -6,7 +7,11 @@ interface LetterProps {
 }
 
 const Letter: FC<LetterProps> = ({ status, char }) => {
-  return <div className={`${status} h-8`}>{char}</div>;
+  return (
+    <Box color={`letter.${status}`} className='h-8'>
+      {char}
+    </Box>
+  );
 };
 
 export default memo(Letter);

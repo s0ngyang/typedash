@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@chakra-ui/react';
 import { FC, memo } from 'react';
 import Caret from './Caret';
 import Letter from './Letter';
@@ -10,23 +9,23 @@ interface WordProps {
 }
 
 const Word: FC<WordProps> = ({ word, typedWord, status }) => {
-  const [isLargerThan768] = useMediaQuery('(min-width: 768px)');
-  const [isLargerThan1024] = useMediaQuery('(min-width: 1024px');
-  const calculateOffset = () => {
-    if (isLargerThan1024) return [12.5, -3];
-    else if (isLargerThan768) return [10.7, -2.7];
-    else return [9.64, -1.5];
-  };
-  const offset = calculateOffset();
+  // const [isLargerThan768] = useMediaQuery('(min-width: 768px)');
+  // const [isLargerThan1024] = useMediaQuery('(min-width: 1024px');
+  // const calculateOffset = () => {
+  //   if (isLargerThan1024) return [12, -3];
+  //   else if (isLargerThan768) return [10.7, -2.7];
+  //   else return [9.64, -1.5];
+  // };
+  const offset = [12, -3];
   const letters = word.split('').map((char, i) => {
-    let letterStatus = 'letter-idle';
+    let letterStatus = 'idle';
     if (status === 'completed') {
-      letterStatus = 'letter-correct';
+      letterStatus = 'correct';
     } else if (status === 'active') {
       if (typedWord?.charAt(i) === char) {
-        letterStatus = 'letter-correct';
+        letterStatus = 'correct';
       } else if (typedWord?.charAt(i) !== char && typedWord?.charAt(i)) {
-        letterStatus = 'letter-incorrect';
+        letterStatus = 'incorrect';
       }
     }
     return <Letter key={i} status={letterStatus} char={char} />;
@@ -35,7 +34,7 @@ const Word: FC<WordProps> = ({ word, typedWord, status }) => {
     ?.slice(word.length)
     .split('')
     .map((char, i) => {
-      return <Letter key={i} status={'letter-incorrect'} char={char} />;
+      return <Letter key={i} status={'incorrect'} char={char} />;
     });
   return (
     <div className={`flex word-active h-8`}>

@@ -1,6 +1,8 @@
-import { FormikValues, useFormik } from 'formik';
+import { Button } from '@chakra-ui/button';
+import { Box, FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
+import { Formik, FormikValues } from 'formik';
 import { FC, useContext } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { authContext } from '../context/authContext';
 import { loginUser } from '../services/services';
@@ -18,77 +20,88 @@ export const Login: FC<LoginProps> = ({}) => {
     });
   };
 
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required('Please enter your email'),
-      password: Yup.string().required('Please enter your password'),
-    }),
-    onSubmit: loginUserHandler,
-  });
-
   return (
-    <div className='flex flex-col justify-center items-center gap-6'>
-      <form
-        className='flex flex-col gap-2 w-1/2 text-left'
-        onSubmit={formik.handleSubmit}
+    <Box className='flex flex-col justify-center items-center gap-6'>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+        }}
+        validationSchema={Yup.object({
+          email: Yup.string().required('Please enter your email'),
+          password: Yup.string().required('Please enter your password'),
+        })}
+        onSubmit={(values) => loginUserHandler(values)}
       >
-        <div>login</div>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='email'
-            name='email'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.email && formik.errors.email
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='email'
-            placeholder='email'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div className='text-red-600 font-bold'>{formik.errors.email}</div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <div className='flex flex-col gap-2'>
-          <input
-            id='password'
-            name='password'
-            className={`bg-transparent border-solid border-2 rounded p-2 ${
-              formik.touched.password && formik.errors.password
-                ? 'border-red-600'
-                : 'border-lightgrey-8008'
-            }`}
-            type='password'
-            placeholder='password'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div className='text-red-600 font-bold'>
-              {formik.errors.password}
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          errors,
+          touched,
+        }) => (
+          <form
+            className='flex flex-col gap-6 w-1/2 text-left'
+            onSubmit={handleSubmit}
+          >
+            <div>login</div>
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.email && !!errors.email}>
+                <Input
+                  id='email'
+                  name='email'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='email'
+                  placeholder='email'
+                  _placeholder={{ color: 'inherit' }}
+                  color='text.primary'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.email}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.email}
+                </FormErrorMessage>
+              </FormControl>
             </div>
-          ) : (
-            <div>&nbsp;</div>
-          )}
-        </div>
-        <button type='submit' className='hover:bg-slate-100 transition p-1'>
-          sign in
-        </button>
-      </form>
-      <NavLink to='/register' className='hover:underline'>
+            <div className='flex flex-col gap-2'>
+              <FormControl isInvalid={touched.password && !!errors.password}>
+                <Input
+                  id='password'
+                  name='password'
+                  borderColor='text.primary'
+                  focusBorderColor='accent.200'
+                  errorBorderColor='red.600'
+                  type='password'
+                  placeholder='password'
+                  _placeholder={{ color: 'inherit' }}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                />
+                <FormErrorMessage color='red.600'>
+                  {errors.password}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
+            <Button type='submit' variant='ghost' color='text.primary'>
+              sign in
+            </Button>
+          </form>
+        )}
+      </Formik>
+      <Button
+        type='submit'
+        variant='link'
+        color='text.primary'
+        onClick={() => navigate('/register')}
+      >
         don't have an account? sign up
-      </NavLink>
-    </div>
+      </Button>
+    </Box>
   );
 };
 

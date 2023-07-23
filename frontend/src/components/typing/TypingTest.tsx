@@ -1,5 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -11,12 +12,15 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { FaKeyboard } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
+import { useOutletContext } from 'react-router-dom';
+import { authContext } from '../../context/authContext';
 import { challengeItems, randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
+import http from '../../services/api';
 import ProgressBar from './ProgressBar';
 import Word from './Word';
 import { ChallengeProps } from './challenges/challenge.interface';
@@ -48,12 +52,16 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   });
   const INITIAL_TIME = 120;
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(INITIAL_TIME); // default time is 120 seconds
+  // @ts-ignore
+  const [middleContainerRef] = useOutletContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const restartRef = useRef<HTMLButtonElement>(null);
   const challengeSwitchRef = useRef<HTMLButtonElement>(null);
   const challengeOptionRef = useRef<Array<HTMLButtonElement | null>>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const context = useContext(authContext);
+  const user = context?.user;
 
   const getDefaultChallengeType = () => {
     const storedChallenge = localStorage.getItem('challenge-type');
@@ -77,17 +85,19 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
 
   useEffect(() => {
     const handleClickAway = (e: MouseEvent) => {
+      const themeModal = document.querySelector('#chakra-modal-theme-modal');
       if (showResults) return;
       if (
         challengeSwitchRef.current?.contains(e.target as Node) ||
         challengeOptionRef.current[0]?.contains(e.target as Node) ||
         challengeOptionRef.current[1]?.contains(e.target as Node) ||
-        challengeOptionRef.current[2]?.contains(e.target as Node)
+        challengeOptionRef.current[2]?.contains(e.target as Node) ||
+        themeModal?.contains(e.target as Node)
       )
         return;
       if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
+        middleContainerRef.current &&
+        !middleContainerRef.current.contains(e.target as Node)
       ) {
         setTimeout(() => setIsFocused(false), 1000);
       }
@@ -124,6 +134,18 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
       accuracy,
       time: timeTaken,
     });
+    if (user) {
+      const params = {
+        challenge_id: challenge?.id,
+        type: challengeType,
+        wpm: WPM,
+        accuracy,
+        time_taken: timeTaken,
+        datetime: new Date().toString(),
+        username: user,
+      };
+      http().post('/results/create', params);
+    }
     setShowResults(true);
   }, [testStatus]);
 
@@ -164,6 +186,28 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     }
     // inputRef.current?.focus();
   };
+
+  const preventCrtlA = (event: KeyboardEvent) => {
+    // Check if the user presses either Ctrl (for Windows/Linux) or Command (for macOS) key
+    const isCtrlKey = event.ctrlKey || event.metaKey;
+
+    // Check if the user presses the 'A' key
+    const isAKey = event.key === 'a' || event.keyCode === 65;
+
+    if (isCtrlKey && isAKey) {
+      // Prevent the default behavior (selecting all text)
+      event.preventDefault();
+    }
+  };
+
+  // prevent crtl A and backspace to delete all words
+  useEffect(() => {
+    document.addEventListener('keydown', preventCrtlA);
+
+    return () => {
+      document.removeEventListener('keydown', preventCrtlA);
+    };
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
@@ -236,19 +280,20 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
     <>
       <div
         className={
-          'flex flex-col justify-center items-center gap-8 text-md md:text-lg lg:text-xl relative'
+          'flex flex-col justify-center items-center gap-8 text-xl relative'
         }
         ref={containerRef}
         onKeyDown={handleTab}
         onClick={focusOnInput}
       >
         {!isFocused && !showResults && (
-          <div
+          <Box
+            color='text.secondary'
             onClick={focusOnInput}
-            className='flex items-center gap-4 absolute z-10 text-white'
+            className='flex items-center gap-4 absolute z-10'
           >
             <HiCursorClick /> Click here to refocus
-          </div>
+          </Box>
         )}
         <div
           className={`flex flex-col justify-center items-center gap-4 h-full overflow-hidden ${
@@ -272,16 +317,18 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 {testStatus === 1 && (
                   <SlideFade in={testStatus === 1}>
-                    <div className='text-pink-8008'>{time}</div>
+                    <Box color='accent.200'>{time}</Box>
                   </SlideFade>
                 )}
                 {testStatus === 0 && (
                   <Button
+                    color='text.primary'
                     ref={challengeSwitchRef}
                     iconSpacing={3}
                     leftIcon={<FaKeyboard size={20} />}
                     variant='ghost'
                     onClick={onOpen}
+                    colorScheme='primary'
                   >
                     {challengeType}
                   </Button>
@@ -331,14 +378,18 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
             aria-label='Restart test tooltip'
             className='font-mono'
           >
-            <button
+            <Button
+              variant='ghost'
               onClick={restartTest}
               ref={restartRef}
-              className='p-4 hover:text-white transition focus:text-white outline-none '
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              _focus={{ color: 'text.secondary' }}
+              className='p-4 transition outline-none '
               tabIndex={0}
             >
               <VscDebugRestart size={25} />
-            </button>
+            </Button>
           </Tooltip>
         </div>
       </div>
@@ -358,7 +409,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 <div className='w-full flex justify-between'>
                   <div>{type.name}</div>
-                  <div className='text-lightgrey-8008'>{type.desc}</div>
+                  <Box>{type.desc}</Box>
                 </div>
               </Button>
             ))}
