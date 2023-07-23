@@ -1,7 +1,7 @@
 import { Box, Divider, Fade, Spinner } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useState } from 'react';
 import { authContext } from '../context/authContext';
-import { getLoadouts } from '../services/services';
+import { getLoadouts, getStatistics } from '../services/services';
 import Loadouts from './Loadouts';
 
 interface AccountProps {}
@@ -15,11 +15,36 @@ export interface LoadoutProps {
 const Account: FC<AccountProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadouts, setLoadouts] = useState<LoadoutProps[]>([]);
+  const [stats, setStats] = useState({
+    completed: 0,
+    time: 0,
+    highestWPM: 0,
+    averageWPM: 0,
+  });
   const context = useContext(authContext);
   const user = context?.user;
 
-  const initialGetLoadouts = () => {
+  const initialGetUserData = () => {
     setIsLoading(true);
+    getStatistics({ user }).then((res) => {
+      const statsArr = res?.data.stats;
+      let time: number = 0;
+      let totalWPM: number = 0;
+      let highestWPM: number = 0;
+      const completed = statsArr.length;
+      for (let i = 0; i < completed; i++) {
+        time += statsArr[i].time_taken;
+        const wpm: number = statsArr[i].wpm;
+        totalWPM += wpm;
+        if (wpm > highestWPM) highestWPM = wpm;
+      }
+      setStats({
+        completed,
+        time,
+        highestWPM,
+        averageWPM: totalWPM / completed,
+      });
+    });
     getLoadouts({ data: user }).then((res) => {
       const loadouts = res?.data.loadouts;
       // sort loadouts by id in ascending order
@@ -30,7 +55,9 @@ const Account: FC<AccountProps> = () => {
   };
 
   useEffect(() => {
-    if (user) initialGetLoadouts();
+    if (user) {
+      initialGetUserData();
+    }
   }, [user]);
 
   return isLoading ? (
@@ -61,21 +88,28 @@ const Account: FC<AccountProps> = () => {
           </div>
           <div className='flex gap-12'>
             <div className='flex flex-col text-left'>
-              <div className='text-sm'>tests started</div>
-              <Box color='text.secondary' className='text-2xl font-semibold'>
-                9999
-              </Box>
-            </div>
-            <div className='flex flex-col text-left'>
               <div className='text-sm'>tests completed</div>
               <Box color='text.secondary' className='text-2xl font-semibold'>
-                9999
+                {stats.completed}
               </Box>
             </div>
             <div className='flex flex-col text-left'>
               <div className='text-sm'>time typed</div>
               <Box color='text.secondary' className='text-2xl font-semibold'>
-                9999
+                {Math.floor(stats.time / 3600)}h {Math.floor(stats.time / 60)}m{' '}
+                {stats.time % 60}s
+              </Box>
+            </div>
+            <div className='flex flex-col text-left'>
+              <div className='text-sm'>highest wpm</div>
+              <Box color='text.secondary' className='text-2xl font-semibold'>
+                {stats.highestWPM}
+              </Box>
+            </div>
+            <div className='flex flex-col text-left'>
+              <div className='text-sm'>average wpm</div>
+              <Box color='text.secondary' className='text-2xl font-semibold'>
+                {stats.averageWPM}
               </Box>
             </div>
           </div>

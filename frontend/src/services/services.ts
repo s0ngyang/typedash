@@ -97,6 +97,15 @@ export const logoutUser = async () => {
   }
 };
 
+export const getStatistics = async (params: { user: string | undefined }) => {
+  try {
+    const stats = await http().get('/results', { params });
+    return stats;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getLoadouts = async (params: { data: string | undefined }) => {
   try {
     const res = await http().get('account/loadout', { params });
