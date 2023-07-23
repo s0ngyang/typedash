@@ -8,6 +8,7 @@ import { customTheme } from './chakra-theme';
 import theme_8008 from './components/themes/8008';
 import { themeItems } from './components/themes/themes';
 import { authContext } from './context/authContext';
+import About from './routes/About';
 import Account from './routes/Account';
 import Layout from './routes/Layout';
 import Login from './routes/Login';
@@ -60,6 +61,7 @@ function App() {
           >
             <Route path='/singleplayer' element={<Singleplayer />} />
             <Route path='/multiplayer' element={<Multiplayer />} />
+            <Route path='/about' element={<About />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/multiplayer'>
