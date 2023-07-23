@@ -98,6 +98,18 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
+    if (user) {
+      const params = {
+        challenge_id: challenge?.id,
+        type: challengeType,
+        wpm: WPM,
+        accuracy,
+        time_taken: timeTaken,
+        datetime: new Date().toString(),
+        username: user,
+      };
+      http().post('/results/create', params);
+    }
     setShowResults(true);
   }, [testStatus]);
 

@@ -12,11 +12,12 @@ datasource db {
 }
 
 model users {
-  id       Int        @id @default(autoincrement())
-  name     String     @unique(map: "no_dupe_name") @db.VarChar(128)
-  email    String     @unique(map: "no_dupe_email") @db.VarChar(128)
-  password String     @db.VarChar(10000)
-  loadouts loadouts[]
+  id         Int          @id @default(autoincrement())
+  name       String       @unique(map: "no_dupe_name") @db.VarChar(128)
+  email      String       @unique(map: "no_dupe_email") @db.VarChar(128)
+  password   String       @db.VarChar(10000)
+  loadouts   loadouts[]
+  statistics statistics[]
 }
 
 model loadouts {
@@ -28,4 +29,16 @@ model loadouts {
   users    users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([name, user_id], map: "no_dupe_loadout")
+}
+
+model statistics {
+  id           Int     @id @default(autoincrement())
+  challenge_id Int
+  type         String
+  wpm          Int
+  accuracy     Decimal @db.Decimal(5, 2)
+  time_taken   Int
+  datetime     String
+  user_id      Int?
+  users        users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_statistics")
 }
