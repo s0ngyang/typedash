@@ -1,5 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -75,7 +76,7 @@ const Multiplayer: FC<MultiplayerProps> = ({}) => {
                 >
                   <div className='w-full flex justify-between'>
                     <div>{type.name}</div>
-                    <div className='text-lightgrey-8008'>{type.desc}</div>
+                    <Box color='text.primary'>{type.desc}</Box>
                   </div>
                 </Button>
               ))}

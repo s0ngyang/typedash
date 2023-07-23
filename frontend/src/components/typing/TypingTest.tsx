@@ -274,7 +274,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 {testStatus === 1 && (
                   <SlideFade in={testStatus === 1}>
-                    <div className='text-pink-8008'>{time}</div>
+                    <Box color='accent.200'>{time}</Box>
                   </SlideFade>
                 )}
                 {testStatus === 0 && (
@@ -335,9 +335,10 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
             className='font-mono'
           >
             <Button
-              variant='unstyled'
+              variant='ghost'
               onClick={restartTest}
               ref={restartRef}
+              color='text.primary'
               _hover={{ color: 'text.secondary' }}
               _focus={{ color: 'text.secondary' }}
               className='p-4 transition outline-none '
@@ -370,7 +371,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 <div className='w-full flex justify-between'>
                   <div>{type.name}</div>
-                  <div className='text-lightgrey-8008'>{type.desc}</div>
+                  <Box color='text.primary'>{type.desc}</Box>
                 </div>
               </Button>
             ))}

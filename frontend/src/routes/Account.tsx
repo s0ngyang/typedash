@@ -51,9 +51,9 @@ const Account: FC<AccountProps> = () => {
           className='w-full h-1/5 rounded-md flex justify-center items-center gap-24 px-4'
         >
           <div className='flex flex-col text-left'>
-            <div className='font-semibold text-2xl text-white'>
+            <Box color='text.secondary' className='font-semibold text-2xl'>
               {context?.user}
-            </div>
+            </Box>
             <div className='text-xs'>Joined 12 Jul 2023</div>
           </div>
           <div className='h-4/5'>
@@ -62,15 +62,21 @@ const Account: FC<AccountProps> = () => {
           <div className='flex gap-12'>
             <div className='flex flex-col text-left'>
               <div className='text-sm'>tests started</div>
-              <div className='text-2xl text-white font-semibold'>9999</div>
+              <Box color='text.secondary' className='text-2xl font-semibold'>
+                9999
+              </Box>
             </div>
             <div className='flex flex-col text-left'>
               <div className='text-sm'>tests completed</div>
-              <div className='text-2xl text-white font-semibold'>9999</div>
+              <Box color='text.secondary' className='text-2xl font-semibold'>
+                9999
+              </Box>
             </div>
             <div className='flex flex-col text-left'>
               <div className='text-sm'>time typed</div>
-              <div className='text-2xl text-white font-semibold'>9999</div>
+              <Box color='text.secondary' className='text-2xl font-semibold'>
+                9999
+              </Box>
             </div>
           </div>
         </Box>

@@ -1,9 +1,15 @@
-import { Box, IconButton, Tooltip, useMediaQuery } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+} from '@chakra-ui/react';
 import { FC, useContext } from 'react';
 import { BsFillPersonFill, BsPeopleFill } from 'react-icons/bs';
 import { CgSmile } from 'react-icons/cg';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authContext } from '../context/authContext';
 // @ts-ignore:next-line
 import { ReactComponent as CatLogo } from '../../src/assets/cat.svg';
@@ -80,13 +86,22 @@ const Header: FC<HeaderProps> = ({}) => {
       )}
       {context?.user && (
         <div className='flex items-center gap-4'>
-          <NavLink
-            to='/account'
-            className='hover:underline flex items-center gap-2'
+          <Tooltip
+            label='Your account'
+            aria-label='Account tooltip'
+            className='font-mono'
           >
-            <CgSmile size={25} />
-            <span>{context?.user}</span>
-          </NavLink>
+            <Button
+              variant='ghost'
+              color='text.primary'
+              _hover={{ color: 'text.secondary' }}
+              onClick={() => navigate('/account')}
+              className='flex items-center gap-2'
+            >
+              <CgSmile size={25} />
+              <span>{context?.user}</span>
+            </Button>
+          </Tooltip>
           <Tooltip
             label='Log Out'
             aria-label='Log out tooltip'
