@@ -1,9 +1,11 @@
 // @ts-nocheck
-import { useColorMode } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import { customTheme } from './chakra-theme';
+import theme_8008 from './components/themes/8008';
 import { authContext } from './context/authContext';
 import Account from './routes/Account';
 import Layout from './routes/Layout';
@@ -14,8 +16,9 @@ import Room from './routes/Room';
 import Singleplayer from './routes/Singleplayer';
 
 function App() {
+  const [currentTheme, setCurrentTheme] = useState(theme_8008);
+  const mergedTheme = extendTheme(customTheme, { colors: currentTheme.colors });
   const [user, setUser] = useState<string>();
-  const { colorMode, toggleColorMode } = useColorMode();
   const context = useContext(authContext);
   const navigate = useNavigate();
   useEffect(() => {
@@ -40,23 +43,32 @@ function App() {
   }, []);
 
   return (
-    <authContext.Provider value={{ user, setUser }}>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path='/singleplayer' element={<Singleplayer />} />
-          <Route path='/multiplayer' element={<Multiplayer />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/multiplayer'>
-            <Route index={true} element={<Multiplayer />} />
-            <Route path=':roomId' element={<Room />} />
+    <ChakraProvider theme={mergedTheme}>
+      <authContext.Provider value={{ user, setUser }}>
+        <Routes>
+          <Route
+            element={
+              <Layout
+                currentTheme={currentTheme}
+                setCurrentTheme={setCurrentTheme}
+              />
+            }
+          >
+            <Route path='/singleplayer' element={<Singleplayer />} />
+            <Route path='/multiplayer' element={<Multiplayer />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/multiplayer'>
+              <Route index={true} element={<Multiplayer />} />
+              <Route path=':roomId' element={<Room />} />
+            </Route>
+            <Route path='login' element={<Login />} />
+            <Route path='account' element={<Account />} />
+            <Route path='*' element={<Navigate to='/singleplayer' replace />} />
           </Route>
-          <Route path='login' element={<Login />} />
-          <Route path='account' element={<Account />} />
-          <Route path='*' element={<Navigate to='/singleplayer' replace />} />
-        </Route>
-      </Routes>
-    </authContext.Provider>
+        </Routes>
+      </authContext.Provider>
+    </ChakraProvider>
   );
 }
 

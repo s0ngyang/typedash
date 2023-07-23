@@ -349,13 +349,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
           </Tooltip>
         </div>
       </div>
-      <Modal
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-        size='2xl'
-        colorScheme='purple'
-      >
+      <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Challenge Type</ModalHeader>
