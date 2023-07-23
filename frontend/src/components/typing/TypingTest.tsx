@@ -11,12 +11,14 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { FaKeyboard } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
 import { VscDebugRestart } from 'react-icons/vsc';
+import { authContext } from '../../context/authContext';
 import { challengeItems, randomChallenge } from '../../helpers/randomChallenge';
 import useTimer from '../../helpers/useTimer';
+import http from '../../services/api';
 import ProgressBar from './ProgressBar';
 import Word from './Word';
 import { ChallengeProps } from './challenges/challenge.interface';
@@ -54,6 +56,8 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
   const challengeSwitchRef = useRef<HTMLButtonElement>(null);
   const challengeOptionRef = useRef<Array<HTMLButtonElement | null>>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const context = useContext(authContext);
+  const user = context?.user;
 
   const getDefaultChallengeType = () => {
     const storedChallenge = localStorage.getItem('challenge-type');
@@ -124,6 +128,18 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
       accuracy,
       time: timeTaken,
     });
+    if (user) {
+      const params = {
+        challenge_id: challenge?.id,
+        type: challengeType,
+        wpm: WPM,
+        accuracy,
+        time_taken: timeTaken,
+        datetime: new Date().toString(),
+        username: user,
+      };
+      http().post('/results/create', params);
+    }
     setShowResults(true);
   }, [testStatus]);
 

@@ -8,6 +8,7 @@ Table users {
   email String [unique, not null]
   password String [not null]
   loadouts loadouts [not null]
+  statistics statistics [not null]
 }
 
 Table loadouts {
@@ -23,4 +24,18 @@ Table loadouts {
   }
 }
 
+Table statistics {
+  id Int [pk, increment]
+  challenge_id Int [not null]
+  type String [not null]
+  wpm Int [not null]
+  accuracy Decimal [not null]
+  time_taken Int [not null]
+  datetime String [not null]
+  user_id Int
+  users users
+}
+
 Ref: loadouts.user_id > users.id [delete: No Action]
+
+Ref: statistics.user_id > users.id [delete: No Action]

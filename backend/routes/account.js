@@ -29,9 +29,9 @@ router.post('/loadout/create', authenticateToken, async (req, res) => {
 
       await prisma.loadouts.create({
         data: {
-          name: name,
-          switches: switches,
-          others: others,
+          name,
+          switches,
+          others,
           user_id: res.id,
         },
       });
@@ -71,7 +71,7 @@ router.get('/loadout', authenticateToken, async (req, res) => {
     main()
       .then(async () => {
         await prisma.$disconnect();
-        return res.status(200).json({ loadouts: loadouts });
+        return res.status(200).json({ loadouts });
       })
       .catch(async (e) => {
         console.error(e);
@@ -90,12 +90,12 @@ router.put('/loadout/update', authenticateToken, async (req, res) => {
     async function main() {
       await prisma.loadouts.update({
         where: {
-          id: id,
+          id,
         },
         data: {
-          name: name,
-          switches: switches,
-          others: others,
+          name,
+          switches,
+          others,
         },
       });
     }

@@ -42,8 +42,8 @@ const Room: FC<RoomProps> = ({}) => {
 
   useEffect(() => {
     socket.emit('joinRoom', {
-      roomID: roomID,
-      username: username,
+      roomID,
+      username,
     });
 
     socket.on('invalidRoom', () => {
@@ -124,8 +124,6 @@ const Room: FC<RoomProps> = ({}) => {
       <Button onClick={leaveRoom} variant='ghost'>
         leave room
       </Button>
-
-      {/* <div>{listOfPlayers}</div> */}
 
       <div>{roomUrl}</div>
     </>
