@@ -1,5 +1,4 @@
 import axios from 'axios';
-import.meta.env.MODE;
 
 const http = () => {
   const api_url: string =
