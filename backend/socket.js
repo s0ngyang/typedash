@@ -89,13 +89,16 @@ io.on('connection', (socket) => {
       Object.keys(rooms[socket.roomID].rankings).length ===
       rooms[socket.roomID].players.length
     ) {
+      const nextChallenge = randomChallenge(
+        rooms[socket.roomID].challenge.type,
+      );
       rooms[socket.roomID] = {
         ...rooms[socket.roomID],
-        challenge: randomChallenge(challenge.type),
+        challenge: nextChallenge,
         ready: [],
         rankings: {},
       };
-      io.to(socket.roomID).emit('allCompleted', rooms[socket.id].challenge);
+      io.to(socket.roomID).emit('allCompleted', rooms[socket.roomID].challenge);
     }
   });
 
