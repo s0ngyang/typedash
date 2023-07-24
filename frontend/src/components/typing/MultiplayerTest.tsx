@@ -121,6 +121,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
+    console.log(challenge);
     socket.emit('testCompleted', randomChallenge(challenge?.type!));
     if (user) {
       const params = {
@@ -135,7 +136,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       http().post('/results/create', params);
     }
     setShowResults(true);
-  }, [testStatus]);
+  }, [testStatus, challenge]);
 
   const focusOnInput = () => {
     setIsFocused(true);
