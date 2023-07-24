@@ -56,6 +56,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
 
     socket.on('restartTest', () => {
       //setChallenge(challenge);
+      resetTimer();
       setTestStatus(0);
       setTypedWordList(['']);
       setActiveWordIndex(0);
@@ -122,11 +123,11 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
-    socket.emit('testCompleted', randomChallenge(challenge?.type!));
+    socket.emit('testCompleted', randomChallenge);
     if (user) {
       const params = {
-        challenge_id: challenge?.id,
-        type: challenge?.type,
+        challenge_id: challenge.id,
+        type: challenge.type,
         wpm: WPM,
         accuracy,
         time_taken: timeTaken,

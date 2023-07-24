@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
       }
       room.ready.push({ id: socket.id, username });
       io.to(socket.roomID).emit('receiveReady', room.ready.length);
-      socket.emit('restartTest', room.challenge);
+      socket.emit('restartTest');
     }
   });
 
@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('testCompleted', (nextChallenge) => {
+  socket.on('testCompleted', (randomChallenge) => {
     rooms[socket.roomID].rankings[socket.id] =
       Object.keys(rooms[socket.roomID].rankings).length + 1;
     io.to(socket.roomID).emit('playerCompleted', rooms[socket.roomID].rankings);
@@ -89,13 +89,16 @@ io.on('connection', (socket) => {
       Object.keys(rooms[socket.roomID].rankings).length ===
       rooms[socket.roomID].players.length
     ) {
-      io.to(socket.roomID).emit('allCompleted');
+      const nextChallenge = randomChallenge(
+        rooms[socket.roomID].challenge.type,
+      );
       rooms[socket.roomID] = {
         ...rooms[socket.roomID],
         challenge: nextChallenge,
         ready: [],
         rankings: {},
       };
+      io.to(socket.roomID).emit('allCompleted', rooms[socket.roomID].challenge);
     }
   });
 
