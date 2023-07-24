@@ -75,13 +75,12 @@ const Account: FC<AccountProps> = () => {
       <div className='flex flex-col gap-4 h-full'>
         <Box
           bg='bg.secondary'
-          className='w-full h-1/5 rounded-md flex justify-center items-center gap-24 px-4'
+          className='w-full h-1/5 rounded-md flex justify-center items-center gap-24 p-12'
         >
           <div className='flex flex-col text-left'>
             <Box color='text.secondary' className='font-semibold text-2xl'>
               {context?.user}
             </Box>
-            <div className='text-xs'>Joined 12 Jul 2023</div>
           </div>
           <div className='h-4/5'>
             <Divider orientation='vertical' />
