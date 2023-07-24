@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Button, SlideFade, useToast } from '@chakra-ui/react';
+import { Button, Icon, SlideFade, useToast } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useState } from 'react';
 import {
   TbRosetteNumber1,
@@ -42,10 +42,10 @@ const Room: FC<RoomProps> = ({}) => {
 
   const displayBadges = (position: number) => {
     const badges = [
-      <TbRosetteNumber1 size={25} className='text-pink-8008' />,
-      <TbRosetteNumber2 size={25} className='text-pink-8008' />,
-      <TbRosetteNumber3 size={25} className='text-pink-8008' />,
-      <TbRosetteNumber4 size={25} className='text-pink-8008' />,
+      <Icon as={TbRosetteNumber1} boxSize={25} color='accent.200' />,
+      <Icon as={TbRosetteNumber2} boxSize={25} color='accent.200' />,
+      <Icon as={TbRosetteNumber3} boxSize={25} color='accent.200' />,
+      <Icon as={TbRosetteNumber4} boxSize={25} color='accent.200' />,
     ];
     return badges[position - 1];
   };
@@ -141,7 +141,7 @@ const Room: FC<RoomProps> = ({}) => {
             className='flex items-center justify-between gap-6'
           >
             <div className='flex w-full items-center gap-6'>
-              <div className='w-20'>{player.username}</div>
+              <div className='w-24'>{player.username}</div>
 
               <div className='transition w-[90%]'>
                 <SlideFade in={time === 0}>
