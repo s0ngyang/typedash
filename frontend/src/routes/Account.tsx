@@ -75,7 +75,7 @@ const Account: FC<AccountProps> = () => {
       <div className='flex flex-col gap-4 h-full'>
         <Box
           bg='bg.secondary'
-          className='w-full h-1/5 rounded-md flex justify-center items-center gap-24 p-12'
+          className='w-full h-1/5 rounded-md flex justify-center items-center gap-16 p-12'
         >
           <div className='flex flex-col text-left'>
             <Box color='text.secondary' className='font-semibold text-2xl'>
