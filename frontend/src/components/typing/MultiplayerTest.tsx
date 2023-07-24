@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Box } from '@chakra-ui/react';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HiCursorClick } from 'react-icons/hi';
@@ -42,6 +41,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     time: 0,
   });
   const INITIAL_TIME = 120;
+  // @ts-ignore
   const [time, { startTimer, pauseTimer, resetTimer }] = useTimer(INITIAL_TIME); // default time is 120 seconds
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -122,8 +122,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
       accuracy,
       time: timeTaken,
     });
-
-    socket.emit('testCompleted', randomChallenge(challenge?.type));
+    socket.emit('testCompleted', randomChallenge(challenge?.type!));
     if (user) {
       const params = {
         challenge_id: challenge?.id,
