@@ -104,6 +104,10 @@ const Room: FC<RoomProps> = ({}) => {
       setNumReady(readyCount);
     });
 
+    socket.on('restartTest', (challenge) => {
+      setChosenChallenge(challenge);
+    });
+
     socket.on('progressUpdate', ({ id, progress }) => {
       setTypingProgresses((prevProgress) => ({
         ...prevProgress,
@@ -164,7 +168,7 @@ const Room: FC<RoomProps> = ({}) => {
       <MultiplayerTest
         startTyping={time === 0}
         setLettersTyped={setLettersTyped}
-        challengeType={state}
+        challenge={chosenChallenge}
       />
       {time !== 0 && (
         <div>
