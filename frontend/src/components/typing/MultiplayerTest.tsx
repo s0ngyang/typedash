@@ -13,15 +13,13 @@ import Result from './results/Result';
 interface MultiplayerTestProps {
   startTyping: boolean;
   setLettersTyped: React.Dispatch<React.SetStateAction<number>>;
-  challenge: ChallengeProps;
 }
 
 const MultiplayerTest: FC<MultiplayerTestProps> = ({
   startTyping,
   setLettersTyped,
-  challenge,
 }) => {
-  //const [challenge, setChallenge] = useState<ChallengeProps>();
+  const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
   const [typedWordList, setTypedWordList] = useState<string[]>(['']);
@@ -50,12 +48,12 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   const user = context?.user;
 
   useEffect(() => {
-    // socket.on('playerJoined', ({ challenge }) => {
-    //   setChallenge(challenge);
-    // });
+    socket.on('playerJoined', ({ challenge }) => {
+      setChallenge(challenge);
+    });
 
-    socket.on('restartTest', () => {
-      //setChallenge(challenge);
+    socket.on('restartTest', (nextChallenge) => {
+      setChallenge(nextChallenge);
       resetTimer();
       setTestStatus(0);
       setTypedWordList(['']);
@@ -126,8 +124,8 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     socket.emit('testCompleted', randomChallenge);
     if (user) {
       const params = {
-        challenge_id: challenge.id,
-        type: challenge.type,
+        challenge_id: challenge?.id,
+        type: challenge?.type,
         wpm: WPM,
         accuracy,
         time_taken: timeTaken,

@@ -104,10 +104,6 @@ const Room: FC<RoomProps> = ({}) => {
       setNumReady(readyCount);
     });
 
-    // socket.on('restartTest', (challenge) => {
-    //   setChosenChallenge(challenge);
-    // });
-
     socket.on('progressUpdate', ({ id, progress }) => {
       setTypingProgresses((prevProgress) => ({
         ...prevProgress,
@@ -119,11 +115,14 @@ const Room: FC<RoomProps> = ({}) => {
       setRankings(rankings);
     });
 
-    socket.on('allCompleted', (nextChallenge) => {
+    socket.on('allCompleted', () => {
       resetTimer();
-      setChosenChallenge(nextChallenge);
       setGameStarted(false);
       setNumReady(0);
+    });
+
+    socket.on('restartTest', (nextChallenge) => {
+      setChosenChallenge(nextChallenge);
       setRankings({});
       setTypingProgresses({});
     });
@@ -169,7 +168,6 @@ const Room: FC<RoomProps> = ({}) => {
       <MultiplayerTest
         startTyping={time === 0}
         setLettersTyped={setLettersTyped}
-        challenge={chosenChallenge}
       />
       {time !== 0 && (
         <div>
