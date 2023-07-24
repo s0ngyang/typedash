@@ -54,7 +54,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
     //   setChallenge(challenge);
     // });
 
-    socket.on('restartTest', (challenge) => {
+    socket.on('restartTest', () => {
       //setChallenge(challenge);
       setTestStatus(0);
       setTypedWordList(['']);
