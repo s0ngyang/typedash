@@ -13,13 +13,15 @@ import Result from './results/Result';
 interface MultiplayerTestProps {
   startTyping: boolean;
   setLettersTyped: React.Dispatch<React.SetStateAction<number>>;
+  challenge: ChallengeProps;
 }
 
 const MultiplayerTest: FC<MultiplayerTestProps> = ({
   startTyping,
   setLettersTyped,
+  challenge,
 }) => {
-  const [challenge, setChallenge] = useState<ChallengeProps>();
+  //const [challenge, setChallenge] = useState<ChallengeProps>();
   const [wordSet, setWordSet] = useState<string[]>([]);
   const [letterSet, setLetterSet] = useState<string[]>([]);
   const [typedWordList, setTypedWordList] = useState<string[]>(['']);
@@ -48,13 +50,12 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   const user = context?.user;
 
   useEffect(() => {
-    socket.on('playerJoined', ({ challenge }) => {
-      console.log(challenge);
-      setChallenge(challenge);
-    });
+    // socket.on('playerJoined', ({ challenge }) => {
+    //   setChallenge(challenge);
+    // });
 
-    socket.on('restartTest', (challenge) => {
-      setChallenge(challenge);
+    socket.on('restartTest', () => {
+      //setChallenge(challenge);
       setTestStatus(0);
       setTypedWordList(['']);
       setActiveWordIndex(0);
