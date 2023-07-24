@@ -104,9 +104,9 @@ const Room: FC<RoomProps> = ({}) => {
       setNumReady(readyCount);
     });
 
-    socket.on('restartTest', (challenge) => {
-      setChosenChallenge(challenge);
-    });
+    // socket.on('restartTest', (challenge) => {
+    //   setChosenChallenge(challenge);
+    // });
 
     socket.on('progressUpdate', ({ id, progress }) => {
       setTypingProgresses((prevProgress) => ({
@@ -119,8 +119,9 @@ const Room: FC<RoomProps> = ({}) => {
       setRankings(rankings);
     });
 
-    socket.on('allCompleted', () => {
+    socket.on('allCompleted', (nextChallenge) => {
       resetTimer();
+      setChosenChallenge(nextChallenge);
       setGameStarted(false);
       setNumReady(0);
       setRankings({});
