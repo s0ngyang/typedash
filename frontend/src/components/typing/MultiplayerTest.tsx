@@ -111,6 +111,7 @@ const MultiplayerTest: FC<MultiplayerTestProps> = ({
   // generate result once test ends
   useEffect(() => {
     if (testStatus !== -1) return;
+    console.log(challenge);
     const WPM = Math.floor((wordSet.length / timeTaken) * 60);
     const accuracy = +(
       ((totalStrokes - mistypedCount) / totalStrokes) *
