@@ -409,7 +409,7 @@ const TypingTest: FC<TypingTestProps> = ({}) => {
               >
                 <div className='w-full flex justify-between'>
                   <div>{type.name}</div>
-                  <Box>{type.desc}</Box>
+                  <div>{type.desc}</div>
                 </div>
               </Button>
             ))}

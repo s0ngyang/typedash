@@ -12,7 +12,7 @@ export const challengeItems = [
   {
     id: 1,
     name: 'Songs',
-    desc: 'Tune into the latest hits, from oldies to modern songs!',
+    desc: 'From oldies to modern songs!',
   },
   {
     id: 2,
