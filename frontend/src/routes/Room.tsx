@@ -23,7 +23,7 @@ interface TypingProgressProps {
 const Room: FC<RoomProps> = ({}) => {
   const location = useLocation();
   const roomID = location.pathname.split('/')[2];
-  const roomUrl = `https://typedash.com/multiplayer/${roomID}`;
+  const roomUrl = `https://main--cosmic-fox-2ad203.netlify.app/multiplayer/${roomID}`;
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(1);
   const [listOfPlayers, setListOfPlayers] = useState([]);
