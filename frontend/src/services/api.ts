@@ -3,7 +3,7 @@ import axios from 'axios';
 const http = () => {
   const api_url: string =
     process.env.NODE_ENV === 'production'
-      ? 'https://typedash-api.raynertoh.dev/'
+      ? (import.meta.env.VITE_API_URL as string)
       : 'http://localhost:3000/';
   const instance = axios.create({
     baseURL: api_url,
