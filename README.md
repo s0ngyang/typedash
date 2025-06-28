@@ -6,7 +6,7 @@ TypeDash was made for Orbital (a.k.a. CP2106: Independent Software Development P
 
 A type racing website to help individuals enhance their typing skills and track their progress across different keyboard loadouts.
 
-Deployment Link: https://typedash.raynertoh.dev
+Deployment Link: <https://typedash.songyang.dev>
 
 ### Motivation
 
